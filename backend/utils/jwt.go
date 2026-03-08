@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/kampunk/backend/configs"
+	"daftar_induk_siswa/configs"
 )
 
 // Claims represents JWT claims

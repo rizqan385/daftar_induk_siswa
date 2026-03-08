@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/kampunk/backend/configs"
+	"daftar_induk_siswa/configs"
 )
 
 // AllowedImageTypes lists allowed image MIME types

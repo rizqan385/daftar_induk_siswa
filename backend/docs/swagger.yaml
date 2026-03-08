@@ -1,0 +1,2375 @@
+basePath: /api/v1
+definitions:
+  requests.BatchNilaiSemesterRequest:
+    properties:
+      nilai:
+        items:
+          $ref: '#/definitions/requests.CreateNilaiSemesterRequest'
+        type: array
+    required:
+    - nilai
+    type: object
+  requests.CreateBeasiswaRequest:
+    properties:
+      keterangan:
+        example: Beasiswa prestasi akademik
+        type: string
+      pemberi:
+        example: Pemerintah
+        maxLength: 100
+        type: string
+      tahun_pelajaran:
+        example: 2024/2025
+        maxLength: 20
+        type: string
+    required:
+    - pemberi
+    - tahun_pelajaran
+    type: object
+  requests.CreateCatatanSemesterRequest:
+    properties:
+      kelas:
+        enum:
+        - X
+        - XI
+        - XII
+        example: X
+        type: string
+      semester:
+        example: 1
+        maximum: 2
+        minimum: 1
+        type: integer
+    required:
+    - kelas
+    - semester
+    type: object
+  requests.CreateKepribadianRequest:
+    properties:
+      aspek:
+        example: Disiplin/Ketertiban
+        maxLength: 100
+        type: string
+      nilai:
+        enum:
+        - Baik
+        - Cukup
+        - Kurang
+        example: Baik
+        type: string
+      tahun_pelajaran:
+        example: 2024/2025
+        maxLength: 20
+        type: string
+    required:
+    - aspek
+    - nilai
+    type: object
+  requests.CreateKesehatanRequest:
+    properties:
+      berat_badan_keluar:
+        example: 55
+        type: number
+      berat_badan_masuk:
+        example: 50.5
+        type: number
+      golongan_darah:
+        enum:
+        - A
+        - B
+        - AB
+        - O
+        example: A
+        type: string
+      kesanggupan_jasmani:
+        example: Baik
+        type: string
+      tinggi_badan_keluar:
+        example: 165
+        type: number
+      tinggi_badan_masuk:
+        example: 160
+        type: number
+    type: object
+  requests.CreateNilaiIjazahRequest:
+    properties:
+      mata_pelajaran_id:
+        example: 1
+        type: integer
+      nilai_akhir:
+        example: 85
+        maximum: 100
+        type: integer
+      no_ijazah:
+        example: DN-01/IJ-2027
+        maxLength: 50
+        type: string
+      tahun_lulus:
+        example: "2027"
+        maxLength: 10
+        type: string
+      tanggal_lulus:
+        example: "2027-06-15"
+        type: string
+    required:
+    - mata_pelajaran_id
+    - nilai_akhir
+    type: object
+  requests.CreateNilaiSemesterRequest:
+    properties:
+      deskripsi_keterampilan:
+        example: Mampu menerapkan dengan baik
+        type: string
+      deskripsi_pengetahuan:
+        example: Baik dalam memahami materi
+        type: string
+      kelas:
+        enum:
+        - X
+        - XI
+        - XII
+        example: X
+        type: string
+      mata_pelajaran_id:
+        example: 1
+        type: integer
+      nilai_keterampilan:
+        example: 88
+        maximum: 100
+        type: integer
+      nilai_pengetahuan:
+        example: 85
+        maximum: 100
+        type: integer
+      predikat_keterampilan:
+        enum:
+        - A
+        - B
+        - C
+        - D
+        example: B
+        type: string
+      predikat_pengetahuan:
+        enum:
+        - A
+        - B
+        - C
+        - D
+        example: B
+        type: string
+      semester:
+        example: 1
+        maximum: 2
+        minimum: 1
+        type: integer
+      tahun_pelajaran:
+        example: 2024/2025
+        maxLength: 20
+        type: string
+    required:
+    - kelas
+    - mata_pelajaran_id
+    - semester
+    - tahun_pelajaran
+    type: object
+  requests.CreateOrangTuaRequest:
+    properties:
+      alamat:
+        example: Jl. Merdeka No. 123
+        type: string
+      kewarganegaraan:
+        example: Indonesia
+        maxLength: 50
+        type: string
+      masih_hidup:
+        example: true
+        type: boolean
+      nama:
+        example: Budi Santoso
+        maxLength: 100
+        type: string
+      no_telepon:
+        example: "081234567890"
+        maxLength: 20
+        type: string
+      pekerjaan:
+        example: Wiraswasta
+        maxLength: 100
+        type: string
+      pendidikan_terakhir:
+        example: S1
+        maxLength: 50
+        type: string
+      penghasilan_bulanan:
+        example: 5000000
+        type: number
+      tanggal_lahir:
+        example: "1975-03-20"
+        type: string
+      tempat_lahir:
+        example: Jakarta
+        maxLength: 100
+        type: string
+      tipe:
+        enum:
+        - ayah
+        - ibu
+        example: ayah
+        type: string
+    required:
+    - nama
+    - tipe
+    type: object
+  requests.CreatePKLRequest:
+    properties:
+      keterangan:
+        example: Praktek sebagai teknisi jaringan
+        type: string
+      lama_bulan:
+        example: 3
+        type: integer
+      lokasi:
+        example: Bandung
+        maxLength: 200
+        type: string
+      nama_dudi:
+        example: PT. Teknologi Indonesia
+        maxLength: 200
+        type: string
+    required:
+    - nama_dudi
+    type: object
+  requests.CreatePendidikanRequest:
+    properties:
+      alamat_sekolah:
+        example: Jl. Pendidikan No. 1
+        type: string
+      alasan_pindah:
+        example: ""
+        type: string
+      asal_sekolah:
+        example: SMP Negeri 1 Bandung
+        maxLength: 200
+        type: string
+      kelas_diterima:
+        enum:
+        - X
+        - XI
+        - XII
+        example: X
+        type: string
+      no_ijazah:
+        example: DN-01/MI-2024
+        maxLength: 50
+        type: string
+      no_skhun:
+        example: DN-01/SK-2024
+        maxLength: 50
+        type: string
+      tanggal_diterima:
+        example: "2024-07-15"
+        type: string
+      tanggal_ijazah:
+        example: "2024-06-10"
+        type: string
+      tanggal_skhun:
+        example: "2024-06-10"
+        type: string
+      tipe:
+        enum:
+        - siswa_baru
+        - pindahan
+        example: siswa_baru
+        type: string
+    required:
+    - asal_sekolah
+    - kelas_diterima
+    - tanggal_diterima
+    - tipe
+    type: object
+  requests.CreatePrestasiRequest:
+    properties:
+      bidang:
+        enum:
+        - Kesenian
+        - Olahraga
+        - Kemasyarakatan
+        - Pramuka
+        - Karya Tulis
+        - Lainnya
+        example: Olahraga
+        type: string
+      keterangan:
+        example: Juara 1 Lomba Lari
+        type: string
+      tahun:
+        example: 2024
+        type: integer
+      tingkat:
+        enum:
+        - Sekolah
+        - Kecamatan
+        - Kota
+        - Provinsi
+        - Nasional
+        - Internasional
+        example: Kota
+        type: string
+    required:
+    - bidang
+    type: object
+  requests.CreateRiwayatPenyakitRequest:
+    properties:
+      jenis_penyakit:
+        example: Demam
+        maxLength: 100
+        type: string
+      keterangan:
+        example: Sembuh total
+        type: string
+      lama_sakit:
+        example: 1 Minggu
+        maxLength: 50
+        type: string
+      tahun:
+        example: 2020
+        type: integer
+    required:
+    - jenis_penyakit
+    type: object
+  requests.CreateSiswaRequest:
+    properties:
+      agama:
+        example: Islam
+        maxLength: 20
+        type: string
+      anak_ke:
+        example: 2
+        minimum: 1
+        type: integer
+      bahasa_rumah:
+        example: Indonesia
+        maxLength: 50
+        type: string
+      jenis_kelamin:
+        enum:
+        - L
+        - P
+        example: L
+        type: string
+      jumlah_saudara:
+        example: 3
+        type: integer
+      kewarganegaraan:
+        example: Indonesia
+        maxLength: 50
+        type: string
+      nama_lengkap:
+        example: Ahmad Syafiq
+        maxLength: 100
+        type: string
+      nama_panggilan:
+        example: Syafiq
+        maxLength: 50
+        type: string
+      nisn:
+        example: "0012345678"
+        type: string
+      no_induk:
+        example: "2024001"
+        maxLength: 20
+        type: string
+      tanggal_lahir:
+        example: "2008-05-15"
+        type: string
+      tempat_lahir:
+        example: Jakarta
+        maxLength: 100
+        type: string
+    required:
+    - agama
+    - jenis_kelamin
+    - nama_lengkap
+    - nisn
+    - no_induk
+    - tanggal_lahir
+    - tempat_lahir
+    type: object
+  requests.CreateWaliRequest:
+    properties:
+      alamat:
+        example: Jl. Desa No. 5
+        type: string
+      hubungan_dengan_siswa:
+        example: Paman
+        maxLength: 50
+        type: string
+      jenis_kelamin:
+        enum:
+        - L
+        - P
+        example: L
+        type: string
+      kewarganegaraan:
+        example: Indonesia
+        maxLength: 50
+        type: string
+      nama:
+        example: Paman Ahmad
+        maxLength: 100
+        type: string
+      no_telepon:
+        example: "081234567891"
+        maxLength: 20
+        type: string
+      pekerjaan:
+        example: Petani
+        maxLength: 100
+        type: string
+      pendidikan_terakhir:
+        example: SMA
+        maxLength: 50
+        type: string
+      penghasilan_bulanan:
+        example: 3000000
+        type: number
+      tanggal_lahir:
+        example: "1970-01-15"
+        type: string
+      tempat_lahir:
+        example: Bandung
+        maxLength: 100
+        type: string
+    required:
+    - jenis_kelamin
+    - nama
+    type: object
+  requests.LoginRequest:
+    properties:
+      password:
+        example: admin123
+        minLength: 6
+        type: string
+      username:
+        example: admin
+        maxLength: 50
+        minLength: 3
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  requests.RegisterRequest:
+    properties:
+      email:
+        example: admin@example.com
+        type: string
+      password:
+        example: password123
+        minLength: 6
+        type: string
+      username:
+        example: newadmin
+        maxLength: 50
+        minLength: 3
+        type: string
+    required:
+    - email
+    - password
+    - username
+    type: object
+  requests.UpdateOrangTuaRequest:
+    properties:
+      alamat:
+        example: Jl. Merdeka No. 123
+        type: string
+      kewarganegaraan:
+        example: Indonesia
+        maxLength: 50
+        type: string
+      masih_hidup:
+        example: true
+        type: boolean
+      nama:
+        example: Budi Santoso
+        maxLength: 100
+        type: string
+      no_telepon:
+        example: "081234567890"
+        maxLength: 20
+        type: string
+      pekerjaan:
+        example: Wiraswasta
+        maxLength: 100
+        type: string
+      pendidikan_terakhir:
+        example: S1
+        maxLength: 50
+        type: string
+      penghasilan_bulanan:
+        example: 5000000
+        type: number
+      tanggal_lahir:
+        example: "1975-03-20"
+        type: string
+      tempat_lahir:
+        example: Jakarta
+        maxLength: 100
+        type: string
+      tipe:
+        enum:
+        - ayah
+        - ibu
+        example: ayah
+        type: string
+    type: object
+  requests.UpdatePendidikanRequest:
+    properties:
+      alamat_sekolah:
+        example: Jl. Pendidikan No. 1
+        type: string
+      alasan_pindah:
+        example: ""
+        type: string
+      asal_sekolah:
+        example: SMP Negeri 1 Bandung
+        maxLength: 200
+        type: string
+      kelas_diterima:
+        enum:
+        - X
+        - XI
+        - XII
+        example: X
+        type: string
+      no_ijazah:
+        example: DN-01/MI-2024
+        maxLength: 50
+        type: string
+      no_skhun:
+        example: DN-01/SK-2024
+        maxLength: 50
+        type: string
+      tanggal_diterima:
+        example: "2024-07-15"
+        type: string
+      tanggal_ijazah:
+        example: "2024-06-10"
+        type: string
+      tanggal_skhun:
+        example: "2024-06-10"
+        type: string
+      tipe:
+        enum:
+        - siswa_baru
+        - pindahan
+        example: siswa_baru
+        type: string
+    type: object
+  requests.UpdateSiswaRequest:
+    properties:
+      agama:
+        example: Islam
+        maxLength: 20
+        type: string
+      anak_ke:
+        example: 2
+        type: integer
+      bahasa_rumah:
+        example: Indonesia
+        maxLength: 50
+        type: string
+      jenis_kelamin:
+        enum:
+        - L
+        - P
+        example: L
+        type: string
+      jumlah_saudara:
+        example: 3
+        type: integer
+      kewarganegaraan:
+        example: Indonesia
+        maxLength: 50
+        type: string
+      nama_lengkap:
+        example: Ahmad Syafiq Updated
+        maxLength: 100
+        type: string
+      nama_panggilan:
+        example: Syafiq
+        maxLength: 50
+        type: string
+      tanggal_lahir:
+        example: "2008-05-15"
+        type: string
+      tempat_lahir:
+        example: Jakarta
+        maxLength: 100
+        type: string
+    type: object
+  responses.AlamatResponse:
+    properties:
+      alamat_lengkap:
+        type: string
+      id:
+        type: integer
+      jarak_ke_sekolah:
+        type: number
+      kecamatan:
+        type: string
+      kelurahan:
+        type: string
+      kode_pos:
+        type: string
+      kota:
+        type: string
+      no_telepon:
+        type: string
+      provinsi:
+        type: string
+      tinggal_dengan:
+        type: string
+      transportasi:
+        type: string
+    type: object
+  responses.BeasiswaResponse:
+    properties:
+      id:
+        type: integer
+      keterangan:
+        type: string
+      pemberi:
+        type: string
+      tahun_pelajaran:
+        type: string
+    type: object
+  responses.CatatanSemesterResponse:
+    properties:
+      ekstrakurikuler:
+        items:
+          $ref: '#/definitions/responses.EkstrakurikulerResponse'
+        type: array
+      id:
+        type: integer
+      kelas:
+        type: string
+      ketidakhadiran:
+        $ref: '#/definitions/responses.KetidakhadiranResponse'
+      pkl:
+        items:
+          $ref: '#/definitions/responses.PKLResponse'
+        type: array
+      prestasi_semester:
+        items:
+          $ref: '#/definitions/responses.PrestasiSemesterResponse'
+        type: array
+      semester:
+        type: integer
+    type: object
+  responses.EkstrakurikulerResponse:
+    properties:
+      id:
+        type: integer
+      keterangan:
+        type: string
+      nama_kegiatan:
+        type: string
+    type: object
+  responses.KehadiranResponse:
+    properties:
+      id:
+        type: integer
+      jumlah_alpa:
+        type: integer
+      jumlah_hadir:
+        type: integer
+      jumlah_hari_efektif:
+        type: integer
+      jumlah_izin:
+        type: integer
+      jumlah_sakit:
+        type: integer
+      kelas:
+        type: string
+      persentase_hadir:
+        type: number
+      semester:
+        type: integer
+    type: object
+  responses.KepribadianResponse:
+    properties:
+      aspek:
+        type: string
+      id:
+        type: integer
+      nilai:
+        type: string
+      tahun_pelajaran:
+        type: string
+    type: object
+  responses.KesehatanResponse:
+    properties:
+      berat_badan_keluar:
+        type: number
+      berat_badan_masuk:
+        type: number
+      golongan_darah:
+        type: string
+      id:
+        type: integer
+      kesanggupan_jasmani:
+        type: string
+      riwayat_penyakit:
+        items:
+          $ref: '#/definitions/responses.RiwayatPenyakitResponse'
+        type: array
+      tinggi_badan_keluar:
+        type: number
+      tinggi_badan_masuk:
+        type: number
+    type: object
+  responses.KetidakhadiranResponse:
+    properties:
+      dengan_izin:
+        type: integer
+      id:
+        type: integer
+      karena_sakit:
+        type: integer
+      tanpa_keterangan:
+        type: integer
+    type: object
+  responses.LoginResponse:
+    properties:
+      expires_in:
+        example: 86400
+        type: integer
+      token:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        type: string
+      user:
+        $ref: '#/definitions/responses.UserResponse'
+    type: object
+  responses.MataPelajaranResponse:
+    properties:
+      id:
+        type: integer
+      kelompok:
+        type: string
+      kode:
+        type: string
+      nama:
+        type: string
+      sub_kelompok:
+        type: string
+    type: object
+  responses.MeninggalkanSekolahResponse:
+    properties:
+      alamat_sekolah_tujuan:
+        type: string
+      alasan:
+        type: string
+      id:
+        type: integer
+      no_ijazah:
+        type: string
+      sekolah_tujuan:
+        type: string
+      tanggal:
+        type: string
+      tipe:
+        type: string
+    type: object
+  responses.NilaiIjazahResponse:
+    properties:
+      id:
+        type: integer
+      mata_pelajaran:
+        $ref: '#/definitions/responses.MataPelajaranResponse'
+      nilai_akhir:
+        type: integer
+      no_ijazah:
+        type: string
+      tahun_lulus:
+        type: string
+      tanggal_lulus:
+        type: string
+    type: object
+  responses.NilaiSemesterResponse:
+    properties:
+      deskripsi_keterampilan:
+        type: string
+      deskripsi_pengetahuan:
+        type: string
+      id:
+        type: integer
+      kelas:
+        type: string
+      mata_pelajaran:
+        $ref: '#/definitions/responses.MataPelajaranResponse'
+      nilai_keterampilan:
+        type: integer
+      nilai_pengetahuan:
+        type: integer
+      predikat_keterampilan:
+        type: string
+      predikat_pengetahuan:
+        type: string
+      semester:
+        type: integer
+      tahun_pelajaran:
+        type: string
+    type: object
+  responses.NilaiSikapResponse:
+    properties:
+      deskripsi_sosial:
+        type: string
+      deskripsi_spiritual:
+        type: string
+      id:
+        type: integer
+      kelas:
+        type: string
+      semester:
+        type: integer
+    type: object
+  responses.OrangTuaResponse:
+    properties:
+      alamat:
+        type: string
+      id:
+        type: integer
+      kewarganegaraan:
+        type: string
+      masih_hidup:
+        type: boolean
+      nama:
+        type: string
+      no_telepon:
+        type: string
+      pekerjaan:
+        type: string
+      pendidikan_terakhir:
+        type: string
+      penghasilan_bulanan:
+        type: number
+      tanggal_lahir:
+        type: string
+      tempat_lahir:
+        type: string
+      tipe:
+        type: string
+    type: object
+  responses.PKLResponse:
+    properties:
+      id:
+        type: integer
+      keterangan:
+        type: string
+      lama_bulan:
+        type: integer
+      lokasi:
+        type: string
+      nama_dudi:
+        type: string
+    type: object
+  responses.PendidikanResponse:
+    properties:
+      alamat_sekolah:
+        type: string
+      alasan_pindah:
+        type: string
+      asal_sekolah:
+        type: string
+      id:
+        type: integer
+      kelas_diterima:
+        type: string
+      no_ijazah:
+        type: string
+      no_skhun:
+        type: string
+      tanggal_diterima:
+        type: string
+      tanggal_ijazah:
+        type: string
+      tanggal_skhun:
+        type: string
+      tipe:
+        type: string
+    type: object
+  responses.PrestasiResponse:
+    properties:
+      bidang:
+        type: string
+      id:
+        type: integer
+      keterangan:
+        type: string
+      tahun:
+        type: integer
+      tingkat:
+        type: string
+    type: object
+  responses.PrestasiSemesterResponse:
+    properties:
+      id:
+        type: integer
+      jenis_prestasi:
+        type: string
+      keterangan:
+        type: string
+    type: object
+  responses.RiwayatPenyakitResponse:
+    properties:
+      id:
+        type: integer
+      jenis_penyakit:
+        type: string
+      keterangan:
+        type: string
+      lama_sakit:
+        type: string
+      tahun:
+        type: integer
+    type: object
+  responses.SiswaDetailResponse:
+    properties:
+      agama:
+        type: string
+      alamat:
+        allOf:
+        - $ref: '#/definitions/responses.AlamatResponse'
+        description: Related data
+      anak_ke:
+        type: integer
+      bahasa_rumah:
+        type: string
+      beasiswa:
+        items:
+          $ref: '#/definitions/responses.BeasiswaResponse'
+        type: array
+      catatan_semester:
+        items:
+          $ref: '#/definitions/responses.CatatanSemesterResponse'
+        type: array
+      created_at:
+        type: string
+      foto_path:
+        type: string
+      id:
+        type: integer
+      jenis_kelamin:
+        type: string
+      jumlah_saudara:
+        type: integer
+      kehadiran:
+        items:
+          $ref: '#/definitions/responses.KehadiranResponse'
+        type: array
+      kepribadian:
+        items:
+          $ref: '#/definitions/responses.KepribadianResponse'
+        type: array
+      kesehatan:
+        $ref: '#/definitions/responses.KesehatanResponse'
+      kewarganegaraan:
+        type: string
+      meninggalkan_sekolah:
+        $ref: '#/definitions/responses.MeninggalkanSekolahResponse'
+      nama_lengkap:
+        type: string
+      nama_panggilan:
+        type: string
+      nilai_ijazah:
+        items:
+          $ref: '#/definitions/responses.NilaiIjazahResponse'
+        type: array
+      nilai_semester:
+        items:
+          $ref: '#/definitions/responses.NilaiSemesterResponse'
+        type: array
+      nilai_sikap:
+        items:
+          $ref: '#/definitions/responses.NilaiSikapResponse'
+        type: array
+      nisn:
+        type: string
+      no_induk:
+        type: string
+      orang_tua:
+        items:
+          $ref: '#/definitions/responses.OrangTuaResponse'
+        type: array
+      pendidikan_sebelumnya:
+        items:
+          $ref: '#/definitions/responses.PendidikanResponse'
+        type: array
+      prestasi:
+        items:
+          $ref: '#/definitions/responses.PrestasiResponse'
+        type: array
+      tanggal_lahir:
+        type: string
+      tempat_lahir:
+        type: string
+      updated_at:
+        type: string
+      wali:
+        $ref: '#/definitions/responses.WaliResponse'
+    type: object
+  responses.SiswaListResponse:
+    properties:
+      created_at:
+        type: string
+      foto_path:
+        example: photos/123456.jpg
+        type: string
+      id:
+        example: 1
+        type: integer
+      jenis_kelamin:
+        example: L
+        type: string
+      kelas:
+        example: X
+        type: string
+      nama_lengkap:
+        example: Ahmad Syafiq
+        type: string
+      nisn:
+        example: "0012345678"
+        type: string
+      no_induk:
+        example: "2024001"
+        type: string
+    type: object
+  responses.UserResponse:
+    properties:
+      email:
+        example: admin@example.com
+        type: string
+      id:
+        example: 1
+        type: integer
+      is_active:
+        example: true
+        type: boolean
+      username:
+        example: admin
+        type: string
+    type: object
+  responses.WaliResponse:
+    properties:
+      alamat:
+        type: string
+      hubungan_dengan_siswa:
+        type: string
+      id:
+        type: integer
+      jenis_kelamin:
+        type: string
+      kewarganegaraan:
+        type: string
+      nama:
+        type: string
+      no_telepon:
+        type: string
+      pekerjaan:
+        type: string
+      pendidikan_terakhir:
+        type: string
+      penghasilan_bulanan:
+        type: number
+      tanggal_lahir:
+        type: string
+      tempat_lahir:
+        type: string
+    type: object
+  utils.PaginatedResponse:
+    properties:
+      data: {}
+      message:
+        type: string
+      pagination:
+        $ref: '#/definitions/utils.Pagination'
+      success:
+        type: boolean
+    type: object
+  utils.Pagination:
+    properties:
+      page:
+        type: integer
+      page_size:
+        type: integer
+      total_items:
+        type: integer
+      total_pages:
+        type: integer
+    type: object
+  utils.Response:
+    properties:
+      data: {}
+      errors: {}
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@siswa.local
+    name: API Support
+  description: API untuk Sistem Data Induk Siswa SMK
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: API Siswa Induk
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate admin user and get JWT token
+      parameters:
+      - description: Login credentials
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/requests.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.LoginResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Login admin
+      tags:
+      - Auth
+  /auth/profile:
+    get:
+      description: Get the profile of the currently authenticated user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.UserResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - BearerAuth: []
+      summary: Get current user profile
+      tags:
+      - Auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Create a new admin user
+      parameters:
+      - description: Registration data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/requests.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.UserResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - BearerAuth: []
+      summary: Register new admin
+      tags:
+      - Auth
+  /beasiswa/{id}:
+    delete:
+      description: Delete scholarship record
+      parameters:
+      - description: Scholarship Record ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - BearerAuth: []
+      summary: Delete scholarship
+      tags:
+      - Beasiswa
+  /catatan-semester/{catatan_id}/pkl:
+    post:
+      consumes:
+      - application/json
+      description: Add internship record to semester notes
+      parameters:
+      - description: Semester Notes ID
+        in: path
+        name: catatan_id
+        required: true
+        type: integer
+      - description: PKL data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreatePKLRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.PKLResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - BearerAuth: []
+      summary: Add PKL to semester notes
+      tags:
+      - Catatan Semester
+  /kepribadian/{id}:
+    delete:
+      description: Delete personality record
+      parameters:
+      - description: Personality Record ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - BearerAuth: []
+      summary: Delete personality record
+      tags:
+      - Kepribadian
+  /kesehatan/{id}/riwayat-penyakit:
+    post:
+      consumes:
+      - application/json
+      description: Add disease history record to health data
+      parameters:
+      - description: Health ID (kesehatan_id)
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Disease / condition data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreateRiwayatPenyakitRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.RiwayatPenyakitResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - BearerAuth: []
+      summary: Add disease history
+      tags:
+      - Kesehatan
+  /mata-pelajaran:
+    get:
+      description: Get list of all active subjects
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/responses.MataPelajaranResponse'
+                  type: array
+              type: object
+      security:
+      - BearerAuth: []
+      summary: Get all subjects
+      tags:
+      - Mata Pelajaran
+  /orang-tua/{id}:
+    delete:
+      description: Delete parent data
+      parameters:
+      - description: Parent ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - BearerAuth: []
+      summary: Delete parent
+      tags:
+      - Orang Tua
+    put:
+      consumes:
+      - application/json
+      description: Update parent data
+      parameters:
+      - description: Parent ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Parent data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/requests.UpdateOrangTuaRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.OrangTuaResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - BearerAuth: []
+      summary: Update parent
+      tags:
+      - Orang Tua
+  /pendidikan/{id}:
+    delete:
+      description: Delete previous education record
+      parameters:
+      - description: Education Record ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - BearerAuth: []
+      summary: Delete education
+      tags:
+      - Pendidikan
+    put:
+      consumes:
+      - application/json
+      description: Update previous education record
+      parameters:
+      - description: Education Record ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Education data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/requests.UpdatePendidikanRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.PendidikanResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - BearerAuth: []
+      summary: Update education
+      tags:
+      - Pendidikan
+  /prestasi/{id}:
+    delete:
+      description: Delete achievement record
+      parameters:
+      - description: Achievement Record ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - BearerAuth: []
+      summary: Delete achievement
+      tags:
+      - Prestasi
+  /riwayat-penyakit/{id}:
+    delete:
+      description: Delete disease history record
+      parameters:
+      - description: Disease History ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - BearerAuth: []
+      summary: Delete disease history
+      tags:
+      - Kesehatan
+  /siswa:
+    get:
+      description: Get paginated list of students
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 20
+        description: Page size
+        in: query
+        name: page_size
+        type: integer
+      - description: Search by name, NISN, or registration number
+        in: query
+        name: search
+        type: string
+      - description: Sort field
+        in: query
+        name: sort_by
+        type: string
+      - description: Sort direction (asc/desc)
+        in: query
+        name: sort_dir
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.PaginatedResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/responses.SiswaListResponse'
+                  type: array
+              type: object
+      security:
+      - BearerAuth: []
+      summary: Get all students
+      tags:
+      - Siswa
+    post:
+      consumes:
+      - application/json
+      description: Create a new student record
+      parameters:
+      - description: Student data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreateSiswaRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.SiswaDetailResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - BearerAuth: []
+      summary: Create a new student
+      tags:
+      - Siswa
+  /siswa/{id}:
+    delete:
+      description: Soft delete a student
+      parameters:
+      - description: Student ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - BearerAuth: []
+      summary: Delete student
+      tags:
+      - Siswa
+    get:
+      description: Get detailed student information by ID
+      parameters:
+      - description: Student ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.SiswaDetailResponse'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - BearerAuth: []
+      summary: Get student by ID
+      tags:
+      - Siswa
+    put:
+      consumes:
+      - application/json
+      description: Update student information
+      parameters:
+      - description: Student ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Student data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/requests.UpdateSiswaRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.SiswaDetailResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - BearerAuth: []
+      summary: Update student
+      tags:
+      - Siswa
+  /siswa/{id}/beasiswa:
+    post:
+      consumes:
+      - application/json
+      description: Add scholarship record to student
+      parameters:
+      - description: Student ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Scholarship data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreateBeasiswaRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.BeasiswaResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - BearerAuth: []
+      summary: Add scholarship
+      tags:
+      - Beasiswa
+  /siswa/{id}/foto:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Upload a photo for a student
+      parameters:
+      - description: Student ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Photo file (JPEG, PNG, GIF, WebP)
+        in: formData
+        name: foto
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - BearerAuth: []
+      summary: Upload student photo
+      tags:
+      - Siswa
+  /siswa/{id}/kehadiran:
+    get:
+      description: Get attendance records for a student with pagination
+      parameters:
+      - description: Student ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 20
+        description: Page size
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.PaginatedResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/responses.KehadiranResponse'
+                  type: array
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - BearerAuth: []
+      summary: Get attendance
+      tags:
+      - Siswa
+  /siswa/{id}/kepribadian:
+    post:
+      consumes:
+      - application/json
+      description: Add personality record to student
+      parameters:
+      - description: Student ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Personality data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreateKepribadianRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.KepribadianResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - BearerAuth: []
+      summary: Add personality record
+      tags:
+      - Kepribadian
+  /siswa/{id}/kesehatan:
+    post:
+      consumes:
+      - application/json
+      description: Create or update health data for a student
+      parameters:
+      - description: Student ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Health data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreateKesehatanRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.KesehatanResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - BearerAuth: []
+      summary: Create or update health data
+      tags:
+      - Kesehatan
+  /siswa/{id}/nilai-semester:
+    get:
+      description: Get semester grades for a student with filters and pagination
+      parameters:
+      - description: Student ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 20
+        description: Page size
+        in: query
+        name: page_size
+        type: integer
+      - description: Class filter (X, XI, XII)
+        in: query
+        name: kelas
+        type: string
+      - description: Semester filter (1, 2)
+        in: query
+        name: semester
+        type: integer
+      - description: Academic year filter
+        in: query
+        name: tahun_pelajaran
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.PaginatedResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/responses.NilaiSemesterResponse'
+                  type: array
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - BearerAuth: []
+      summary: Get semester grades
+      tags:
+      - Nilai
+  /siswa/{id}/orang-tua:
+    post:
+      consumes:
+      - application/json
+      description: Create parent for a student
+      parameters:
+      - description: Student ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Parent data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreateOrangTuaRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.OrangTuaResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - BearerAuth: []
+      summary: Create parent
+      tags:
+      - Orang Tua
+  /siswa/{id}/pendidikan:
+    post:
+      consumes:
+      - application/json
+      description: Add previous education record to student
+      parameters:
+      - description: Student ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Education data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreatePendidikanRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.PendidikanResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - BearerAuth: []
+      summary: Add previous education
+      tags:
+      - Pendidikan
+  /siswa/{id}/prestasi:
+    post:
+      consumes:
+      - application/json
+      description: Add achievement record to student
+      parameters:
+      - description: Student ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Achievement data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreatePrestasiRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.PrestasiResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - BearerAuth: []
+      summary: Add achievement
+      tags:
+      - Prestasi
+  /siswa/{id}/wali:
+    post:
+      consumes:
+      - application/json
+      description: Create or update guardian for a student
+      parameters:
+      - description: Student ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Guardian data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreateWaliRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.WaliResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - BearerAuth: []
+      summary: Create or update guardian
+      tags:
+      - Wali
+  /siswa/{siswa_id}/catatan-semester:
+    get:
+      description: Get semester notes for a student
+      parameters:
+      - description: Student ID
+        in: path
+        name: siswa_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/responses.CatatanSemesterResponse'
+                  type: array
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - BearerAuth: []
+      summary: Get semester notes
+      tags:
+      - Catatan Semester
+    post:
+      consumes:
+      - application/json
+      description: Create semester notes for a student
+      parameters:
+      - description: Student ID
+        in: path
+        name: siswa_id
+        required: true
+        type: integer
+      - description: Semester notes data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreateCatatanSemesterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.CatatanSemesterResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - BearerAuth: []
+      summary: Create semester notes
+      tags:
+      - Catatan Semester
+  /siswa/{siswa_id}/nilai-ijazah:
+    get:
+      description: Get certificate grades for a student
+      parameters:
+      - description: Student ID
+        in: path
+        name: siswa_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/responses.NilaiIjazahResponse'
+                  type: array
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - BearerAuth: []
+      summary: Get certificate grades
+      tags:
+      - Nilai
+    post:
+      consumes:
+      - application/json
+      description: Create a certificate grade for a student
+      parameters:
+      - description: Student ID
+        in: path
+        name: siswa_id
+        required: true
+        type: integer
+      - description: Certificate grade data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreateNilaiIjazahRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.NilaiIjazahResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - BearerAuth: []
+      summary: Create certificate grade
+      tags:
+      - Nilai
+  /siswa/{siswa_id}/nilai-semester:
+    post:
+      consumes:
+      - application/json
+      description: Create a semester grade for a student
+      parameters:
+      - description: Student ID
+        in: path
+        name: siswa_id
+        required: true
+        type: integer
+      - description: Grade data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreateNilaiSemesterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.NilaiSemesterResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - BearerAuth: []
+      summary: Create semester grade
+      tags:
+      - Nilai
+  /siswa/{siswa_id}/nilai-semester/batch:
+    post:
+      consumes:
+      - application/json
+      description: Create multiple semester grades for a student
+      parameters:
+      - description: Student ID
+        in: path
+        name: siswa_id
+        required: true
+        type: integer
+      - description: Batch grade data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/requests.BatchNilaiSemesterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/responses.NilaiSemesterResponse'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.Response'
+      security:
+      - BearerAuth: []
+      summary: Create multiple semester grades
+      tags:
+      - Nilai
+securityDefinitions:
+  BearerAuth:
+    description: Enter "Bearer {token}" to authenticate
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

@@ -1,0 +1,386 @@
+{
+    "info": {
+        "_postman_id": "api-siswa-collection",
+        "name": "API Siswa Induk (Explicit Auth)",
+        "description": "Postman collection with Explicit Bearer Auth",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Auth",
+            "item": [
+                {
+                    "name": "Login",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "var jsonData = pm.response.json();",
+                                    "if (jsonData.success && jsonData.data.token) {",
+                                    "    pm.collectionVariables.set(\"token\", jsonData.data.token);",
+                                    "    pm.environment.set(\"token\", jsonData.data.token);",
+                                    "    console.log(\"Token updated successfully: \" + jsonData.data.token);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"username\": \"admin\",\n    \"password\": \"admin123\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/login",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "login"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Register",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"username\": \"newuser\",\n    \"email\": \"new@example.com\",\n    \"password\": \"password123\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/register",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "register"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Siswa",
+            "item": [
+                {
+                    "name": "Get All Siswa",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/siswa?page=1&page_size=10",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "siswa"
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "page_size",
+                                    "value": "10"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Create Siswa",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"no_induk\": \"2024001\",\n    \"nisn\": \"0012345678\",\n    \"nama_lengkap\": \"Budi Santoso\",\n    \"jenis_kelamin\": \"L\",\n    \"tempat_lahir\": \"Jakarta\",\n    \"tanggal_lahir\": \"2008-05-15\",\n    \"agama\": \"Islam\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/siswa",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "siswa"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Siswa Detail",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/siswa/1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "siswa",
+                                "1"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Data Detail",
+            "item": [
+                {
+                    "name": "Add Orang Tua",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"tipe\": \"ayah\",\n    \"nama\": \"Ayah Budi\",\n    \"pekerjaan\": \"Wiraswasta\",\n    \"no_telepon\": \"08123456789\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/siswa/1/orang-tua",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "siswa",
+                                "1",
+                                "orang-tua"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Add Kesehatan",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"golongan_darah\": \"O\",\n    \"berat_badan_masuk\": 55.5,\n    \"tinggi_badan_masuk\": 165\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/siswa/1/kesehatan",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "siswa",
+                                "1",
+                                "kesehatan"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Nilai & Akademik",
+            "item": [
+                {
+                    "name": "Get Mata Pelajaran",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/mata-pelajaran",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "mata-pelajaran"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Add Nilai Semester",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"mata_pelajaran_id\": 1,\n    \"kelas\": \"X\",\n    \"semester\": 1,\n    \"tahun_pelajaran\": \"2024/2025\",\n    \"nilai_pengetahuan\": 85,\n    \"predikat_pengetahuan\": \"B\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/siswa/1/nilai-semester",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "siswa",
+                                "1",
+                                "nilai-semester"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Kehadiran",
+                    "request": {
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/siswa/1/kehadiran",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "siswa",
+                                "1",
+                                "kehadiran"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        }
+    ],
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:8080/api/v1",
+            "type": "string"
+        },
+        {
+            "key": "token",
+            "value": "",
+            "type": "string"
+        }
+    ]
+}

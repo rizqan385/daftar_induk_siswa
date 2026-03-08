@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/kampunk/backend/utils"
+	"daftar_induk_siswa/utils"
 )
 
 // AuthMiddleware validates JWT token

@@ -2,10 +2,10 @@ package handlers
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/kampunk/backend/dtos/requests"
-	"github.com/kampunk/backend/middlewares"
-	"github.com/kampunk/backend/services"
-	"github.com/kampunk/backend/utils"
+	"daftar_induk_siswa/dtos/requests"
+	"daftar_induk_siswa/middlewares"
+	"daftar_induk_siswa/services"
+	"daftar_induk_siswa/utils"
 )
 
 // AuthHandler handles authentication endpoints

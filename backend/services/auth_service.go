@@ -3,12 +3,12 @@ package services
 import (
 	"errors"
 
-	"github.com/kampunk/backend/configs"
-	"github.com/kampunk/backend/dtos/requests"
-	"github.com/kampunk/backend/dtos/responses"
-	"github.com/kampunk/backend/models"
-	"github.com/kampunk/backend/repositories"
-	"github.com/kampunk/backend/utils"
+	"daftar_induk_siswa/configs"
+	"daftar_induk_siswa/dtos/requests"
+	"daftar_induk_siswa/dtos/responses"
+	"daftar_induk_siswa/models"
+	"daftar_induk_siswa/repositories"
+	"daftar_induk_siswa/utils"
 	"gorm.io/gorm"
 )
 

@@ -1,0 +1,3659 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API untuk Sistem Data Induk Siswa SMK",
+        "title": "API Siswa Induk",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "email": "support@siswa.local"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api/v1",
+    "paths": {
+        "/auth/login": {
+            "post": {
+                "description": "Authenticate admin user and get JWT token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login admin",
+                "parameters": [
+                    {
+                        "description": "Login credentials",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.LoginResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/profile": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get the profile of the currently authenticated user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Get current user profile",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.UserResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/register": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create a new admin user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Register new admin",
+                "parameters": [
+                    {
+                        "description": "Registration data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.RegisterRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.UserResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/beasiswa/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Delete scholarship record",
+                "tags": [
+                    "Beasiswa"
+                ],
+                "summary": "Delete scholarship",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Scholarship Record ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/catatan-semester/{catatan_id}/pkl": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Add internship record to semester notes",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Catatan Semester"
+                ],
+                "summary": "Add PKL to semester notes",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Semester Notes ID",
+                        "name": "catatan_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "PKL data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.CreatePKLRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.PKLResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/kepribadian/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Delete personality record",
+                "tags": [
+                    "Kepribadian"
+                ],
+                "summary": "Delete personality record",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Personality Record ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/kesehatan/{id}/riwayat-penyakit": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Add disease history record to health data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Kesehatan"
+                ],
+                "summary": "Add disease history",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Health ID (kesehatan_id)",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Disease / condition data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.CreateRiwayatPenyakitRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.RiwayatPenyakitResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/mata-pelajaran": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get list of all active subjects",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Mata Pelajaran"
+                ],
+                "summary": "Get all subjects",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/responses.MataPelajaranResponse"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/orang-tua/{id}": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update parent data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Orang Tua"
+                ],
+                "summary": "Update parent",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Parent ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Parent data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.UpdateOrangTuaRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.OrangTuaResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Delete parent data",
+                "tags": [
+                    "Orang Tua"
+                ],
+                "summary": "Delete parent",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Parent ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/pendidikan/{id}": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update previous education record",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Pendidikan"
+                ],
+                "summary": "Update education",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Education Record ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Education data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.UpdatePendidikanRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.PendidikanResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Delete previous education record",
+                "tags": [
+                    "Pendidikan"
+                ],
+                "summary": "Delete education",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Education Record ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/prestasi/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Delete achievement record",
+                "tags": [
+                    "Prestasi"
+                ],
+                "summary": "Delete achievement",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Achievement Record ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/riwayat-penyakit/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Delete disease history record",
+                "tags": [
+                    "Kesehatan"
+                ],
+                "summary": "Delete disease history",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Disease History ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/siswa": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get paginated list of students",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Siswa"
+                ],
+                "summary": "Get all students",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 20,
+                        "description": "Page size",
+                        "name": "page_size",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search by name, NISN, or registration number",
+                        "name": "search",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort field",
+                        "name": "sort_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort direction (asc/desc)",
+                        "name": "sort_dir",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.PaginatedResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/responses.SiswaListResponse"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create a new student record",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Siswa"
+                ],
+                "summary": "Create a new student",
+                "parameters": [
+                    {
+                        "description": "Student data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.CreateSiswaRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.SiswaDetailResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/siswa/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get detailed student information by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Siswa"
+                ],
+                "summary": "Get student by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Student ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.SiswaDetailResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update student information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Siswa"
+                ],
+                "summary": "Update student",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Student ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Student data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.UpdateSiswaRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.SiswaDetailResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Soft delete a student",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Siswa"
+                ],
+                "summary": "Delete student",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Student ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/siswa/{id}/beasiswa": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Add scholarship record to student",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Beasiswa"
+                ],
+                "summary": "Add scholarship",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Student ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Scholarship data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.CreateBeasiswaRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.BeasiswaResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/siswa/{id}/foto": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Upload a photo for a student",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Siswa"
+                ],
+                "summary": "Upload student photo",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Student ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "Photo file (JPEG, PNG, GIF, WebP)",
+                        "name": "foto",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/siswa/{id}/kehadiran": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get attendance records for a student with pagination",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Siswa"
+                ],
+                "summary": "Get attendance",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Student ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 20,
+                        "description": "Page size",
+                        "name": "page_size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.PaginatedResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/responses.KehadiranResponse"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/siswa/{id}/kepribadian": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Add personality record to student",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Kepribadian"
+                ],
+                "summary": "Add personality record",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Student ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Personality data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.CreateKepribadianRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.KepribadianResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/siswa/{id}/kesehatan": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create or update health data for a student",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Kesehatan"
+                ],
+                "summary": "Create or update health data",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Student ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Health data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.CreateKesehatanRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.KesehatanResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/siswa/{id}/nilai-semester": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get semester grades for a student with filters and pagination",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Nilai"
+                ],
+                "summary": "Get semester grades",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Student ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 20,
+                        "description": "Page size",
+                        "name": "page_size",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Class filter (X, XI, XII)",
+                        "name": "kelas",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Semester filter (1, 2)",
+                        "name": "semester",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Academic year filter",
+                        "name": "tahun_pelajaran",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.PaginatedResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/responses.NilaiSemesterResponse"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/siswa/{id}/orang-tua": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create parent for a student",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Orang Tua"
+                ],
+                "summary": "Create parent",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Student ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Parent data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.CreateOrangTuaRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.OrangTuaResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/siswa/{id}/pendidikan": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Add previous education record to student",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Pendidikan"
+                ],
+                "summary": "Add previous education",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Student ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Education data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.CreatePendidikanRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.PendidikanResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/siswa/{id}/prestasi": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Add achievement record to student",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Prestasi"
+                ],
+                "summary": "Add achievement",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Student ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Achievement data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.CreatePrestasiRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.PrestasiResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/siswa/{id}/wali": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create or update guardian for a student",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Wali"
+                ],
+                "summary": "Create or update guardian",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Student ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Guardian data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.CreateWaliRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.WaliResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/siswa/{siswa_id}/catatan-semester": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get semester notes for a student",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Catatan Semester"
+                ],
+                "summary": "Get semester notes",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Student ID",
+                        "name": "siswa_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/responses.CatatanSemesterResponse"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create semester notes for a student",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Catatan Semester"
+                ],
+                "summary": "Create semester notes",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Student ID",
+                        "name": "siswa_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Semester notes data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.CreateCatatanSemesterRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.CatatanSemesterResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/siswa/{siswa_id}/nilai-ijazah": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get certificate grades for a student",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Nilai"
+                ],
+                "summary": "Get certificate grades",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Student ID",
+                        "name": "siswa_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/responses.NilaiIjazahResponse"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create a certificate grade for a student",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Nilai"
+                ],
+                "summary": "Create certificate grade",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Student ID",
+                        "name": "siswa_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Certificate grade data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.CreateNilaiIjazahRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.NilaiIjazahResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/siswa/{siswa_id}/nilai-semester": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create a semester grade for a student",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Nilai"
+                ],
+                "summary": "Create semester grade",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Student ID",
+                        "name": "siswa_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Grade data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.CreateNilaiSemesterRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.NilaiSemesterResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/siswa/{siswa_id}/nilai-semester/batch": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create multiple semester grades for a student",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Nilai"
+                ],
+                "summary": "Create multiple semester grades",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Student ID",
+                        "name": "siswa_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Batch grade data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.BatchNilaiSemesterRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/responses.NilaiSemesterResponse"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "requests.BatchNilaiSemesterRequest": {
+            "type": "object",
+            "required": [
+                "nilai"
+            ],
+            "properties": {
+                "nilai": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/requests.CreateNilaiSemesterRequest"
+                    }
+                }
+            }
+        },
+        "requests.CreateBeasiswaRequest": {
+            "type": "object",
+            "required": [
+                "pemberi",
+                "tahun_pelajaran"
+            ],
+            "properties": {
+                "keterangan": {
+                    "type": "string",
+                    "example": "Beasiswa prestasi akademik"
+                },
+                "pemberi": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "example": "Pemerintah"
+                },
+                "tahun_pelajaran": {
+                    "type": "string",
+                    "maxLength": 20,
+                    "example": "2024/2025"
+                }
+            }
+        },
+        "requests.CreateCatatanSemesterRequest": {
+            "type": "object",
+            "required": [
+                "kelas",
+                "semester"
+            ],
+            "properties": {
+                "kelas": {
+                    "type": "string",
+                    "enum": [
+                        "X",
+                        "XI",
+                        "XII"
+                    ],
+                    "example": "X"
+                },
+                "semester": {
+                    "type": "integer",
+                    "maximum": 2,
+                    "minimum": 1,
+                    "example": 1
+                }
+            }
+        },
+        "requests.CreateKepribadianRequest": {
+            "type": "object",
+            "required": [
+                "aspek",
+                "nilai"
+            ],
+            "properties": {
+                "aspek": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "example": "Disiplin/Ketertiban"
+                },
+                "nilai": {
+                    "type": "string",
+                    "enum": [
+                        "Baik",
+                        "Cukup",
+                        "Kurang"
+                    ],
+                    "example": "Baik"
+                },
+                "tahun_pelajaran": {
+                    "type": "string",
+                    "maxLength": 20,
+                    "example": "2024/2025"
+                }
+            }
+        },
+        "requests.CreateKesehatanRequest": {
+            "type": "object",
+            "properties": {
+                "berat_badan_keluar": {
+                    "type": "number",
+                    "example": 55
+                },
+                "berat_badan_masuk": {
+                    "type": "number",
+                    "example": 50.5
+                },
+                "golongan_darah": {
+                    "type": "string",
+                    "enum": [
+                        "A",
+                        "B",
+                        "AB",
+                        "O"
+                    ],
+                    "example": "A"
+                },
+                "kesanggupan_jasmani": {
+                    "type": "string",
+                    "example": "Baik"
+                },
+                "tinggi_badan_keluar": {
+                    "type": "number",
+                    "example": 165
+                },
+                "tinggi_badan_masuk": {
+                    "type": "number",
+                    "example": 160
+                }
+            }
+        },
+        "requests.CreateNilaiIjazahRequest": {
+            "type": "object",
+            "required": [
+                "mata_pelajaran_id",
+                "nilai_akhir"
+            ],
+            "properties": {
+                "mata_pelajaran_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "nilai_akhir": {
+                    "type": "integer",
+                    "maximum": 100,
+                    "example": 85
+                },
+                "no_ijazah": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "example": "DN-01/IJ-2027"
+                },
+                "tahun_lulus": {
+                    "type": "string",
+                    "maxLength": 10,
+                    "example": "2027"
+                },
+                "tanggal_lulus": {
+                    "type": "string",
+                    "example": "2027-06-15"
+                }
+            }
+        },
+        "requests.CreateNilaiSemesterRequest": {
+            "type": "object",
+            "required": [
+                "kelas",
+                "mata_pelajaran_id",
+                "semester",
+                "tahun_pelajaran"
+            ],
+            "properties": {
+                "deskripsi_keterampilan": {
+                    "type": "string",
+                    "example": "Mampu menerapkan dengan baik"
+                },
+                "deskripsi_pengetahuan": {
+                    "type": "string",
+                    "example": "Baik dalam memahami materi"
+                },
+                "kelas": {
+                    "type": "string",
+                    "enum": [
+                        "X",
+                        "XI",
+                        "XII"
+                    ],
+                    "example": "X"
+                },
+                "mata_pelajaran_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "nilai_keterampilan": {
+                    "type": "integer",
+                    "maximum": 100,
+                    "example": 88
+                },
+                "nilai_pengetahuan": {
+                    "type": "integer",
+                    "maximum": 100,
+                    "example": 85
+                },
+                "predikat_keterampilan": {
+                    "type": "string",
+                    "enum": [
+                        "A",
+                        "B",
+                        "C",
+                        "D"
+                    ],
+                    "example": "B"
+                },
+                "predikat_pengetahuan": {
+                    "type": "string",
+                    "enum": [
+                        "A",
+                        "B",
+                        "C",
+                        "D"
+                    ],
+                    "example": "B"
+                },
+                "semester": {
+                    "type": "integer",
+                    "maximum": 2,
+                    "minimum": 1,
+                    "example": 1
+                },
+                "tahun_pelajaran": {
+                    "type": "string",
+                    "maxLength": 20,
+                    "example": "2024/2025"
+                }
+            }
+        },
+        "requests.CreateOrangTuaRequest": {
+            "type": "object",
+            "required": [
+                "nama",
+                "tipe"
+            ],
+            "properties": {
+                "alamat": {
+                    "type": "string",
+                    "example": "Jl. Merdeka No. 123"
+                },
+                "kewarganegaraan": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "example": "Indonesia"
+                },
+                "masih_hidup": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "nama": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "example": "Budi Santoso"
+                },
+                "no_telepon": {
+                    "type": "string",
+                    "maxLength": 20,
+                    "example": "081234567890"
+                },
+                "pekerjaan": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "example": "Wiraswasta"
+                },
+                "pendidikan_terakhir": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "example": "S1"
+                },
+                "penghasilan_bulanan": {
+                    "type": "number",
+                    "example": 5000000
+                },
+                "tanggal_lahir": {
+                    "type": "string",
+                    "example": "1975-03-20"
+                },
+                "tempat_lahir": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "example": "Jakarta"
+                },
+                "tipe": {
+                    "type": "string",
+                    "enum": [
+                        "ayah",
+                        "ibu"
+                    ],
+                    "example": "ayah"
+                }
+            }
+        },
+        "requests.CreatePKLRequest": {
+            "type": "object",
+            "required": [
+                "nama_dudi"
+            ],
+            "properties": {
+                "keterangan": {
+                    "type": "string",
+                    "example": "Praktek sebagai teknisi jaringan"
+                },
+                "lama_bulan": {
+                    "type": "integer",
+                    "example": 3
+                },
+                "lokasi": {
+                    "type": "string",
+                    "maxLength": 200,
+                    "example": "Bandung"
+                },
+                "nama_dudi": {
+                    "type": "string",
+                    "maxLength": 200,
+                    "example": "PT. Teknologi Indonesia"
+                }
+            }
+        },
+        "requests.CreatePendidikanRequest": {
+            "type": "object",
+            "required": [
+                "asal_sekolah",
+                "kelas_diterima",
+                "tanggal_diterima",
+                "tipe"
+            ],
+            "properties": {
+                "alamat_sekolah": {
+                    "type": "string",
+                    "example": "Jl. Pendidikan No. 1"
+                },
+                "alasan_pindah": {
+                    "type": "string",
+                    "example": ""
+                },
+                "asal_sekolah": {
+                    "type": "string",
+                    "maxLength": 200,
+                    "example": "SMP Negeri 1 Bandung"
+                },
+                "kelas_diterima": {
+                    "type": "string",
+                    "enum": [
+                        "X",
+                        "XI",
+                        "XII"
+                    ],
+                    "example": "X"
+                },
+                "no_ijazah": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "example": "DN-01/MI-2024"
+                },
+                "no_skhun": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "example": "DN-01/SK-2024"
+                },
+                "tanggal_diterima": {
+                    "type": "string",
+                    "example": "2024-07-15"
+                },
+                "tanggal_ijazah": {
+                    "type": "string",
+                    "example": "2024-06-10"
+                },
+                "tanggal_skhun": {
+                    "type": "string",
+                    "example": "2024-06-10"
+                },
+                "tipe": {
+                    "type": "string",
+                    "enum": [
+                        "siswa_baru",
+                        "pindahan"
+                    ],
+                    "example": "siswa_baru"
+                }
+            }
+        },
+        "requests.CreatePrestasiRequest": {
+            "type": "object",
+            "required": [
+                "bidang"
+            ],
+            "properties": {
+                "bidang": {
+                    "type": "string",
+                    "enum": [
+                        "Kesenian",
+                        "Olahraga",
+                        "Kemasyarakatan",
+                        "Pramuka",
+                        "Karya Tulis",
+                        "Lainnya"
+                    ],
+                    "example": "Olahraga"
+                },
+                "keterangan": {
+                    "type": "string",
+                    "example": "Juara 1 Lomba Lari"
+                },
+                "tahun": {
+                    "type": "integer",
+                    "example": 2024
+                },
+                "tingkat": {
+                    "type": "string",
+                    "enum": [
+                        "Sekolah",
+                        "Kecamatan",
+                        "Kota",
+                        "Provinsi",
+                        "Nasional",
+                        "Internasional"
+                    ],
+                    "example": "Kota"
+                }
+            }
+        },
+        "requests.CreateRiwayatPenyakitRequest": {
+            "type": "object",
+            "required": [
+                "jenis_penyakit"
+            ],
+            "properties": {
+                "jenis_penyakit": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "example": "Demam"
+                },
+                "keterangan": {
+                    "type": "string",
+                    "example": "Sembuh total"
+                },
+                "lama_sakit": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "example": "1 Minggu"
+                },
+                "tahun": {
+                    "type": "integer",
+                    "example": 2020
+                }
+            }
+        },
+        "requests.CreateSiswaRequest": {
+            "type": "object",
+            "required": [
+                "agama",
+                "jenis_kelamin",
+                "nama_lengkap",
+                "nisn",
+                "no_induk",
+                "tanggal_lahir",
+                "tempat_lahir"
+            ],
+            "properties": {
+                "agama": {
+                    "type": "string",
+                    "maxLength": 20,
+                    "example": "Islam"
+                },
+                "anak_ke": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "example": 2
+                },
+                "bahasa_rumah": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "example": "Indonesia"
+                },
+                "jenis_kelamin": {
+                    "type": "string",
+                    "enum": [
+                        "L",
+                        "P"
+                    ],
+                    "example": "L"
+                },
+                "jumlah_saudara": {
+                    "type": "integer",
+                    "example": 3
+                },
+                "kewarganegaraan": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "example": "Indonesia"
+                },
+                "nama_lengkap": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "example": "Ahmad Syafiq"
+                },
+                "nama_panggilan": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "example": "Syafiq"
+                },
+                "nisn": {
+                    "type": "string",
+                    "example": "0012345678"
+                },
+                "no_induk": {
+                    "type": "string",
+                    "maxLength": 20,
+                    "example": "2024001"
+                },
+                "tanggal_lahir": {
+                    "type": "string",
+                    "example": "2008-05-15"
+                },
+                "tempat_lahir": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "example": "Jakarta"
+                }
+            }
+        },
+        "requests.CreateWaliRequest": {
+            "type": "object",
+            "required": [
+                "jenis_kelamin",
+                "nama"
+            ],
+            "properties": {
+                "alamat": {
+                    "type": "string",
+                    "example": "Jl. Desa No. 5"
+                },
+                "hubungan_dengan_siswa": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "example": "Paman"
+                },
+                "jenis_kelamin": {
+                    "type": "string",
+                    "enum": [
+                        "L",
+                        "P"
+                    ],
+                    "example": "L"
+                },
+                "kewarganegaraan": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "example": "Indonesia"
+                },
+                "nama": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "example": "Paman Ahmad"
+                },
+                "no_telepon": {
+                    "type": "string",
+                    "maxLength": 20,
+                    "example": "081234567891"
+                },
+                "pekerjaan": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "example": "Petani"
+                },
+                "pendidikan_terakhir": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "example": "SMA"
+                },
+                "penghasilan_bulanan": {
+                    "type": "number",
+                    "example": 3000000
+                },
+                "tanggal_lahir": {
+                    "type": "string",
+                    "example": "1970-01-15"
+                },
+                "tempat_lahir": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "example": "Bandung"
+                }
+            }
+        },
+        "requests.LoginRequest": {
+            "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string",
+                    "minLength": 6,
+                    "example": "admin123"
+                },
+                "username": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 3,
+                    "example": "admin"
+                }
+            }
+        },
+        "requests.RegisterRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "password",
+                "username"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "admin@example.com"
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 6,
+                    "example": "password123"
+                },
+                "username": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 3,
+                    "example": "newadmin"
+                }
+            }
+        },
+        "requests.UpdateOrangTuaRequest": {
+            "type": "object",
+            "properties": {
+                "alamat": {
+                    "type": "string",
+                    "example": "Jl. Merdeka No. 123"
+                },
+                "kewarganegaraan": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "example": "Indonesia"
+                },
+                "masih_hidup": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "nama": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "example": "Budi Santoso"
+                },
+                "no_telepon": {
+                    "type": "string",
+                    "maxLength": 20,
+                    "example": "081234567890"
+                },
+                "pekerjaan": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "example": "Wiraswasta"
+                },
+                "pendidikan_terakhir": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "example": "S1"
+                },
+                "penghasilan_bulanan": {
+                    "type": "number",
+                    "example": 5000000
+                },
+                "tanggal_lahir": {
+                    "type": "string",
+                    "example": "1975-03-20"
+                },
+                "tempat_lahir": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "example": "Jakarta"
+                },
+                "tipe": {
+                    "type": "string",
+                    "enum": [
+                        "ayah",
+                        "ibu"
+                    ],
+                    "example": "ayah"
+                }
+            }
+        },
+        "requests.UpdatePendidikanRequest": {
+            "type": "object",
+            "properties": {
+                "alamat_sekolah": {
+                    "type": "string",
+                    "example": "Jl. Pendidikan No. 1"
+                },
+                "alasan_pindah": {
+                    "type": "string",
+                    "example": ""
+                },
+                "asal_sekolah": {
+                    "type": "string",
+                    "maxLength": 200,
+                    "example": "SMP Negeri 1 Bandung"
+                },
+                "kelas_diterima": {
+                    "type": "string",
+                    "enum": [
+                        "X",
+                        "XI",
+                        "XII"
+                    ],
+                    "example": "X"
+                },
+                "no_ijazah": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "example": "DN-01/MI-2024"
+                },
+                "no_skhun": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "example": "DN-01/SK-2024"
+                },
+                "tanggal_diterima": {
+                    "type": "string",
+                    "example": "2024-07-15"
+                },
+                "tanggal_ijazah": {
+                    "type": "string",
+                    "example": "2024-06-10"
+                },
+                "tanggal_skhun": {
+                    "type": "string",
+                    "example": "2024-06-10"
+                },
+                "tipe": {
+                    "type": "string",
+                    "enum": [
+                        "siswa_baru",
+                        "pindahan"
+                    ],
+                    "example": "siswa_baru"
+                }
+            }
+        },
+        "requests.UpdateSiswaRequest": {
+            "type": "object",
+            "properties": {
+                "agama": {
+                    "type": "string",
+                    "maxLength": 20,
+                    "example": "Islam"
+                },
+                "anak_ke": {
+                    "type": "integer",
+                    "example": 2
+                },
+                "bahasa_rumah": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "example": "Indonesia"
+                },
+                "jenis_kelamin": {
+                    "type": "string",
+                    "enum": [
+                        "L",
+                        "P"
+                    ],
+                    "example": "L"
+                },
+                "jumlah_saudara": {
+                    "type": "integer",
+                    "example": 3
+                },
+                "kewarganegaraan": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "example": "Indonesia"
+                },
+                "nama_lengkap": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "example": "Ahmad Syafiq Updated"
+                },
+                "nama_panggilan": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "example": "Syafiq"
+                },
+                "tanggal_lahir": {
+                    "type": "string",
+                    "example": "2008-05-15"
+                },
+                "tempat_lahir": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "example": "Jakarta"
+                }
+            }
+        },
+        "responses.AlamatResponse": {
+            "type": "object",
+            "properties": {
+                "alamat_lengkap": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "jarak_ke_sekolah": {
+                    "type": "number"
+                },
+                "kecamatan": {
+                    "type": "string"
+                },
+                "kelurahan": {
+                    "type": "string"
+                },
+                "kode_pos": {
+                    "type": "string"
+                },
+                "kota": {
+                    "type": "string"
+                },
+                "no_telepon": {
+                    "type": "string"
+                },
+                "provinsi": {
+                    "type": "string"
+                },
+                "tinggal_dengan": {
+                    "type": "string"
+                },
+                "transportasi": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.BeasiswaResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "keterangan": {
+                    "type": "string"
+                },
+                "pemberi": {
+                    "type": "string"
+                },
+                "tahun_pelajaran": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.CatatanSemesterResponse": {
+            "type": "object",
+            "properties": {
+                "ekstrakurikuler": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.EkstrakurikulerResponse"
+                    }
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "kelas": {
+                    "type": "string"
+                },
+                "ketidakhadiran": {
+                    "$ref": "#/definitions/responses.KetidakhadiranResponse"
+                },
+                "pkl": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.PKLResponse"
+                    }
+                },
+                "prestasi_semester": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.PrestasiSemesterResponse"
+                    }
+                },
+                "semester": {
+                    "type": "integer"
+                }
+            }
+        },
+        "responses.EkstrakurikulerResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "keterangan": {
+                    "type": "string"
+                },
+                "nama_kegiatan": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.KehadiranResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "jumlah_alpa": {
+                    "type": "integer"
+                },
+                "jumlah_hadir": {
+                    "type": "integer"
+                },
+                "jumlah_hari_efektif": {
+                    "type": "integer"
+                },
+                "jumlah_izin": {
+                    "type": "integer"
+                },
+                "jumlah_sakit": {
+                    "type": "integer"
+                },
+                "kelas": {
+                    "type": "string"
+                },
+                "persentase_hadir": {
+                    "type": "number"
+                },
+                "semester": {
+                    "type": "integer"
+                }
+            }
+        },
+        "responses.KepribadianResponse": {
+            "type": "object",
+            "properties": {
+                "aspek": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "nilai": {
+                    "type": "string"
+                },
+                "tahun_pelajaran": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.KesehatanResponse": {
+            "type": "object",
+            "properties": {
+                "berat_badan_keluar": {
+                    "type": "number"
+                },
+                "berat_badan_masuk": {
+                    "type": "number"
+                },
+                "golongan_darah": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "kesanggupan_jasmani": {
+                    "type": "string"
+                },
+                "riwayat_penyakit": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.RiwayatPenyakitResponse"
+                    }
+                },
+                "tinggi_badan_keluar": {
+                    "type": "number"
+                },
+                "tinggi_badan_masuk": {
+                    "type": "number"
+                }
+            }
+        },
+        "responses.KetidakhadiranResponse": {
+            "type": "object",
+            "properties": {
+                "dengan_izin": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "karena_sakit": {
+                    "type": "integer"
+                },
+                "tanpa_keterangan": {
+                    "type": "integer"
+                }
+            }
+        },
+        "responses.LoginResponse": {
+            "type": "object",
+            "properties": {
+                "expires_in": {
+                    "type": "integer",
+                    "example": 86400
+                },
+                "token": {
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                },
+                "user": {
+                    "$ref": "#/definitions/responses.UserResponse"
+                }
+            }
+        },
+        "responses.MataPelajaranResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "kelompok": {
+                    "type": "string"
+                },
+                "kode": {
+                    "type": "string"
+                },
+                "nama": {
+                    "type": "string"
+                },
+                "sub_kelompok": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.MeninggalkanSekolahResponse": {
+            "type": "object",
+            "properties": {
+                "alamat_sekolah_tujuan": {
+                    "type": "string"
+                },
+                "alasan": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "no_ijazah": {
+                    "type": "string"
+                },
+                "sekolah_tujuan": {
+                    "type": "string"
+                },
+                "tanggal": {
+                    "type": "string"
+                },
+                "tipe": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.NilaiIjazahResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "mata_pelajaran": {
+                    "$ref": "#/definitions/responses.MataPelajaranResponse"
+                },
+                "nilai_akhir": {
+                    "type": "integer"
+                },
+                "no_ijazah": {
+                    "type": "string"
+                },
+                "tahun_lulus": {
+                    "type": "string"
+                },
+                "tanggal_lulus": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.NilaiSemesterResponse": {
+            "type": "object",
+            "properties": {
+                "deskripsi_keterampilan": {
+                    "type": "string"
+                },
+                "deskripsi_pengetahuan": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "kelas": {
+                    "type": "string"
+                },
+                "mata_pelajaran": {
+                    "$ref": "#/definitions/responses.MataPelajaranResponse"
+                },
+                "nilai_keterampilan": {
+                    "type": "integer"
+                },
+                "nilai_pengetahuan": {
+                    "type": "integer"
+                },
+                "predikat_keterampilan": {
+                    "type": "string"
+                },
+                "predikat_pengetahuan": {
+                    "type": "string"
+                },
+                "semester": {
+                    "type": "integer"
+                },
+                "tahun_pelajaran": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.NilaiSikapResponse": {
+            "type": "object",
+            "properties": {
+                "deskripsi_sosial": {
+                    "type": "string"
+                },
+                "deskripsi_spiritual": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "kelas": {
+                    "type": "string"
+                },
+                "semester": {
+                    "type": "integer"
+                }
+            }
+        },
+        "responses.OrangTuaResponse": {
+            "type": "object",
+            "properties": {
+                "alamat": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "kewarganegaraan": {
+                    "type": "string"
+                },
+                "masih_hidup": {
+                    "type": "boolean"
+                },
+                "nama": {
+                    "type": "string"
+                },
+                "no_telepon": {
+                    "type": "string"
+                },
+                "pekerjaan": {
+                    "type": "string"
+                },
+                "pendidikan_terakhir": {
+                    "type": "string"
+                },
+                "penghasilan_bulanan": {
+                    "type": "number"
+                },
+                "tanggal_lahir": {
+                    "type": "string"
+                },
+                "tempat_lahir": {
+                    "type": "string"
+                },
+                "tipe": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.PKLResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "keterangan": {
+                    "type": "string"
+                },
+                "lama_bulan": {
+                    "type": "integer"
+                },
+                "lokasi": {
+                    "type": "string"
+                },
+                "nama_dudi": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.PendidikanResponse": {
+            "type": "object",
+            "properties": {
+                "alamat_sekolah": {
+                    "type": "string"
+                },
+                "alasan_pindah": {
+                    "type": "string"
+                },
+                "asal_sekolah": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "kelas_diterima": {
+                    "type": "string"
+                },
+                "no_ijazah": {
+                    "type": "string"
+                },
+                "no_skhun": {
+                    "type": "string"
+                },
+                "tanggal_diterima": {
+                    "type": "string"
+                },
+                "tanggal_ijazah": {
+                    "type": "string"
+                },
+                "tanggal_skhun": {
+                    "type": "string"
+                },
+                "tipe": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.PrestasiResponse": {
+            "type": "object",
+            "properties": {
+                "bidang": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "keterangan": {
+                    "type": "string"
+                },
+                "tahun": {
+                    "type": "integer"
+                },
+                "tingkat": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.PrestasiSemesterResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "jenis_prestasi": {
+                    "type": "string"
+                },
+                "keterangan": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.RiwayatPenyakitResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "jenis_penyakit": {
+                    "type": "string"
+                },
+                "keterangan": {
+                    "type": "string"
+                },
+                "lama_sakit": {
+                    "type": "string"
+                },
+                "tahun": {
+                    "type": "integer"
+                }
+            }
+        },
+        "responses.SiswaDetailResponse": {
+            "type": "object",
+            "properties": {
+                "agama": {
+                    "type": "string"
+                },
+                "alamat": {
+                    "description": "Related data",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/responses.AlamatResponse"
+                        }
+                    ]
+                },
+                "anak_ke": {
+                    "type": "integer"
+                },
+                "bahasa_rumah": {
+                    "type": "string"
+                },
+                "beasiswa": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.BeasiswaResponse"
+                    }
+                },
+                "catatan_semester": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.CatatanSemesterResponse"
+                    }
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "foto_path": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "jenis_kelamin": {
+                    "type": "string"
+                },
+                "jumlah_saudara": {
+                    "type": "integer"
+                },
+                "kehadiran": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.KehadiranResponse"
+                    }
+                },
+                "kepribadian": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.KepribadianResponse"
+                    }
+                },
+                "kesehatan": {
+                    "$ref": "#/definitions/responses.KesehatanResponse"
+                },
+                "kewarganegaraan": {
+                    "type": "string"
+                },
+                "meninggalkan_sekolah": {
+                    "$ref": "#/definitions/responses.MeninggalkanSekolahResponse"
+                },
+                "nama_lengkap": {
+                    "type": "string"
+                },
+                "nama_panggilan": {
+                    "type": "string"
+                },
+                "nilai_ijazah": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.NilaiIjazahResponse"
+                    }
+                },
+                "nilai_semester": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.NilaiSemesterResponse"
+                    }
+                },
+                "nilai_sikap": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.NilaiSikapResponse"
+                    }
+                },
+                "nisn": {
+                    "type": "string"
+                },
+                "no_induk": {
+                    "type": "string"
+                },
+                "orang_tua": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.OrangTuaResponse"
+                    }
+                },
+                "pendidikan_sebelumnya": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.PendidikanResponse"
+                    }
+                },
+                "prestasi": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.PrestasiResponse"
+                    }
+                },
+                "tanggal_lahir": {
+                    "type": "string"
+                },
+                "tempat_lahir": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "wali": {
+                    "$ref": "#/definitions/responses.WaliResponse"
+                }
+            }
+        },
+        "responses.SiswaListResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "foto_path": {
+                    "type": "string",
+                    "example": "photos/123456.jpg"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "jenis_kelamin": {
+                    "type": "string",
+                    "example": "L"
+                },
+                "kelas": {
+                    "type": "string",
+                    "example": "X"
+                },
+                "nama_lengkap": {
+                    "type": "string",
+                    "example": "Ahmad Syafiq"
+                },
+                "nisn": {
+                    "type": "string",
+                    "example": "0012345678"
+                },
+                "no_induk": {
+                    "type": "string",
+                    "example": "2024001"
+                }
+            }
+        },
+        "responses.UserResponse": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "admin@example.com"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "is_active": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "username": {
+                    "type": "string",
+                    "example": "admin"
+                }
+            }
+        },
+        "responses.WaliResponse": {
+            "type": "object",
+            "properties": {
+                "alamat": {
+                    "type": "string"
+                },
+                "hubungan_dengan_siswa": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "jenis_kelamin": {
+                    "type": "string"
+                },
+                "kewarganegaraan": {
+                    "type": "string"
+                },
+                "nama": {
+                    "type": "string"
+                },
+                "no_telepon": {
+                    "type": "string"
+                },
+                "pekerjaan": {
+                    "type": "string"
+                },
+                "pendidikan_terakhir": {
+                    "type": "string"
+                },
+                "penghasilan_bulanan": {
+                    "type": "number"
+                },
+                "tanggal_lahir": {
+                    "type": "string"
+                },
+                "tempat_lahir": {
+                    "type": "string"
+                }
+            }
+        },
+        "utils.PaginatedResponse": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "message": {
+                    "type": "string"
+                },
+                "pagination": {
+                    "$ref": "#/definitions/utils.Pagination"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "utils.Pagination": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "total_items": {
+                    "type": "integer"
+                },
+                "total_pages": {
+                    "type": "integer"
+                }
+            }
+        },
+        "utils.Response": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "errors": {},
+                "message": {
+                    "type": "string"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "description": "Enter \"Bearer {token}\" to authenticate",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}

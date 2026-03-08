@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/kampunk/backend/configs"
+	"daftar_induk_siswa/configs"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"

@@ -4,9 +4,9 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/kampunk/backend/dtos/requests"
-	"github.com/kampunk/backend/services"
-	"github.com/kampunk/backend/utils"
+	"daftar_induk_siswa/dtos/requests"
+	"daftar_induk_siswa/services"
+	"daftar_induk_siswa/utils"
 )
 
 // SiswaHandler handles student endpoints

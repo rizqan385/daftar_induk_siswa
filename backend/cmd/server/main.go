@@ -6,12 +6,12 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/kampunk/backend/configs"
-	"github.com/kampunk/backend/database"
-	"github.com/kampunk/backend/routes"
+	"daftar_induk_siswa/configs"
+	"daftar_induk_siswa/database"
+	"daftar_induk_siswa/routes"
 	"github.com/rs/zerolog"
 
-	
+	_ "daftar_induk_siswa/docs"
 )
 
 // @title API Siswa Induk
@@ -57,7 +57,8 @@ func main() {
 	}
 	defer database.Close()
 
-	
+	// Seed database
+	database.Seed(db)
 
 	// Create Gin router
 	r := gin.New()

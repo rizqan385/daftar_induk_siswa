@@ -1,7 +1,7 @@
 package repositories
 
 import (
-	"github.com/kampunk/backend/models"
+	"daftar_induk_siswa/models"
 	"gorm.io/gorm"
 )
 
