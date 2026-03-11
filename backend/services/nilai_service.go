@@ -9,6 +9,7 @@ import (
 	"daftar_induk_siswa/models"
 	"daftar_induk_siswa/repositories"
 	"daftar_induk_siswa/utils"
+
 	"gorm.io/gorm"
 )
 
@@ -58,8 +59,10 @@ func (s *NilaiService) GetAllMataPelajaran() ([]responses.MataPelajaranResponse,
 			ID:          m.ID,
 			Kode:        m.Kode,
 			Nama:        m.Nama,
-			Kelompok:    m.Kelompok,
-			SubKelompok: m.SubKelompok,
+			Kelompok:     m.Kelompok,
+			SubKelompok:  m.SubKelompok,
+			KelasTarget1: m.KelasTarget1,
+			KelasTarget2: m.KelasTarget2,
 		})
 	}
 	return result, nil
@@ -100,7 +103,7 @@ func (s *NilaiService) CreateNilaiSemester(siswaID uint, req requests.CreateNila
 		DeskripsiKeterampilan: utils.SanitizeString(req.DeskripsiKeterampilan),
 	}
 
-	if err := s.nilaiRepo.Create(nilai); err != nil {
+	if err := s.nilaiRepo.Upsert(nilai); err != nil {
 		return nil, err
 	}
 
@@ -175,6 +178,54 @@ func (s *NilaiService) BatchCreateNilaiSemester(siswaID uint, req requests.Batch
 	return hasil, nil
 }
 
+// UpdateNilaiSemester updates an existing semester grade by ID
+func (s *NilaiService) UpdateNilaiSemester(id uint, req requests.UpdateNilaiSemesterRequest) (*responses.NilaiSemesterResponse, error) {
+	nilai, err := s.nilaiRepo.FindByID(id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("grade not found")
+		}
+		return nil, err
+	}
+
+	nilai.TahunPelajaran = utils.SanitizeString(req.TahunPelajaran)
+	nilai.NilaiPengetahuan = req.NilaiPengetahuan
+	nilai.PredikatPengetahuan = req.PredikatPengetahuan
+	nilai.DeskripsiPengetahuan = utils.SanitizeString(req.DeskripsiPengetahuan)
+	nilai.NilaiKeterampilan = req.NilaiKeterampilan
+	nilai.PredikatKeterampilan = req.PredikatKeterampilan
+	nilai.DeskripsiKeterampilan = utils.SanitizeString(req.DeskripsiKeterampilan)
+
+	if err := s.nilaiRepo.Update(nilai); err != nil {
+		return nil, err
+	}
+
+	var mapelResp *responses.MataPelajaranResponse
+	if nilai.MataPelajaran != nil {
+		mapelResp = &responses.MataPelajaranResponse{
+			ID:          nilai.MataPelajaran.ID,
+			Kode:        nilai.MataPelajaran.Kode,
+			Nama:        nilai.MataPelajaran.Nama,
+			Kelompok:    nilai.MataPelajaran.Kelompok,
+			SubKelompok: nilai.MataPelajaran.SubKelompok,
+		}
+	}
+
+	return &responses.NilaiSemesterResponse{
+		ID:                    nilai.ID,
+		MataPelajaran:         mapelResp,
+		Kelas:                 nilai.Kelas,
+		Semester:              nilai.Semester,
+		TahunPelajaran:        nilai.TahunPelajaran,
+		NilaiPengetahuan:      nilai.NilaiPengetahuan,
+		PredikatPengetahuan:   nilai.PredikatPengetahuan,
+		DeskripsiPengetahuan:  nilai.DeskripsiPengetahuan,
+		NilaiKeterampilan:     nilai.NilaiKeterampilan,
+		PredikatKeterampilan:  nilai.PredikatKeterampilan,
+		DeskripsiKeterampilan: nilai.DeskripsiKeterampilan,
+	}, nil
+}
+
 // GetNilaiSemester gets semester grades for a student
 func (s *NilaiService) GetNilaiSemester(siswaID uint, filter requests.NilaiFilterRequest) ([]responses.NilaiSemesterResponse, error) {
 	nilaiList, err := s.nilaiRepo.FindBySiswaIDFiltered(siswaID, filter.Kelas, filter.Semester, filter.TahunPelajaran)
@@ -211,6 +262,121 @@ func (s *NilaiService) GetNilaiSemester(siswaID uint, filter requests.NilaiFilte
 	}
 
 	return result, nil
+}
+
+// CreateKehadiran creates or updates attendance record (UPSERT by siswa_id, kelas, semester)
+func (s *NilaiService) CreateKehadiran(siswaID uint, req requests.CreateKehadiranRequest) (*responses.KehadiranResponse, error) {
+	// Validate student exists
+	_, err := s.siswaRepo.FindByID(siswaID)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("student not found")
+		}
+		return nil, err
+	}
+
+	// Find existing record with same unique key
+	existingKehadiran, errFind := s.kehadiranRepo.FindBySiswaIDAndKelas(siswaID, req.Kelas, req.Semester)
+	if errFind != nil && !errors.Is(errFind, gorm.ErrRecordNotFound) {
+		return nil, errFind
+	}
+
+	if existingKehadiran != nil && existingKehadiran.ID > 0 {
+		existingKehadiran.JumlahHadir = req.JumlahHadir
+		existingKehadiran.PersentaseHadir = req.PersentaseHadir
+		existingKehadiran.JumlahSakit = req.JumlahSakit
+		existingKehadiran.JumlahIzin = req.JumlahIzin
+		existingKehadiran.JumlahAlpa = req.JumlahAlpa
+		existingKehadiran.JumlahHariEfektif = req.JumlahHariEfektif
+		if err := s.kehadiranRepo.Update(existingKehadiran); err != nil {
+			return nil, err
+		}
+		return &responses.KehadiranResponse{
+			ID: existingKehadiran.ID, Kelas: existingKehadiran.Kelas, Semester: existingKehadiran.Semester,
+			JumlahHadir: existingKehadiran.JumlahHadir, PersentaseHadir: existingKehadiran.PersentaseHadir,
+			JumlahSakit: existingKehadiran.JumlahSakit, JumlahIzin: existingKehadiran.JumlahIzin,
+			JumlahAlpa: existingKehadiran.JumlahAlpa, JumlahHariEfektif: existingKehadiran.JumlahHariEfektif,
+		}, nil
+	}
+
+	kehadiran := &models.Kehadiran{
+		SiswaID:           siswaID,
+		Kelas:             req.Kelas,
+		Semester:          req.Semester,
+		JumlahHadir:       req.JumlahHadir,
+		PersentaseHadir:   req.PersentaseHadir,
+		JumlahSakit:       req.JumlahSakit,
+		JumlahIzin:        req.JumlahIzin,
+		JumlahAlpa:        req.JumlahAlpa,
+		JumlahHariEfektif: req.JumlahHariEfektif,
+	}
+
+	if err := s.kehadiranRepo.Create(kehadiran); err != nil {
+		return nil, err
+	}
+
+	return &responses.KehadiranResponse{
+		ID:                kehadiran.ID,
+		Kelas:             kehadiran.Kelas,
+		Semester:          kehadiran.Semester,
+		JumlahHadir:       kehadiran.JumlahHadir,
+		PersentaseHadir:   kehadiran.PersentaseHadir,
+		JumlahSakit:       kehadiran.JumlahSakit,
+		JumlahIzin:        kehadiran.JumlahIzin,
+		JumlahAlpa:        kehadiran.JumlahAlpa,
+		JumlahHariEfektif: kehadiran.JumlahHariEfektif,
+	}, nil
+}
+
+// CreateNilaiSikap creates or updates attitude record (UPSERT by siswa_id, kelas, semester)
+func (s *NilaiService) CreateNilaiSikap(siswaID uint, req requests.CreateNilaiSikapRequest) (*responses.NilaiSikapResponse, error) {
+	// Validate student exists
+	_, err := s.siswaRepo.FindByID(siswaID)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("student not found")
+		}
+		return nil, err
+	}
+
+	// Find existing record with same unique key
+	existingSikap, errFind := s.sikapRepo.FindBySiswaIDAndKelas(siswaID, req.Kelas, req.Semester)
+	if errFind != nil && !errors.Is(errFind, gorm.ErrRecordNotFound) {
+		return nil, errFind
+	}
+
+	if existingSikap != nil && existingSikap.ID > 0 {
+		// Update existing
+		existingSikap.DeskripsiSpiritual = utils.SanitizeString(req.DeskripsiSpiritual)
+		existingSikap.DeskripsiSosial = utils.SanitizeString(req.DeskripsiSosial)
+		if err := s.sikapRepo.Update(existingSikap); err != nil {
+			return nil, err
+		}
+		return &responses.NilaiSikapResponse{
+			ID: existingSikap.ID, Kelas: existingSikap.Kelas, Semester: existingSikap.Semester,
+			DeskripsiSpiritual: existingSikap.DeskripsiSpiritual, DeskripsiSosial: existingSikap.DeskripsiSosial,
+		}, nil
+	}
+
+	sikap := &models.NilaiSikap{
+		SiswaID:            siswaID,
+		Kelas:              req.Kelas,
+		Semester:           req.Semester,
+		DeskripsiSpiritual: utils.SanitizeString(req.DeskripsiSpiritual),
+		DeskripsiSosial:    utils.SanitizeString(req.DeskripsiSosial),
+	}
+
+	if err := s.sikapRepo.Create(sikap); err != nil {
+		return nil, err
+	}
+
+	return &responses.NilaiSikapResponse{
+		ID:                 sikap.ID,
+		Kelas:              sikap.Kelas,
+		Semester:           sikap.Semester,
+		DeskripsiSpiritual: sikap.DeskripsiSpiritual,
+		DeskripsiSosial:    sikap.DeskripsiSosial,
+	}, nil
 }
 
 // CreateNilaiIjazah creates certificate grade
@@ -317,9 +483,10 @@ func (s *NilaiService) CreateCatatanSemester(siswaID uint, req requests.CreateCa
 	}
 
 	catatan := &models.CatatanAkhirSemester{
-		SiswaID:  siswaID,
-		Kelas:    req.Kelas,
-		Semester: req.Semester,
+		SiswaID:          siswaID,
+		Kelas:            req.Kelas,
+		Semester:         req.Semester,
+		CatatanWaliKelas: req.CatatanWaliKelas,
 	}
 
 	if err := s.catatanRepo.Create(catatan); err != nil {
@@ -327,9 +494,33 @@ func (s *NilaiService) CreateCatatanSemester(siswaID uint, req requests.CreateCa
 	}
 
 	return &responses.CatatanSemesterResponse{
-		ID:       catatan.ID,
-		Kelas:    catatan.Kelas,
-		Semester: catatan.Semester,
+		ID:               catatan.ID,
+		Kelas:            catatan.Kelas,
+		Semester:         catatan.Semester,
+		CatatanWaliKelas: catatan.CatatanWaliKelas,
+	}, nil
+}
+
+// UpdateCatatanSemester updates the wali kelas note for an existing CAS
+func (s *NilaiService) UpdateCatatanSemester(id uint, req requests.UpdateCatatanSemesterRequest) (*responses.CatatanSemesterResponse, error) {
+	catatan, err := s.catatanRepo.FindByID(id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("semester notes not found")
+		}
+		return nil, err
+	}
+
+	catatan.CatatanWaliKelas = req.CatatanWaliKelas
+	if err := s.catatanRepo.Update(catatan); err != nil {
+		return nil, err
+	}
+
+	return &responses.CatatanSemesterResponse{
+		ID:               catatan.ID,
+		Kelas:            catatan.Kelas,
+		Semester:         catatan.Semester,
+		CatatanWaliKelas: catatan.CatatanWaliKelas,
 	}, nil
 }
 
@@ -343,9 +534,10 @@ func (s *NilaiService) GetCatatanSemester(siswaID uint) ([]responses.CatatanSeme
 	var result []responses.CatatanSemesterResponse
 	for _, c := range catatanList {
 		resp := responses.CatatanSemesterResponse{
-			ID:       c.ID,
-			Kelas:    c.Kelas,
-			Semester: c.Semester,
+			ID:               c.ID,
+			Kelas:            c.Kelas,
+			Semester:         c.Semester,
+			CatatanWaliKelas: c.CatatanWaliKelas,
 		}
 
 		for _, pkl := range c.PKL {
@@ -362,6 +554,7 @@ func (s *NilaiService) GetCatatanSemester(siswaID uint) ([]responses.CatatanSeme
 			resp.Ekstrakurikuler = append(resp.Ekstrakurikuler, responses.EkstrakurikulerResponse{
 				ID:           eks.ID,
 				NamaKegiatan: eks.NamaKegiatan,
+				Nilai:        eks.Nilai,
 				Keterangan:   eks.Keterangan,
 			})
 		}
@@ -435,6 +628,7 @@ func (s *NilaiService) AddEkstrakurikuler(catatanID uint, req requests.CreateEks
 	ekskul := &models.Ekstrakurikuler{
 		CatatanID:    catatanID,
 		NamaKegiatan: utils.SanitizeString(req.NamaKegiatan),
+		Nilai:        utils.SanitizeString(req.Nilai),
 		Keterangan:   utils.SanitizeString(req.Keterangan),
 	}
 
@@ -445,6 +639,85 @@ func (s *NilaiService) AddEkstrakurikuler(catatanID uint, req requests.CreateEks
 	return &responses.EkstrakurikulerResponse{
 		ID:           ekskul.ID,
 		NamaKegiatan: ekskul.NamaKegiatan,
+		Nilai:        ekskul.Nilai,
 		Keterangan:   ekskul.Keterangan,
 	}, nil
+}
+
+// UpdatePKL updates internship record
+func (s *NilaiService) UpdatePKL(id uint, req requests.CreatePKLRequest) (*responses.PKLResponse, error) {
+	pkl, err := s.catatanRepo.FindPKLByID(id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("pkl record not found")
+		}
+		return nil, err
+	}
+
+	pkl.NamaDUDI = utils.SanitizeString(req.NamaDUDI)
+	pkl.Lokasi = utils.SanitizeString(req.Lokasi)
+	pkl.LamaBulan = req.LamaBulan
+	pkl.Keterangan = utils.SanitizeString(req.Keterangan)
+
+	if err := s.catatanRepo.UpdatePKL(pkl); err != nil {
+		return nil, err
+	}
+
+	return &responses.PKLResponse{
+		ID:         pkl.ID,
+		NamaDUDI:   pkl.NamaDUDI,
+		Lokasi:     pkl.Lokasi,
+		LamaBulan:  pkl.LamaBulan,
+		Keterangan: pkl.Keterangan,
+	}, nil
+}
+
+// DeletePKL deletes internship record
+func (s *NilaiService) DeletePKL(id uint) error {
+	_, err := s.catatanRepo.FindPKLByID(id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errors.New("pkl record not found")
+		}
+		return err
+	}
+	return s.catatanRepo.DeletePKL(id)
+}
+
+// UpdateEkstrakurikuler updates extracurricular activity record
+func (s *NilaiService) UpdateEkstrakurikuler(id uint, req requests.CreateEkstrakurikulerRequest) (*responses.EkstrakurikulerResponse, error) {
+	ekskul, err := s.catatanRepo.FindEkstrakurikulerByID(id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("extracurricular record not found")
+		}
+		return nil, err
+	}
+
+	ekskul.NamaKegiatan = utils.SanitizeString(req.NamaKegiatan)
+	ekskul.Nilai = utils.SanitizeString(req.Nilai)
+	ekskul.Keterangan = utils.SanitizeString(req.Keterangan)
+
+	if err := s.catatanRepo.UpdateEkstrakurikuler(ekskul); err != nil {
+		return nil, err
+	}
+
+	return &responses.EkstrakurikulerResponse{
+		ID:           ekskul.ID,
+		NamaKegiatan: ekskul.NamaKegiatan,
+		Nilai:        ekskul.Nilai,
+		Keterangan:   ekskul.Keterangan,
+	}, nil
+}
+
+// DeleteEkstrakurikuler deletes extracurricular activity record
+func (s *NilaiService) DeleteEkstrakurikuler(id uint) error {
+	_, err := s.catatanRepo.FindEkstrakurikulerByID(id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errors.New("extracurricular record not found")
+		}
+		return err
+	}
+	return s.catatanRepo.DeleteEkstrakurikuler(id)
 }

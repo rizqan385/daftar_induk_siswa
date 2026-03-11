@@ -10,6 +10,11 @@ import (
 
 // Seed populates the database with initial data
 func Seed(db *gorm.DB) {
+	// Auto-migrate tables that are added after initial schema
+	if err := db.AutoMigrate(&models.ActivityLog{}, &models.KeanggotaanEkskul{}); err != nil {
+		log.Printf("Warning: Failed to auto-migrate ActivityLog: %v", err)
+	}
+
 	seedUsers(db)
 }
 

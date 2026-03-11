@@ -1,14 +1,18 @@
 package routes
 
 import (
+	"strconv"
 	"time"
+
+	"daftar_induk_siswa/handlers"
+	"daftar_induk_siswa/middlewares"
+	"daftar_induk_siswa/models"
+	"daftar_induk_siswa/repositories"
+	"daftar_induk_siswa/services"
+	"daftar_induk_siswa/utils"
 
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
-	"daftar_induk_siswa/handlers"
-	"daftar_induk_siswa/middlewares"
-	"daftar_induk_siswa/repositories"
-	"daftar_induk_siswa/services"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"gorm.io/gorm"
@@ -45,10 +49,13 @@ func SetupRoutes(r *gin.Engine, db *gorm.DB) {
 	kepribadianRepo := repositories.NewKepribadianRepository(db)
 	prestasiRepo := repositories.NewPrestasiRepository(db)
 	beasiswaRepo := repositories.NewBeasiswaRepository(db)
+	activityLogRepo := repositories.NewActivityLogRepository(db)
+	kelasRepo := repositories.NewKelasRepository(db)
+	keanggotaanEkskulRepo := repositories.NewKeanggotaanEkskulRepository(db)
 
 	// Initialize services
 	authService := services.NewAuthService(userRepo)
-	siswaService := services.NewSiswaService(siswaRepo, alamatRepo, orangTuaRepo, waliRepo, kesehatanRepo)
+	siswaService := services.NewSiswaService(siswaRepo, alamatRepo, orangTuaRepo, waliRepo, kesehatanRepo, kelasRepo)
 	nilaiService := services.NewNilaiService(siswaRepo, mapelRepo, nilaiRepo, sikapRepo, catatanRepo, ijazahRepo, kehadiranRepo)
 	orangTuaService := services.NewOrangTuaService(siswaRepo, orangTuaRepo)
 	waliService := services.NewWaliService(siswaRepo, waliRepo)
@@ -57,10 +64,13 @@ func SetupRoutes(r *gin.Engine, db *gorm.DB) {
 	kepribadianService := services.NewKepribadianService(siswaRepo, kepribadianRepo)
 	prestasiService := services.NewPrestasiService(siswaRepo, prestasiRepo)
 	beasiswaService := services.NewBeasiswaService(siswaRepo, beasiswaRepo)
+	activityLogService := services.NewActivityLogService(activityLogRepo)
+	kelasService := services.NewKelasService(kelasRepo)
+	keanggotaanEkskulService := services.NewKeanggotaanEkskulService(keanggotaanEkskulRepo)
 
 	// Initialize handlers
 	authHandler := handlers.NewAuthHandler(authService)
-	siswaHandler := handlers.NewSiswaHandler(siswaService)
+	siswaHandler := handlers.NewSiswaHandler(siswaService, activityLogService)
 	nilaiHandler := handlers.NewNilaiHandler(nilaiService)
 	orangTuaHandler := handlers.NewOrangTuaHandler(orangTuaService)
 	waliHandler := handlers.NewWaliHandler(waliService)
@@ -69,6 +79,11 @@ func SetupRoutes(r *gin.Engine, db *gorm.DB) {
 	kepribadianHandler := handlers.NewKepribadianHandler(kepribadianService)
 	prestasiHandler := handlers.NewPrestasiHandler(prestasiService)
 	beasiswaHandler := handlers.NewBeasiswaHandler(beasiswaService)
+	alamatHandler := handlers.NewAlamatHandler(alamatRepo)
+	activityLogHandler := handlers.NewActivityLogHandler(activityLogService)
+	kelasHandler := handlers.NewKelasHandler(kelasService)
+	keanggotaanEkskulHandler := handlers.NewKeanggotaanEkskulHandler(keanggotaanEkskulService, activityLogService)
+	dashboardHandler := handlers.NewDashboardHandler(db)
 
 	// API v1 routes
 	api := r.Group("/api/v1")
@@ -88,6 +103,9 @@ func SetupRoutes(r *gin.Engine, db *gorm.DB) {
 		protected := api.Group("")
 		protected.Use(middlewares.AuthMiddleware())
 		{
+			// Dashboard
+			protected.GET("/dashboard/stats", dashboardHandler.GetStats)
+
 			// Auth routes (protected)
 			authProtected := protected.Group("/auth")
 			{
@@ -99,6 +117,7 @@ func SetupRoutes(r *gin.Engine, db *gorm.DB) {
 			siswa := protected.Group("/siswa")
 			{
 				siswa.POST("", siswaHandler.Create)
+				siswa.POST("/import", siswaHandler.ImportExcel)
 				siswa.GET("", siswaHandler.FindAll)
 				siswa.GET("/:id", siswaHandler.FindByID)
 				siswa.PUT("/:id", siswaHandler.Update)
@@ -106,6 +125,7 @@ func SetupRoutes(r *gin.Engine, db *gorm.DB) {
 				siswa.POST("/:id/foto", siswaHandler.UploadFoto)
 
 				// Sub-resources routes
+				siswa.POST("/:id/alamat", alamatHandler.CreateOrUpdate)
 				siswa.POST("/:id/orang-tua", orangTuaHandler.Create)
 				siswa.POST("/:id/wali", waliHandler.CreateOrUpdate)
 				siswa.POST("/:id/kesehatan", kesehatanHandler.CreateOrUpdate)
@@ -118,9 +138,12 @@ func SetupRoutes(r *gin.Engine, db *gorm.DB) {
 
 				// Kehadiran routes
 				siswa.GET("/:id/kehadiran", nilaiHandler.GetKehadiran)
+				siswa.POST("/:id/kehadiran", nilaiHandler.CreateKehadiran)
 
 				siswa.POST("/:id/nilai-ijazah", nilaiHandler.CreateNilaiIjazah)
 				siswa.GET("/:id/nilai-ijazah", nilaiHandler.GetNilaiIjazah)
+
+				siswa.POST("/:id/nilai-sikap", nilaiHandler.CreateNilaiSikap)
 
 				siswa.POST("/:id/catatan-semester", nilaiHandler.CreateCatatanSemester)
 				siswa.GET("/:id/catatan-semester", nilaiHandler.GetCatatanSemester)
@@ -132,6 +155,7 @@ func SetupRoutes(r *gin.Engine, db *gorm.DB) {
 
 				// Meninggalkan Sekolah
 				siswa.POST("/:id/meninggalkan-sekolah", siswaHandler.AddMeninggalkanSekolah)
+				siswa.DELETE("/:id/meninggalkan-sekolah", siswaHandler.DeleteMeninggalkanSekolah)
 			}
 
 			// Direct resource routes for updates/deletes
@@ -144,18 +168,92 @@ func SetupRoutes(r *gin.Engine, db *gorm.DB) {
 			protected.PUT("/pendidikan/:id", pendidikanHandler.Update)
 			protected.DELETE("/pendidikan/:id", pendidikanHandler.Delete)
 
+			protected.PUT("/kepribadian/:id", kepribadianHandler.Update)
 			protected.DELETE("/kepribadian/:id", kepribadianHandler.Delete)
+			protected.PUT("/prestasi/:id", prestasiHandler.Update)
 			protected.DELETE("/prestasi/:id", prestasiHandler.Delete)
+			protected.PUT("/beasiswa/:id", beasiswaHandler.Update)
 			protected.DELETE("/beasiswa/:id", beasiswaHandler.Delete)
+
+			protected.PUT("/pkl/:id", nilaiHandler.UpdatePKL)
+			protected.DELETE("/pkl/:id", nilaiHandler.DeletePKL)
+			protected.PUT("/ekstrakurikuler/:id", nilaiHandler.UpdateEkstrakurikuler)
+			protected.DELETE("/ekstrakurikuler/:id", nilaiHandler.DeleteEkstrakurikuler)
+
+			// Nilai semester update route
+			protected.PUT("/nilai-semester/:id", nilaiHandler.UpdateNilaiSemester)
+			protected.DELETE("/nilai-semester/:id", func(c *gin.Context) {
+				id, _ := strconv.ParseUint(c.Param("id"), 10, 32)
+				if err := nilaiRepo.Delete(uint(id)); err != nil {
+					utils.BadRequestResponse(c, err.Error(), nil)
+					return
+				}
+				utils.SuccessResponse(c, "Grade deleted", nil)
+			})
 
 			// Mata pelajaran routes
 			protected.GET("/mata-pelajaran", nilaiHandler.GetMataPelajaran)
+			protected.POST("/mata-pelajaran", func(c *gin.Context) {
+				var mapel models.MataPelajaran
+				if err := c.ShouldBindJSON(&mapel); err != nil {
+					utils.BadRequestResponse(c, "Invalid request", err.Error())
+					return
+				}
+				if err := db.Create(&mapel).Error; err != nil {
+					utils.BadRequestResponse(c, err.Error(), nil)
+					return
+				}
+				utils.CreatedResponse(c, "Mata pelajaran created", mapel)
+			})
+			protected.PUT("/mata-pelajaran/:id", func(c *gin.Context) {
+				id, _ := strconv.ParseUint(c.Param("id"), 10, 32)
+				var mapel models.MataPelajaran
+				if err := db.First(&mapel, uint(id)).Error; err != nil {
+					utils.BadRequestResponse(c, "Mata pelajaran not found", nil)
+					return
+				}
+				if err := c.ShouldBindJSON(&mapel); err != nil {
+					utils.BadRequestResponse(c, "Invalid request", err.Error())
+					return
+				}
+				mapel.ID = uint(id)
+				db.Save(&mapel)
+				utils.SuccessResponse(c, "Mata pelajaran updated", mapel)
+			})
+			protected.DELETE("/mata-pelajaran/:id", func(c *gin.Context) {
+				id, _ := strconv.ParseUint(c.Param("id"), 10, 32)
+				db.Delete(&models.MataPelajaran{}, uint(id))
+				utils.SuccessResponse(c, "Mata pelajaran deleted", nil)
+			})
+
+			// Kelas CRUD
+			kelas := protected.Group("/kelas")
+			{
+				kelas.GET("", kelasHandler.FindAll)
+				kelas.GET("/:id", kelasHandler.FindByID)
+				kelas.POST("", kelasHandler.Create)
+				kelas.PUT("/:id", kelasHandler.Update)
+				kelas.DELETE("/:id", kelasHandler.Delete)
+			}
+
+			// Activity log routes
+			protected.GET("/activity-logs", activityLogHandler.GetLogs)
 
 			// Catatan semester routes (separate group)
 			catatanSemester := protected.Group("/catatan-semester")
 			{
 				catatanSemester.POST("/:id/pkl", nilaiHandler.AddPKL)
 				catatanSemester.POST("/:id/ekstrakurikuler", nilaiHandler.AddEkstrakurikuler)
+				catatanSemester.PUT("/:id", nilaiHandler.UpdateCatatanSemester)
+			}
+
+			// Keanggotaan Ekskul routes
+			keanggotaanEkskul := protected.Group("/keanggotaan-ekskul")
+			{
+				keanggotaanEkskul.POST("", keanggotaanEkskulHandler.Add)
+				keanggotaanEkskul.GET("", keanggotaanEkskulHandler.GetAll)
+				keanggotaanEkskul.PUT("/:id", keanggotaanEkskulHandler.Update)
+				keanggotaanEkskul.DELETE("/:id", keanggotaanEkskulHandler.Delete)
 			}
 		}
 	}

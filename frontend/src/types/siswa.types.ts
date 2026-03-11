@@ -66,23 +66,23 @@ export interface SiswaBase {
     jumlah_saudara?: number;
     kewarganegaraan?: string;
     bahasa_rumah?: string;
+    kelas_id?: number;
+    kelas_ref?: { id: number; nama: string; tingkat?: string; };
     foto_path?: string;
 }
 
 // -- TAB 2: AKADEMIK --
 export interface PendidikanSebelumnya {
     id: number;
-    tipe?: "siswa_baru" | "pindahan";
-    tanggal_diterima?: string;
-    jenjang: string; // Used informally, kept for UI backward compatibility
-    nama_sekolah: string; // asal_sekolah
+    tipe: "siswa_baru" | "pindahan";
+    tanggal_diterima: string; // DATE YYYY-MM-DD
+    nama_sekolah: string; // asal_sekolah in DB
     alamat_sekolah?: string;
-    tahun_lulus: string; // Informal, derived from tanggal_ijazah
     no_ijazah?: string;
     tanggal_ijazah?: string;
     no_skhun?: string;
     tanggal_skhun?: string;
-    kelas_diterima?: "X" | "XI" | "XII";
+    kelas_diterima: string;
     alasan_pindah?: string;
 }
 
@@ -112,18 +112,18 @@ export interface NilaiSemester {
 
 export interface NilaiSikap {
     id: number;
-    kelas?: "X" | "XI" | "XII";
+    kelas: "X" | "XI" | "XII";
     semester: number;
-    aspek_sikap: string; // Legacy UI
-    nilai: string; // Legacy UI
-    deskripsi: string; // Legacy UI, corresponds to deskripsi_spiritual / sosial
-    deskripsi_spiritual?: string;
-    deskripsi_sosial?: string;
+    deskripsi_spiritual: string;
+    deskripsi_sosial: string;
 }
 
 export interface NilaiIjazah {
     id: number;
+    mata_pelajaran_id?: number;
     nomor_ijazah: string; // no_ijazah
+    no_ijazah?: string;
+    nilai_akhir?: number;
     nilai_rata_rata: number; // calculated from nilai_akhir
     tahun_lulus?: string;
     tanggal_lulus?: string;
@@ -176,7 +176,7 @@ export interface PKL {
     id: number;
     nama_dudi: string;
     lokasi: string;
-    lama_pkl: string; // lama_bulan
+    lama_bulan: number; // matched with API
     keterangan?: string;
 }
 
@@ -212,23 +212,18 @@ export interface Prestasi {
 
 export interface Beasiswa {
     id: number;
-    tahun_pelajaran?: string;
-    nama_beasiswa: string; // Used for UI
-    pemberi?: string;
-    sumber: string; // Maps to pemberi
-    tahun_mulai: string;
-    tahun_selesai: string;
+    tahun_pelajaran: string; // tahun_pelajaran in DB
+    pemberi: string; // pemberi in DB
     keterangan?: string;
 }
 
 export interface Kepribadian {
     id: number;
-    aspek?: string;
-    nilai?: "Baik" | "Cukup" | "Kurang";
-    tahun_pelajaran?: string;
-    tipe_kepribadian: string; // UI compat
-    catatan_psikolog: string; // UI compat
+    aspek: string;
+    nilai: string;
+    tahun_pelajaran: string;
 }
+
 
 export interface PemeriksaanBuku {
     id: number;
@@ -255,6 +250,7 @@ export interface Siswa extends SiswaBase {
     // 1-to-1 relationships
     alamat_siswa: AlamatSiswa;
     orang_tua: OrangTua; 
+    orang_tua_ibu?: OrangTua;
     wali: Wali;
     kesehatan_siswa: KesehatanSiswa;
     nilai_ijazah?: NilaiIjazah;
@@ -266,7 +262,7 @@ export interface Siswa extends SiswaBase {
     nilai_sikap: NilaiSikap[];
     kehadiran: Kehadiran[];
     riwayat_penyakit: RiwayatPenyakit[]; 
-    catatan_akhir_semester: CatatanAkhirSemester[];
+    catatan_semester: CatatanAkhirSemester[];
     prestasi: Prestasi[];
     beasiswa: Beasiswa[];
     kepribadian: Kepribadian[];

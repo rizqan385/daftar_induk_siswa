@@ -1,0 +1,92 @@
+/* CetakLaporan.css */
+
+.cetak-container {
+    padding: 20px;
+    background-color: var(--bg-body);
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+}
+
+.cetak-settings {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.form-group input, 
+.form-group select {
+    background-color: rgba(15, 23, 42, 0.4);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: 6px;
+    font-family: inherit;
+}
+
+/* ========================================================
+   KERTAS A4 CSS (Preview Layar & Cetak Fisik)
+   ======================================================== */
+.kertas-a4 {
+    background: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    margin: 0 auto;
+    width: 210mm;
+    min-height: 297mm;
+    padding: 20mm;
+    box-sizing: border-box;
+    color: black;
+    font-family: 'Times New Roman', Times, serif; /* Standard formal document font */
+}
+
+/* PRINT MEDIA QUERIES */
+@media print {
+    /* Hide everything EXCEPT the print area */
+    body * {
+        visibility: hidden;
+    }
+    
+    .print-area, .print-area * {
+        visibility: visible;
+    }
+
+    /* Remove margins, padding, and background color from body for clean print */
+    @page {
+        size: A4;
+        margin: 0;
+    }
+
+    body {
+        margin: 0;
+        background-color: white !important;
+    }
+
+    .kertas-a4 {
+        position: absolute;
+        left: 0;
+        top: 0;
+        margin: 0;
+        box-shadow: none;
+        width: 210mm;
+        /* Let it flow naturally to multiple pages if needed */
+        min-height: auto;
+        padding: 15mm; 
+    }
+    
+    /* Ensure no unwanted page breaks inside tables */
+    table { page-break-inside: auto; }
+    tr    { page-break-inside: avoid; page-break-after: auto; }
+}

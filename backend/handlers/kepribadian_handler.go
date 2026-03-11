@@ -53,6 +53,41 @@ func (h *KepribadianHandler) Add(c *gin.Context) {
 	utils.CreatedResponse(c, "Personality record added successfully", response)
 }
 
+// Update godoc
+// @Summary Update personality record
+// @Description Update personality record
+// @Tags Kepribadian
+// @Accept json
+// @Produce json
+// @Param id path int true "Personality Record ID"
+// @Param request body requests.CreateKepribadianRequest true "Personality data"
+// @Success 200 {object} utils.Response{data=responses.KepribadianResponse}
+// @Failure 400 {object} utils.Response
+// @Failure 404 {object} utils.Response
+// @Security BearerAuth
+// @Router /kepribadian/{id} [put]
+func (h *KepribadianHandler) Update(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	if err != nil {
+		utils.BadRequestResponse(c, "Invalid personality record ID", nil)
+		return
+	}
+
+	var req requests.CreateKepribadianRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		utils.BadRequestResponse(c, "Invalid request", err.Error())
+		return
+	}
+
+	response, err := h.service.Update(uint(id), req)
+	if err != nil {
+		utils.BadRequestResponse(c, err.Error(), nil)
+		return
+	}
+
+	utils.SuccessResponse(c, "Personality record updated successfully", response)
+}
+
 // Delete godoc
 // @Summary Delete personality record
 // @Description Delete personality record

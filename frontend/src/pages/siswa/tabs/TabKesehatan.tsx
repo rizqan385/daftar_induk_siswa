@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { Siswa, KesehatanSiswa, RiwayatPenyakit } from "../../../types/siswa.types";
 import Input from "../../../components/ui/Input";
 import Button from "../../../components/ui/Button";
@@ -7,9 +7,10 @@ interface TabKesehatanProps {
     siswa: Siswa | undefined;
     isNew: boolean;
     onSave: (data: Partial<Siswa>) => void;
+    section?: 'perkembangan';
 }
 
-const TabKesehatan = ({ siswa, isNew, onSave }: TabKesehatanProps) => {
+const TabKesehatan = ({ siswa, isNew, onSave, section: _section }: TabKesehatanProps) => {
     // 1-to-1 State
     const [kesehatan, setKesehatan] = useState<KesehatanSiswa>({
         id: siswa?.kesehatan_siswa?.id || 0,
@@ -21,6 +22,19 @@ const TabKesehatan = ({ siswa, isNew, onSave }: TabKesehatanProps) => {
 
     // 1-to-Many State
     const [riwayatPenyakit, setRiwayatPenyakit] = useState<RiwayatPenyakit[]>(siswa?.riwayat_penyakit || []);
+
+    // Re-sync state from prop when siswa API data is refreshed
+    useEffect(() => {
+        setKesehatan({
+            id: siswa?.kesehatan_siswa?.id || 0,
+            tinggi_badan: siswa?.kesehatan_siswa?.tinggi_badan || 0,
+            berat_badan: siswa?.kesehatan_siswa?.berat_badan || 0,
+            golongan_darah: siswa?.kesehatan_siswa?.golongan_darah || '',
+            kesanggupan_jasmani: siswa?.kesehatan_siswa?.kesanggupan_jasmani || ''
+        });
+        setRiwayatPenyakit(siswa?.riwayat_penyakit || []);
+    }, [siswa]);
+
 
     if (isNew) {
         return (

@@ -53,6 +53,41 @@ func (h *BeasiswaHandler) Add(c *gin.Context) {
 	utils.CreatedResponse(c, "Scholarship record added successfully", response)
 }
 
+// Update godoc
+// @Summary Update scholarship
+// @Description Update scholarship record
+// @Tags Beasiswa
+// @Accept json
+// @Produce json
+// @Param id path int true "Scholarship Record ID"
+// @Param request body requests.CreateBeasiswaRequest true "Scholarship data"
+// @Success 200 {object} utils.Response{data=responses.BeasiswaResponse}
+// @Failure 400 {object} utils.Response
+// @Failure 404 {object} utils.Response
+// @Security BearerAuth
+// @Router /beasiswa/{id} [put]
+func (h *BeasiswaHandler) Update(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	if err != nil {
+		utils.BadRequestResponse(c, "Invalid scholarship record ID", nil)
+		return
+	}
+
+	var req requests.CreateBeasiswaRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		utils.BadRequestResponse(c, "Invalid request", err.Error())
+		return
+	}
+
+	response, err := h.service.Update(uint(id), req)
+	if err != nil {
+		utils.BadRequestResponse(c, err.Error(), nil)
+		return
+	}
+
+	utils.SuccessResponse(c, "Scholarship record updated successfully", response)
+}
+
 // Delete godoc
 // @Summary Delete scholarship
 // @Description Delete scholarship record

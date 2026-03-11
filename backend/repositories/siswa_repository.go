@@ -108,7 +108,7 @@ func (r *SiswaRepository) FindAll(page, pageSize int, search, sortBy, sortDir st
 
 	// Pagination
 	offset := (page - 1) * pageSize
-	if err := query.Offset(offset).Limit(pageSize).Find(&siswa).Error; err != nil {
+	if err := query.Preload("Kelas").Offset(offset).Limit(pageSize).Find(&siswa).Error; err != nil {
 		return nil, 0, err
 	}
 
@@ -125,19 +125,19 @@ func (r *SiswaRepository) Delete(id uint) error {
 	return r.db.Delete(&models.Siswa{}, id).Error
 }
 
-// ExistsByNISN checks if NISN exists
+// ExistsByNISN checks if NISN exists (including soft-deleted records)
 func (r *SiswaRepository) ExistsByNISN(nisn string) (bool, error) {
 	var count int64
-	if err := r.db.Model(&models.Siswa{}).Where("nisn = ?", nisn).Count(&count).Error; err != nil {
+	if err := r.db.Unscoped().Model(&models.Siswa{}).Where("nisn = ?", nisn).Count(&count).Error; err != nil {
 		return false, err
 	}
 	return count > 0, nil
 }
 
-// ExistsByNoInduk checks if school registration number exists
+// ExistsByNoInduk checks if school registration number exists (including soft-deleted records)
 func (r *SiswaRepository) ExistsByNoInduk(noInduk string) (bool, error) {
 	var count int64
-	if err := r.db.Model(&models.Siswa{}).Where("no_induk = ?", noInduk).Count(&count).Error; err != nil {
+	if err := r.db.Unscoped().Model(&models.Siswa{}).Where("no_induk = ?", noInduk).Count(&count).Error; err != nil {
 		return false, err
 	}
 	return count > 0, nil
@@ -148,7 +148,22 @@ func (r *SiswaRepository) UpdateFotoPath(id uint, fotoPath string) error {
 	return r.db.Model(&models.Siswa{}).Where("id = ?", id).Update("foto_path", fotoPath).Error
 }
 
+// UpdateStatus updates student status
+func (r *SiswaRepository) UpdateStatus(id uint, status string) error {
+	return r.db.Model(&models.Siswa{}).Where("id = ?", id).Update("status", status).Error
+}
+
 // AddMeninggalkanSekolah adds leaving school record
 func (r *SiswaRepository) AddMeninggalkanSekolah(data *models.MeninggalkanSekolah) error {
+	var existing models.MeninggalkanSekolah
+	if err := r.db.Where("siswa_id = ?", data.SiswaID).First(&existing).Error; err == nil {
+		data.ID = existing.ID
+		return r.db.Save(data).Error
+	}
 	return r.db.Create(data).Error
+}
+
+// DeleteMeninggalkanSekolah deletes leaving school record
+func (r *SiswaRepository) DeleteMeninggalkanSekolah(siswaID uint) error {
+	return r.db.Where("siswa_id = ?", siswaID).Delete(&models.MeninggalkanSekolah{}).Error
 }

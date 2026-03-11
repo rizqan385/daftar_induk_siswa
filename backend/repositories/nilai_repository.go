@@ -2,7 +2,9 @@ package repositories
 
 import (
 	"daftar_induk_siswa/models"
+
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 // MataPelajaranRepository handles subject database operations
@@ -49,6 +51,22 @@ func NewNilaiSemesterRepository(db *gorm.DB) *NilaiSemesterRepository {
 
 func (r *NilaiSemesterRepository) Create(nilai *models.NilaiSemester) error {
 	return r.db.Create(nilai).Error
+}
+
+func (r *NilaiSemesterRepository) Upsert(nilai *models.NilaiSemester) error {
+	return r.db.Clauses(clause.OnConflict{
+		Columns: []clause.Column{
+			{Name: "siswa_id"},
+			{Name: "mata_pelajaran_id"},
+			{Name: "kelas"},
+			{Name: "semester"},
+			{Name: "tahun_pelajaran"},
+		},
+		DoUpdates: clause.AssignmentColumns([]string{
+			"nilai_pengetahuan", "predikat_pengetahuan", "deskripsi_pengetahuan",
+			"nilai_keterampilan", "predikat_keterampilan", "deskripsi_keterampilan",
+		}),
+	}).Create(nilai).Error
 }
 
 func (r *NilaiSemesterRepository) CreateBatch(nilai []models.NilaiSemester) error {
@@ -163,6 +181,15 @@ func (r *NilaiSikapRepository) FindBySiswaID(siswaID uint) ([]models.NilaiSikap,
 	return sikap, nil
 }
 
+func (r *NilaiSikapRepository) FindBySiswaIDAndKelas(siswaID uint, kelas string, semester uint8) (*models.NilaiSikap, error) {
+	var sikap models.NilaiSikap
+	err := r.db.Where("siswa_id = ? AND kelas = ? AND semester = ?", siswaID, kelas, semester).First(&sikap).Error
+	if err != nil {
+		return nil, err
+	}
+	return &sikap, nil
+}
+
 func (r *NilaiSikapRepository) Update(sikap *models.NilaiSikap) error {
 	return r.db.Save(sikap).Error
 }
@@ -208,12 +235,48 @@ func (r *CatatanRepository) FindByID(id uint) (*models.CatatanAkhirSemester, err
 	return &catatan, nil
 }
 
+func (r *CatatanRepository) Update(catatan *models.CatatanAkhirSemester) error {
+	return r.db.Save(catatan).Error
+}
+
 func (r *CatatanRepository) AddPKL(pkl *models.PraktikKerjaLapangan) error {
 	return r.db.Create(pkl).Error
 }
 
+func (r *CatatanRepository) FindPKLByID(id uint) (*models.PraktikKerjaLapangan, error) {
+	var pkl models.PraktikKerjaLapangan
+	if err := r.db.First(&pkl, id).Error; err != nil {
+		return nil, err
+	}
+	return &pkl, nil
+}
+
+func (r *CatatanRepository) UpdatePKL(pkl *models.PraktikKerjaLapangan) error {
+	return r.db.Save(pkl).Error
+}
+
+func (r *CatatanRepository) DeletePKL(id uint) error {
+	return r.db.Delete(&models.PraktikKerjaLapangan{}, id).Error
+}
+
 func (r *CatatanRepository) AddEkstrakurikuler(ekskul *models.Ekstrakurikuler) error {
 	return r.db.Create(ekskul).Error
+}
+
+func (r *CatatanRepository) FindEkstrakurikulerByID(id uint) (*models.Ekstrakurikuler, error) {
+	var ekskul models.Ekstrakurikuler
+	if err := r.db.First(&ekskul, id).Error; err != nil {
+		return nil, err
+	}
+	return &ekskul, nil
+}
+
+func (r *CatatanRepository) UpdateEkstrakurikuler(ekskul *models.Ekstrakurikuler) error {
+	return r.db.Save(ekskul).Error
+}
+
+func (r *CatatanRepository) DeleteEkstrakurikuler(id uint) error {
+	return r.db.Delete(&models.Ekstrakurikuler{}, id).Error
 }
 
 func (r *CatatanRepository) AddPrestasiSemester(prestasi *models.PrestasiSemester) error {

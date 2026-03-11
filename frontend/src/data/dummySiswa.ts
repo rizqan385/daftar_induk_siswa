@@ -11,14 +11,14 @@ const generateDefaultNested = (id: number) => ({
     riwayat_penyakit: [],
     
     // Tab Akademik
-    pendidikan_sebelumnya: [{ id: 1, jenjang: "SMP", nama_sekolah: "SMPN 1 Probolinggo", tahun_lulus: "2020", tipe: "siswa_baru" as const }],
+    pendidikan_sebelumnya: [{ id: 1, nama_sekolah: "SMPN 1 Probolinggo", tipe: "siswa_baru" as const, tanggal_diterima: "2020-07-01", kelas_diterima: "X" as const }],
     nilai_ijazah: { id, nomor_ijazah: "IJZ-2020-001", nilai_rata_rata: 85 },
     nilai_semester: [],
     nilai_sikap: [],
     kehadiran: [],
     
     // Tab Catatan Akhir Semester
-    catatan_akhir_semester: [],
+    catatan_semester: [],
 
     // Tab Lainnya
     prestasi: [],

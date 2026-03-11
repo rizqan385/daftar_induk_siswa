@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { Siswa, CatatanAkhirSemester } from "../../../types/siswa.types";
 import Button from "../../../components/ui/Button";
 
@@ -10,7 +10,13 @@ interface TabCatatanProps {
 
 const TabCatatan = ({ siswa, isNew, onSave }: TabCatatanProps) => {
     // 1-to-Many State
-    const [casList, setCasList] = useState<CatatanAkhirSemester[]>(siswa?.catatan_akhir_semester || []);
+    const [casList, setCasList] = useState<CatatanAkhirSemester[]>(siswa?.catatan_semester || []);
+
+    // Re-sync state from prop when siswa API data is refreshed
+    useEffect(() => {
+        setCasList(siswa?.catatan_semester || []);
+    }, [siswa]);
+
 
     if (isNew) {
         return (
@@ -22,7 +28,7 @@ const TabCatatan = ({ siswa, isNew, onSave }: TabCatatanProps) => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        onSave({ catatan_akhir_semester: casList });
+        onSave({ catatan_semester: casList });
     };
 
     const addCas = () => {

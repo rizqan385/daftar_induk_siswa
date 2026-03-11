@@ -34,14 +34,38 @@ func (s *PrestasiService) Add(siswaID uint, req requests.CreatePrestasiRequest) 
 	}
 
 	prestasi := &models.Prestasi{
-		SiswaID:    siswaID,
-		Bidang:     utils.SanitizeString(req.Bidang),
-		Keterangan: utils.SanitizeString(req.Keterangan),
-		Tahun:      req.Tahun,
-		Tingkat:    utils.SanitizeString(req.Tingkat),
+		SiswaID:      siswaID,
+		Bidang:       utils.SanitizeString(req.Bidang),
+		NamaPrestasi: utils.SanitizeString(req.NamaPrestasi),
+		Keterangan:   utils.SanitizeString(req.Keterangan),
+		Tahun:        req.Tahun,
+		Tingkat:      utils.SanitizeString(req.Tingkat),
 	}
 
 	if err := s.prestasiRepo.Create(prestasi); err != nil {
+		return nil, err
+	}
+
+	return s.toResponse(prestasi), nil
+}
+
+// Update updates achievement record
+func (s *PrestasiService) Update(id uint, req requests.CreatePrestasiRequest) (*responses.PrestasiResponse, error) {
+	prestasi, err := s.prestasiRepo.FindByID(id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("achievement record not found")
+		}
+		return nil, err
+	}
+
+	prestasi.Bidang = utils.SanitizeString(req.Bidang)
+	prestasi.NamaPrestasi = utils.SanitizeString(req.NamaPrestasi)
+	prestasi.Keterangan = utils.SanitizeString(req.Keterangan)
+	prestasi.Tahun = req.Tahun
+	prestasi.Tingkat = utils.SanitizeString(req.Tingkat)
+
+	if err := s.prestasiRepo.Update(prestasi); err != nil {
 		return nil, err
 	}
 
@@ -64,10 +88,11 @@ func (s *PrestasiService) Delete(id uint) error {
 // toResponse converts to DTO
 func (s *PrestasiService) toResponse(p *models.Prestasi) *responses.PrestasiResponse {
 	return &responses.PrestasiResponse{
-		ID:         p.ID,
-		Bidang:     p.Bidang,
-		Keterangan: p.Keterangan,
-		Tahun:      p.Tahun,
-		Tingkat:    p.Tingkat,
+		ID:           p.ID,
+		Bidang:       p.Bidang,
+		NamaPrestasi: p.NamaPrestasi,
+		Keterangan:   p.Keterangan,
+		Tahun:        p.Tahun,
+		Tingkat:      p.Tingkat,
 	}
 }

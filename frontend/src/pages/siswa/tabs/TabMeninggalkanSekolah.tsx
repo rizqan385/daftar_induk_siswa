@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { Siswa, MeninggalkanSekolah } from "../../../types/siswa.types";
 import Input from "../../../components/ui/Input";
 import Button from "../../../components/ui/Button";
@@ -11,7 +11,14 @@ interface TabMeninggalkanSekolahProps {
 
 const TabMeninggalkanSekolah = ({ siswa, isNew, onSave }: TabMeninggalkanSekolahProps) => {
     const [data, setData] = useState<MeninggalkanSekolah | undefined>(siswa?.meninggalkan_sekolah);
-    const [isEditing, setIsEditing] = useState(!!data);
+    const [isEditing, setIsEditing] = useState(!!siswa?.meninggalkan_sekolah);
+
+    // Re-sync state from prop when siswa API data is refreshed
+    useEffect(() => {
+        setData(siswa?.meninggalkan_sekolah);
+        setIsEditing(!!siswa?.meninggalkan_sekolah);
+    }, [siswa]);
+
 
     if (isNew) {
         return (
@@ -44,7 +51,7 @@ const TabMeninggalkanSekolah = ({ siswa, isNew, onSave }: TabMeninggalkanSekolah
         if (window.confirm('Yakin ingin menghapus data kepindahan ini?')) {
             setData(undefined);
             setIsEditing(false);
-            onSave({ meninggalkan_sekolah: undefined });
+            onSave({ meninggalkan_sekolah: null as any });
         }
     };
 

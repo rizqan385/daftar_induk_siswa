@@ -39,9 +39,6 @@ func main() {
 
 	// Setup zerolog
 	zerolog.TimeFieldFormat = time.RFC3339
-	if cfg.Server.Mode == "development" {
-		log.SetOutput(zerolog.ConsoleWriter{Out: os.Stderr})
-	}
 
 	// Set Gin mode
 	if cfg.Server.Mode == "production" {

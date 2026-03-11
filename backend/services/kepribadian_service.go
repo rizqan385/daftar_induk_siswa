@@ -47,6 +47,27 @@ func (s *KepribadianService) Add(siswaID uint, req requests.CreateKepribadianReq
 	return s.toResponse(kepribadian), nil
 }
 
+// Update updates personality record
+func (s *KepribadianService) Update(id uint, req requests.CreateKepribadianRequest) (*responses.KepribadianResponse, error) {
+	kepribadian, err := s.kepribadianRepo.FindByID(id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("personality record not found")
+		}
+		return nil, err
+	}
+
+	kepribadian.Aspek = utils.SanitizeString(req.Aspek)
+	kepribadian.Nilai = req.Nilai
+	kepribadian.TahunPelajaran = utils.SanitizeString(req.TahunPelajaran)
+
+	if err := s.kepribadianRepo.Update(kepribadian); err != nil {
+		return nil, err
+	}
+
+	return s.toResponse(kepribadian), nil
+}
+
 // Delete deletes personality record
 func (s *KepribadianService) Delete(id uint) error {
 	// Currently repo doesn't have FindByID, so we trust ID exists or handle error from Delete

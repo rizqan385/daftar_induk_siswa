@@ -38,9 +38,14 @@ type Siswa struct {
 	Kewarganegaraan string         `gorm:"size:50;default:'Indonesia'" json:"kewarganegaraan"`
 	BahasaRumah     string         `gorm:"size:50;default:'Indonesia'" json:"bahasa_rumah"`
 	FotoPath        string         `gorm:"size:255" json:"foto_path"`
+	KelasID         *uint          `json:"kelas_id"`
+	Status          string         `gorm:"type:enum('aktif','lulus','pindah','tinggal_kelas');default:'aktif'" json:"status"`
 	CreatedAt       time.Time      `json:"created_at"`
 	UpdatedAt       time.Time      `json:"updated_at"`
 	DeletedAt       gorm.DeletedAt `gorm:"index" json:"-"`
+
+	// Kelas relation
+	Kelas            *Kelas         `gorm:"foreignKey:KelasID" json:"kelas_ref,omitempty"`
 
 	// Relations
 	Alamat               *AlamatSiswa           `gorm:"foreignKey:SiswaID" json:"alamat,omitempty"`
@@ -57,6 +62,7 @@ type Siswa struct {
 	CatatanAkhirSemester []CatatanAkhirSemester `gorm:"foreignKey:SiswaID" json:"catatan_akhir_semester,omitempty"`
 	NilaiIjazah          []NilaiIjazah          `gorm:"foreignKey:SiswaID" json:"nilai_ijazah,omitempty"`
 	MeninggalkanSekolah  *MeninggalkanSekolah   `gorm:"foreignKey:SiswaID" json:"meninggalkan_sekolah,omitempty"`
+	KeanggotaanEkskul    []KeanggotaanEkskul    `gorm:"foreignKey:SiswaID" json:"keanggotaan_ekskul,omitempty"`
 }
 
 // TableName returns the table name for Siswa
@@ -201,12 +207,13 @@ func (Kepribadian) TableName() string {
 
 // Prestasi model for achievements
 type Prestasi struct {
-	ID         uint   `gorm:"primaryKey" json:"id"`
-	SiswaID    uint   `gorm:"not null;index" json:"siswa_id"`
-	Bidang     string `gorm:"type:enum('Kesenian','Olahraga','Kemasyarakatan','Pramuka','Karya Tulis','Lainnya');not null" json:"bidang"`
-	Keterangan string `gorm:"type:text" json:"keterangan"`
-	Tahun      uint   `json:"tahun"`
-	Tingkat    string `gorm:"type:enum('Sekolah','Kecamatan','Kota','Provinsi','Nasional','Internasional')" json:"tingkat"`
+	ID           uint   `gorm:"primaryKey" json:"id"`
+	SiswaID      uint   `gorm:"not null;index" json:"siswa_id"`
+	Bidang       string `gorm:"type:enum('Kesenian','Olahraga','Kemasyarakatan','Pramuka','Karya Tulis','Lainnya');not null" json:"bidang"`
+	NamaPrestasi string `gorm:"size:255" json:"nama_prestasi"`
+	Keterangan   string `gorm:"type:text" json:"keterangan"`
+	Tahun        uint   `json:"tahun"`
+	Tingkat      string `gorm:"type:enum('Sekolah','Kecamatan','Kota','Provinsi','Nasional','Internasional')" json:"tingkat"`
 }
 
 // TableName returns the table name for Prestasi
@@ -249,12 +256,14 @@ func (Kehadiran) TableName() string {
 
 // MataPelajaran model for subjects
 type MataPelajaran struct {
-	ID          uint   `gorm:"primaryKey" json:"id"`
-	Kode        string `gorm:"uniqueIndex;size:20;not null" json:"kode"`
-	Nama        string `gorm:"size:100;not null" json:"nama"`
-	Kelompok    string `gorm:"type:enum('A','B','C');not null" json:"kelompok"`
-	SubKelompok string `gorm:"size:50" json:"sub_kelompok"`
-	Aktif       bool   `gorm:"default:true" json:"aktif"`
+	ID           uint   `gorm:"primaryKey" json:"id"`
+	Kode         string `gorm:"uniqueIndex;size:20;not null" json:"kode"`
+	Nama         string `gorm:"size:100;not null" json:"nama"`
+	Kelompok     string `gorm:"type:enum('A','B','C');not null" json:"kelompok"`
+	SubKelompok  string `gorm:"size:50" json:"sub_kelompok"`
+	KelasTarget1 string `gorm:"column:kelas_target_1;size:100;default:'Semua'" json:"kelas_target_1"`
+	KelasTarget2 string `gorm:"column:kelas_target_2;size:100;default:'Tidak ada'" json:"kelas_target_2"`
+	Aktif        bool   `gorm:"default:true" json:"aktif"`
 }
 
 // TableName returns the table name for MataPelajaran
@@ -303,10 +312,11 @@ func (NilaiSikap) TableName() string {
 
 // CatatanAkhirSemester model for end of semester notes
 type CatatanAkhirSemester struct {
-	ID       uint   `gorm:"primaryKey" json:"id"`
-	SiswaID  uint   `gorm:"not null;index" json:"siswa_id"`
-	Kelas    string `gorm:"type:enum('X','XI','XII');not null" json:"kelas"`
-	Semester uint8  `gorm:"not null" json:"semester"`
+	ID                uint   `gorm:"primaryKey" json:"id"`
+	SiswaID           uint   `gorm:"not null;index" json:"siswa_id"`
+	Kelas             string `gorm:"type:enum('X','XI','XII');not null" json:"kelas"`
+	Semester          uint8  `gorm:"not null" json:"semester"`
+	CatatanWaliKelas  string `gorm:"type:text" json:"catatan_wali_kelas"`
 
 	// Relations
 	PKL              []PraktikKerjaLapangan `gorm:"foreignKey:CatatanID" json:"pkl,omitempty"`
@@ -335,11 +345,28 @@ func (PraktikKerjaLapangan) TableName() string {
 	return "praktik_kerja_lapangan"
 }
 
-// Ekstrakurikuler model for extracurricular
+// KeanggotaanEkskul model for student extracurricular membership (not tied to semester)
+type KeanggotaanEkskul struct {
+	ID           uint   `gorm:"primaryKey" json:"id"`
+	SiswaID      uint   `gorm:"not null;index" json:"siswa_id"`
+	NamaKegiatan string `gorm:"size:100;not null" json:"nama_kegiatan"`
+	Keterangan   string `gorm:"type:text" json:"keterangan"`
+	
+	// Relations
+	Siswa *Siswa `gorm:"foreignKey:SiswaID" json:"siswa,omitempty"`
+}
+
+// TableName returns the table name for KeanggotaanEkskul
+func (KeanggotaanEkskul) TableName() string {
+	return "keanggotaan_ekskul"
+}
+
+// Ekstrakurikuler model for extracurricular grades (tied to semester)
 type Ekstrakurikuler struct {
 	ID           uint   `gorm:"primaryKey" json:"id"`
 	CatatanID    uint   `gorm:"not null;index" json:"catatan_id"`
 	NamaKegiatan string `gorm:"size:100;not null" json:"nama_kegiatan"`
+	Nilai        string `gorm:"size:10" json:"nilai"`
 	Keterangan   string `gorm:"type:text" json:"keterangan"`
 }
 
@@ -411,6 +438,24 @@ func (MeninggalkanSekolah) TableName() string {
 	return "meninggalkan_sekolah"
 }
 
+// ActivityLog model for audit trail
+type ActivityLog struct {
+	ID          uint      `gorm:"primaryKey" json:"id"`
+	UserID      uint      `gorm:"not null;index" json:"user_id"`
+	Username    string    `gorm:"size:50;not null" json:"username"`
+	Action      string    `gorm:"size:20;not null" json:"action"`
+	EntityType  string    `gorm:"size:50;not null" json:"entity_type"`
+	EntityID    uint      `gorm:"default:0" json:"entity_id"`
+	Description string    `gorm:"type:text" json:"description"`
+	IPAddress   string    `gorm:"size:50" json:"ip_address"`
+	CreatedAt   time.Time `json:"created_at"`
+}
+
+// TableName returns the table name for ActivityLog
+func (ActivityLog) TableName() string {
+	return "activity_logs"
+}
+
 // PemeriksaanBuku model for book inspection
 type PemeriksaanBuku struct {
 	ID            uint      `gorm:"primaryKey" json:"id"`
@@ -424,4 +469,63 @@ type PemeriksaanBuku struct {
 // TableName returns the table name for PemeriksaanBuku
 func (PemeriksaanBuku) TableName() string {
 	return "pemeriksaan_buku"
+}
+
+// Kelas model for class data
+type Kelas struct {
+	ID             uint      `gorm:"primaryKey" json:"id"`
+	Nama           string    `gorm:"size:50;not null" json:"nama"`
+	Tingkat        string    `gorm:"type:enum('X','XI','XII');not null" json:"tingkat"`
+	Jurusan        string    `gorm:"size:50" json:"jurusan"`
+	TahunPelajaran string    `gorm:"size:20;not null" json:"tahun_pelajaran"`
+	WaliKelas      string    `gorm:"size:100" json:"wali_kelas"`
+	CreatedAt      time.Time `json:"created_at"`
+	UpdatedAt      time.Time `json:"updated_at"`
+}
+
+// TableName returns the table name for Kelas
+func (Kelas) TableName() string {
+	return "kelas"
+}
+
+// NilaiEkstrakurikuler model for extracurricular grades
+type NilaiEkstrakurikuler struct {
+	ID        uint      `gorm:"primaryKey" json:"id"`
+	SiswaID   uint      `gorm:"not null;index" json:"siswa_id"`
+	NamaEkskul string   `gorm:"size:100;not null" json:"nama_ekskul"`
+	Kelas     string    `gorm:"type:enum('X','XI','XII');not null" json:"kelas"`
+	Semester  uint8     `gorm:"not null" json:"semester"`
+	Predikat  string    `gorm:"type:enum('A','B','C');not null" json:"predikat"`
+	Keterangan string   `gorm:"type:text" json:"keterangan"`
+	CreatedAt time.Time `json:"created_at"`
+
+	// Relations
+	Siswa *Siswa `gorm:"foreignKey:SiswaID" json:"siswa,omitempty"`
+}
+
+// TableName returns the table name for NilaiEkstrakurikuler
+func (NilaiEkstrakurikuler) TableName() string {
+	return "nilai_ekstrakurikuler"
+}
+
+// KenaikanKelas model for class promotion
+type KenaikanKelas struct {
+	ID                  uint      `gorm:"primaryKey" json:"id"`
+	SiswaID             uint      `gorm:"not null;index" json:"siswa_id"`
+	DariKelasID         uint      `gorm:"not null" json:"dari_kelas_id"`
+	KeKelasID           *uint     `json:"ke_kelas_id"`
+	TahunPelajaranLama  string    `gorm:"size:20;not null" json:"tahun_pelajaran_lama"`
+	TahunPelajaranBaru  string    `gorm:"size:20;not null" json:"tahun_pelajaran_baru"`
+	Status              string    `gorm:"type:enum('naik','lulus','tinggal_kelas');not null" json:"status"`
+	CreatedAt           time.Time `json:"created_at"`
+
+	// Relations
+	Siswa     *Siswa `gorm:"foreignKey:SiswaID" json:"siswa,omitempty"`
+	DariKelas *Kelas `gorm:"foreignKey:DariKelasID" json:"dari_kelas,omitempty"`
+	KeKelas   *Kelas `gorm:"foreignKey:KeKelasID" json:"ke_kelas,omitempty"`
+}
+
+// TableName returns the table name for KenaikanKelas
+func (KenaikanKelas) TableName() string {
+	return "kenaikan_kelas"
 }

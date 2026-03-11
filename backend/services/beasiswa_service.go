@@ -47,6 +47,27 @@ func (s *BeasiswaService) Add(siswaID uint, req requests.CreateBeasiswaRequest) 
 	return s.toResponse(beasiswa), nil
 }
 
+// Update updates scholarship record
+func (s *BeasiswaService) Update(id uint, req requests.CreateBeasiswaRequest) (*responses.BeasiswaResponse, error) {
+	beasiswa, err := s.beasiswaRepo.FindByID(id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("scholarship record not found")
+		}
+		return nil, err
+	}
+
+	beasiswa.TahunPelajaran = utils.SanitizeString(req.TahunPelajaran)
+	beasiswa.Pemberi = utils.SanitizeString(req.Pemberi)
+	beasiswa.Keterangan = utils.SanitizeString(req.Keterangan)
+
+	if err := s.beasiswaRepo.Update(beasiswa); err != nil {
+		return nil, err
+	}
+
+	return s.toResponse(beasiswa), nil
+}
+
 // Delete deletes scholarship record
 func (s *BeasiswaService) Delete(id uint) error {
 	// BeasiswaRepo also might missing FindByID.

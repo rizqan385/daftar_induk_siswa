@@ -3,10 +3,11 @@ package handlers
 import (
 	"strconv"
 
-	"github.com/gin-gonic/gin"
 	"daftar_induk_siswa/dtos/requests"
 	"daftar_induk_siswa/services"
 	"daftar_induk_siswa/utils"
+
+	"github.com/gin-gonic/gin"
 )
 
 // NilaiHandler handles grade endpoints
@@ -107,6 +108,29 @@ func (h *NilaiHandler) BatchCreateNilaiSemester(c *gin.Context) {
 	utils.CreatedResponse(c, "Semester grades created successfully", response)
 }
 
+// UpdateNilaiSemester updates an existing semester grade by ID
+func (h *NilaiHandler) UpdateNilaiSemester(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	if err != nil {
+		utils.BadRequestResponse(c, "Invalid grade ID", nil)
+		return
+	}
+
+	var req requests.UpdateNilaiSemesterRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		utils.BadRequestResponse(c, "Invalid request", err.Error())
+		return
+	}
+
+	response, err := h.nilaiService.UpdateNilaiSemester(uint(id), req)
+	if err != nil {
+		utils.BadRequestResponse(c, err.Error(), nil)
+		return
+	}
+
+	utils.SuccessResponse(c, "Semester grade updated successfully", response)
+}
+
 // GetNilaiSemester godoc
 // @Summary Get semester grades
 // @Description Get semester grades for a student with filters and pagination
@@ -198,6 +222,76 @@ func (h *NilaiHandler) GetKehadiran(c *gin.Context) {
 	}
 
 	utils.PaginatedSuccessResponse(c, "Attendance records retrieved", response, pageInfo)
+}
+
+// CreateKehadiran godoc
+// @Summary Create attendance
+// @Description Create an attendance record for a student
+// @Tags Nilai
+// @Accept json
+// @Produce json
+// @Param siswa_id path int true "Student ID"
+// @Param request body requests.CreateKehadiranRequest true "Attendance data"
+// @Success 201 {object} utils.Response{data=responses.KehadiranResponse}
+// @Failure 400 {object} utils.Response
+// @Failure 404 {object} utils.Response
+// @Security BearerAuth
+// @Router /siswa/{siswa_id}/kehadiran [post]
+func (h *NilaiHandler) CreateKehadiran(c *gin.Context) {
+	siswaID, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	if err != nil {
+		utils.BadRequestResponse(c, "Invalid student ID", nil)
+		return
+	}
+
+	var req requests.CreateKehadiranRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		utils.BadRequestResponse(c, "Invalid request", err.Error())
+		return
+	}
+
+	response, err := h.nilaiService.CreateKehadiran(uint(siswaID), req)
+	if err != nil {
+		utils.BadRequestResponse(c, err.Error(), nil)
+		return
+	}
+
+	utils.CreatedResponse(c, "Attendance record created successfully", response)
+}
+
+// CreateNilaiSikap godoc
+// @Summary Create attitude grade
+// @Description Create an attitude grade for a student
+// @Tags Nilai
+// @Accept json
+// @Produce json
+// @Param siswa_id path int true "Student ID"
+// @Param request body requests.CreateNilaiSikapRequest true "Attitude grade data"
+// @Success 201 {object} utils.Response{data=responses.NilaiSikapResponse}
+// @Failure 400 {object} utils.Response
+// @Failure 404 {object} utils.Response
+// @Security BearerAuth
+// @Router /siswa/{siswa_id}/nilai-sikap [post]
+func (h *NilaiHandler) CreateNilaiSikap(c *gin.Context) {
+	siswaID, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	if err != nil {
+		utils.BadRequestResponse(c, "Invalid student ID", nil)
+		return
+	}
+
+	var req requests.CreateNilaiSikapRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		utils.BadRequestResponse(c, "Invalid request", err.Error())
+		return
+	}
+
+	response, err := h.nilaiService.CreateNilaiSikap(uint(siswaID), req)
+	if err != nil {
+		utils.BadRequestResponse(c, err.Error(), nil)
+		return
+	}
+
+	utils.CreatedResponse(c, "Attitude grade created successfully", response)
 }
 
 // CreateNilaiIjazah godoc
@@ -296,6 +390,29 @@ func (h *NilaiHandler) CreateCatatanSemester(c *gin.Context) {
 	utils.CreatedResponse(c, "Semester notes created successfully", response)
 }
 
+// UpdateCatatanSemester updates the wali kelas note for an existing CAS
+func (h *NilaiHandler) UpdateCatatanSemester(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	if err != nil {
+		utils.BadRequestResponse(c, "Invalid semester notes ID", nil)
+		return
+	}
+
+	var req requests.UpdateCatatanSemesterRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		utils.BadRequestResponse(c, "Invalid request", err.Error())
+		return
+	}
+
+	response, err := h.nilaiService.UpdateCatatanSemester(uint(id), req)
+	if err != nil {
+		utils.BadRequestResponse(c, err.Error(), nil)
+		return
+	}
+
+	utils.SuccessResponse(c, "Semester notes updated successfully", response)
+}
+
 // GetCatatanSemester godoc
 // @Summary Get semester notes
 // @Description Get semester notes for a student
@@ -390,4 +507,122 @@ func (h *NilaiHandler) AddEkstrakurikuler(c *gin.Context) {
 	}
 
 	utils.CreatedResponse(c, "Extracurricular added successfully", response)
+}
+
+// UpdatePKL godoc
+// @Summary Update internship record
+// @Description Update PKL record
+// @Tags Catatan Semester
+// @Accept json
+// @Produce json
+// @Param id path int true "PKL Record ID"
+// @Param request body requests.CreatePKLRequest true "PKL data"
+// @Success 200 {object} utils.Response{data=responses.PKLResponse}
+// @Failure 400 {object} utils.Response
+// @Failure 404 {object} utils.Response
+// @Security BearerAuth
+// @Router /pkl/{id} [put]
+func (h *NilaiHandler) UpdatePKL(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	if err != nil {
+		utils.BadRequestResponse(c, "Invalid PKL record ID", nil)
+		return
+	}
+
+	var req requests.CreatePKLRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		utils.BadRequestResponse(c, "Invalid request", err.Error())
+		return
+	}
+
+	response, err := h.nilaiService.UpdatePKL(uint(id), req)
+	if err != nil {
+		utils.BadRequestResponse(c, err.Error(), nil)
+		return
+	}
+
+	utils.SuccessResponse(c, "PKL updated successfully", response)
+}
+
+// DeletePKL godoc
+// @Summary Delete internship record
+// @Description Delete PKL record
+// @Tags Catatan Semester
+// @Param id path int true "PKL Record ID"
+// @Success 204
+// @Failure 404 {object} utils.Response
+// @Security BearerAuth
+// @Router /pkl/{id} [delete]
+func (h *NilaiHandler) DeletePKL(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	if err != nil {
+		utils.BadRequestResponse(c, "Invalid PKL record ID", nil)
+		return
+	}
+
+	if err := h.nilaiService.DeletePKL(uint(id)); err != nil {
+		utils.BadRequestResponse(c, err.Error(), nil)
+		return
+	}
+
+	utils.NoContentResponse(c)
+}
+
+// UpdateEkstrakurikuler godoc
+// @Summary Update extracurricular activity
+// @Description Update extracurricular activity record
+// @Tags Catatan Semester
+// @Accept json
+// @Produce json
+// @Param id path int true "Extracurricular Record ID"
+// @Param request body requests.CreateEkstrakurikulerRequest true "Extracurricular data"
+// @Success 200 {object} utils.Response{data=responses.EkstrakurikulerResponse}
+// @Failure 400 {object} utils.Response
+// @Failure 404 {object} utils.Response
+// @Security BearerAuth
+// @Router /ekstrakurikuler/{id} [put]
+func (h *NilaiHandler) UpdateEkstrakurikuler(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	if err != nil {
+		utils.BadRequestResponse(c, "Invalid extracurricular record ID", nil)
+		return
+	}
+
+	var req requests.CreateEkstrakurikulerRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		utils.BadRequestResponse(c, "Invalid request", err.Error())
+		return
+	}
+
+	response, err := h.nilaiService.UpdateEkstrakurikuler(uint(id), req)
+	if err != nil {
+		utils.BadRequestResponse(c, err.Error(), nil)
+		return
+	}
+
+	utils.SuccessResponse(c, "Extracurricular activity updated successfully", response)
+}
+
+// DeleteEkstrakurikuler godoc
+// @Summary Delete extracurricular activity
+// @Description Delete extracurricular activity record
+// @Tags Catatan Semester
+// @Param id path int true "Extracurricular Record ID"
+// @Success 204
+// @Failure 404 {object} utils.Response
+// @Security BearerAuth
+// @Router /ekstrakurikuler/{id} [delete]
+func (h *NilaiHandler) DeleteEkstrakurikuler(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	if err != nil {
+		utils.BadRequestResponse(c, "Invalid extracurricular record ID", nil)
+		return
+	}
+
+	if err := h.nilaiService.DeleteEkstrakurikuler(uint(id)); err != nil {
+		utils.BadRequestResponse(c, err.Error(), nil)
+		return
+	}
+
+	utils.NoContentResponse(c)
 }

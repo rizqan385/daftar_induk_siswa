@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -11,12 +12,28 @@ import (
 
 // SiswaHandler handles student endpoints
 type SiswaHandler struct {
-	siswaService *services.SiswaService
+	siswaService    *services.SiswaService
+	activityService *services.ActivityLogService
 }
 
 // NewSiswaHandler creates a new SiswaHandler
-func NewSiswaHandler(siswaService *services.SiswaService) *SiswaHandler {
-	return &SiswaHandler{siswaService: siswaService}
+func NewSiswaHandler(siswaService *services.SiswaService, activityService *services.ActivityLogService) *SiswaHandler {
+	return &SiswaHandler{siswaService: siswaService, activityService: activityService}
+}
+
+// helper to extract user info from JWT context
+func getUserInfo(c *gin.Context) (uint, string) {
+	userID, _ := c.Get("user_id")
+	username, _ := c.Get("username")
+	uid, ok := userID.(uint)
+	if !ok {
+		// try float64 (JSON numbers default)
+		if f, ok := userID.(float64); ok {
+			uid = uint(f)
+		}
+	}
+	uname, _ := username.(string)
+	return uid, uname
 }
 
 // Create godoc
@@ -43,6 +60,11 @@ func (h *SiswaHandler) Create(c *gin.Context) {
 		return
 	}
 
+	// Audit log
+	uid, uname := getUserInfo(c)
+	h.activityService.LogActivity(uid, uname, "CREATE", "siswa", response.ID,
+		fmt.Sprintf("Menambah siswa baru: %s", response.NamaLengkap), c.ClientIP())
+
 	utils.CreatedResponse(c, "Student created successfully", response)
 }
 
@@ -68,6 +90,11 @@ func (h *SiswaHandler) FindByID(c *gin.Context) {
 		utils.NotFoundResponse(c, err.Error())
 		return
 	}
+
+	// Audit log
+	uid, uname := getUserInfo(c)
+	h.activityService.LogActivity(uid, uname, "VIEW", "siswa", uint(id),
+		fmt.Sprintf("Melihat data siswa: %s", response.NamaLengkap), c.ClientIP())
 
 	utils.SuccessResponse(c, "Student retrieved", response)
 }
@@ -133,6 +160,11 @@ func (h *SiswaHandler) Update(c *gin.Context) {
 		return
 	}
 
+	// Audit log
+	uid, uname := getUserInfo(c)
+	h.activityService.LogActivity(uid, uname, "UPDATE", "siswa", uint(id),
+		fmt.Sprintf("Mengubah data siswa: %s", response.NamaLengkap), c.ClientIP())
+
 	utils.SuccessResponse(c, "Student updated successfully", response)
 }
 
@@ -157,6 +189,11 @@ func (h *SiswaHandler) Delete(c *gin.Context) {
 		utils.NotFoundResponse(c, err.Error())
 		return
 	}
+
+	// Audit log
+	uid, uname := getUserInfo(c)
+	h.activityService.LogActivity(uid, uname, "DELETE", "siswa", uint(id),
+		fmt.Sprintf("Menghapus data siswa ID: %d", id), c.ClientIP())
 
 	utils.SuccessResponse(c, "Student deleted successfully", nil)
 }
@@ -193,6 +230,11 @@ func (h *SiswaHandler) UploadFoto(c *gin.Context) {
 		return
 	}
 
+	// Audit log
+	uid, uname := getUserInfo(c)
+	h.activityService.LogActivity(uid, uname, "UPLOAD", "foto", uint(id),
+		fmt.Sprintf("Upload foto siswa ID: %d", id), c.ClientIP())
+
 	utils.SuccessResponse(c, "Photo uploaded successfully", gin.H{"foto_path": fotoPath})
 }
 
@@ -228,5 +270,79 @@ func (h *SiswaHandler) AddMeninggalkanSekolah(c *gin.Context) {
 		return
 	}
 
+	// Audit log
+	uid, uname := getUserInfo(c)
+	h.activityService.LogActivity(uid, uname, "CREATE", "meninggalkan_sekolah", uint(id),
+		fmt.Sprintf("Menambah record pindah/keluar sekolah siswa ID: %d", id), c.ClientIP())
+
 	utils.CreatedResponse(c, "Leaving record added successfully", response)
+}
+
+// DeleteMeninggalkanSekolah godoc
+// @Summary Delete leaving school record
+// @Description Delete record of student leaving school
+// @Tags Siswa
+// @Produce json
+// @Param id path int true "Student ID"
+// @Success 200 {object} utils.Response
+// @Failure 400 {object} utils.Response
+// @Failure 404 {object} utils.Response
+// @Security BearerAuth
+// @Router /siswa/{id}/meninggalkan-sekolah [delete]
+func (h *SiswaHandler) DeleteMeninggalkanSekolah(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	if err != nil {
+		utils.BadRequestResponse(c, "Invalid ID", nil)
+		return
+	}
+
+	if err := h.siswaService.DeleteMeninggalkanSekolah(uint(id)); err != nil {
+		if err.Error() == "student not found" {
+			utils.NotFoundResponse(c, "Student not found")
+			return
+		}
+		utils.InternalServerErrorResponse(c, err.Error())
+		return
+	}
+
+	// Audit log
+	uid, uname := getUserInfo(c)
+	h.activityService.LogActivity(uid, uname, "DELETE", "meninggalkan_sekolah", uint(id),
+		fmt.Sprintf("Menghapus record pindah/keluar sekolah siswa ID: %d", id), c.ClientIP())
+
+	utils.SuccessResponse(c, "Leaving school record deleted successfully", nil)
+}
+
+// ImportExcel godoc
+// @Summary Import student data from Excel
+// @Description Import basic student (nisn, nis, nama, gender, kelas) from an uploaded .xlsx file
+// @Tags Siswa
+// @Accept multipart/form-data
+// @Produce json
+// @Param file formData file true "Excel file (.xlsx)"
+// @Success 200 {object} utils.Response
+// @Failure 400 {object} utils.Response
+// @Security BearerAuth
+// @Router /siswa/import [post]
+func (h *SiswaHandler) ImportExcel(c *gin.Context) {
+	file, err := c.FormFile("file")
+	if err != nil {
+		utils.BadRequestResponse(c, "No file uploaded", err.Error())
+		return
+	}
+
+	importedCount, err := h.siswaService.ImportExcel(file)
+	if err != nil {
+		utils.BadRequestResponse(c, "Failed to import excel file", err.Error())
+		return
+	}
+
+	// Audit log
+	uid, uname := getUserInfo(c)
+	h.activityService.LogActivity(uid, uname, "IMPORT", "siswa", 0,
+		fmt.Sprintf("Import data siswa via Excel: %d berhasil ditambahkan", importedCount), c.ClientIP())
+
+	utils.SuccessResponse(c, fmt.Sprintf("%d students imported successfully", importedCount), gin.H{
+		"imported_count": importedCount,
+	})
 }

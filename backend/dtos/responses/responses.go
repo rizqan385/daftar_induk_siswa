@@ -17,16 +17,28 @@ type UserResponse struct {
 	IsActive bool   `json:"is_active" example:"true"`
 }
 
+// KelasResponse for passing class details
+type KelasResponse struct {
+	ID        uint      `json:"id" example:"1"`
+	Nama      string    `json:"nama" example:"X MIPA 1"`
+	WaliKelas string    `json:"wali_kelas" example:"Budi Santoso"`
+	Tingkat   string    `json:"tingkat" example:"X"`
+	Keterangan string   `json:"keterangan,omitempty"`
+}
+
 // SiswaListResponse for student list
 type SiswaListResponse struct {
-	ID           uint      `json:"id" example:"1"`
-	NoInduk      string    `json:"no_induk" example:"2024001"`
-	NISN         string    `json:"nisn" example:"0012345678"`
-	NamaLengkap  string    `json:"nama_lengkap" example:"Ahmad Syafiq"`
-	JenisKelamin string    `json:"jenis_kelamin" example:"L"`
-	Kelas        string    `json:"kelas" example:"X"`
-	FotoPath     string    `json:"foto_path" example:"photos/123456.jpg"`
-	CreatedAt    time.Time `json:"created_at"`
+	ID           uint           `json:"id" example:"1"`
+	NoInduk      string         `json:"no_induk" example:"2024001"`
+	NISN         string         `json:"nisn" example:"0012345678"`
+	NamaLengkap  string         `json:"nama_lengkap" example:"Ahmad Syafiq"`
+	JenisKelamin string         `json:"jenis_kelamin" example:"L"`
+	Kelas        string         `json:"kelas" example:"X"`
+	KelasID      *uint          `json:"kelas_id" example:"1"`
+	KelasRef     *KelasResponse `json:"kelas_ref,omitempty"`
+	FotoPath     string         `json:"foto_path" example:"photos/123456.jpg"`
+	Status       string         `json:"status" example:"aktif"`
+	CreatedAt    time.Time      `json:"created_at"`
 }
 
 // SiswaDetailResponse for detailed student data
@@ -44,7 +56,9 @@ type SiswaDetailResponse struct {
 	JumlahSaudara   uint      `json:"jumlah_saudara"`
 	Kewarganegaraan string    `json:"kewarganegaraan"`
 	BahasaRumah     string    `json:"bahasa_rumah"`
+	KelasID         *uint     `json:"kelas_id,omitempty"`
 	FotoPath        string    `json:"foto_path"`
+	Status          string    `json:"status"`
 	CreatedAt       time.Time `json:"created_at"`
 	UpdatedAt       time.Time `json:"updated_at"`
 
@@ -158,11 +172,12 @@ type KepribadianResponse struct {
 
 // PrestasiResponse for achievement
 type PrestasiResponse struct {
-	ID         uint   `json:"id"`
-	Bidang     string `json:"bidang"`
-	Keterangan string `json:"keterangan"`
-	Tahun      uint   `json:"tahun"`
-	Tingkat    string `json:"tingkat"`
+	ID           uint   `json:"id"`
+	Bidang       string `json:"bidang"`
+	NamaPrestasi string `json:"nama_prestasi"`
+	Keterangan   string `json:"keterangan"`
+	Tahun        uint   `json:"tahun"`
+	Tingkat      string `json:"tingkat"`
 }
 
 // BeasiswaResponse for scholarship
@@ -188,11 +203,13 @@ type KehadiranResponse struct {
 
 // MataPelajaranResponse for subject
 type MataPelajaranResponse struct {
-	ID          uint   `json:"id"`
-	Kode        string `json:"kode"`
-	Nama        string `json:"nama"`
-	Kelompok    string `json:"kelompok"`
-	SubKelompok string `json:"sub_kelompok"`
+	ID           uint   `json:"id"`
+	Kode         string `json:"kode"`
+	Nama         string `json:"nama"`
+	Kelompok     string `json:"kelompok"`
+	SubKelompok  string `json:"sub_kelompok"`
+	KelasTarget1 string `json:"kelas_target_1"`
+	KelasTarget2 string `json:"kelas_target_2"`
 }
 
 // NilaiSemesterResponse for semester grade
@@ -224,6 +241,7 @@ type CatatanSemesterResponse struct {
 	ID               uint                       `json:"id"`
 	Kelas            string                     `json:"kelas"`
 	Semester         uint8                      `json:"semester"`
+	CatatanWaliKelas string                     `json:"catatan_wali_kelas"`
 	PKL              []PKLResponse              `json:"pkl,omitempty"`
 	Ekstrakurikuler  []EkstrakurikulerResponse  `json:"ekstrakurikuler,omitempty"`
 	PrestasiSemester []PrestasiSemesterResponse `json:"prestasi_semester,omitempty"`
@@ -239,10 +257,21 @@ type PKLResponse struct {
 	Keterangan string `json:"keterangan"`
 }
 
+// KeanggotaanEkskulResponse for extracurricular membership
+type KeanggotaanEkskulResponse struct {
+	ID           uint   `json:"id"`
+	SiswaID      uint   `json:"siswa_id"`
+	SiswaNama    string `json:"siswa_nama"`
+	SiswaKelas   string `json:"siswa_kelas"`
+	NamaKegiatan string `json:"nama_kegiatan"`
+	Keterangan   string `json:"keterangan"`
+}
+
 // EkstrakurikulerResponse for extracurricular
 type EkstrakurikulerResponse struct {
 	ID           uint   `json:"id"`
 	NamaKegiatan string `json:"nama_kegiatan"`
+	Nilai        string `json:"nilai"`
 	Keterangan   string `json:"keterangan"`
 }
 
@@ -290,4 +319,17 @@ type PemeriksaanResponse struct {
 	NamaPemeriksa string    `json:"nama_pemeriksa"`
 	Jabatan       string    `json:"jabatan"`
 	Keterangan    string    `json:"keterangan"`
+}
+
+// ActivityLogResponse for admin activity audit trail
+type ActivityLogResponse struct {
+	ID          uint      `json:"id"`
+	UserID      uint      `json:"user_id"`
+	Username    string    `json:"username"`
+	Action      string    `json:"action"`
+	EntityType  string    `json:"entity_type"`
+	EntityID    uint      `json:"entity_id"`
+	Description string    `json:"description"`
+	IPAddress   string    `json:"ip_address"`
+	CreatedAt   time.Time `json:"created_at"`
 }

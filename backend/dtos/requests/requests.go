@@ -18,7 +18,7 @@ type RegisterRequest struct {
 // CreateSiswaRequest for creating a student
 type CreateSiswaRequest struct {
 	NoInduk         string `json:"no_induk" binding:"required,max=20" example:"2024001"`
-	NISN            string `json:"nisn" binding:"required,len=10" example:"0012345678"`
+	NISN            string `json:"nisn" binding:"required,max=20" example:"0012345678"`
 	NamaLengkap     string `json:"nama_lengkap" binding:"required,max=100" example:"Ahmad Syafiq"`
 	NamaPanggilan   string `json:"nama_panggilan" binding:"max=50" example:"Syafiq"`
 	JenisKelamin    string `json:"jenis_kelamin" binding:"required,oneof=L P" example:"L"`
@@ -29,6 +29,8 @@ type CreateSiswaRequest struct {
 	JumlahSaudara   uint   `json:"jumlah_saudara" example:"3"`
 	Kewarganegaraan string `json:"kewarganegaraan" binding:"max=50" example:"Indonesia"`
 	BahasaRumah     string `json:"bahasa_rumah" binding:"max=50" example:"Indonesia"`
+	KelasID         uint   `json:"kelas_id" example:"1"`
+	Status          string `json:"status" binding:"omitempty" example:"aktif"`
 }
 
 // UpdateSiswaRequest for updating a student
@@ -43,11 +45,13 @@ type UpdateSiswaRequest struct {
 	JumlahSaudara   uint   `json:"jumlah_saudara" example:"3"`
 	Kewarganegaraan string `json:"kewarganegaraan" binding:"max=50" example:"Indonesia"`
 	BahasaRumah     string `json:"bahasa_rumah" binding:"max=50" example:"Indonesia"`
+	KelasID         uint   `json:"kelas_id" example:"1"`
+	Status          string `json:"status" binding:"omitempty" example:"aktif"`
 }
 
 // CreateAlamatRequest for creating address
 type CreateAlamatRequest struct {
-	AlamatLengkap  string  `json:"alamat_lengkap" binding:"required" example:"Jl. Merdeka No. 123"`
+	AlamatLengkap  string  `json:"alamat_lengkap" example:"Jl. Merdeka No. 123"`
 	Kelurahan      string  `json:"kelurahan" binding:"max=100" example:"Cibiru"`
 	Kecamatan      string  `json:"kecamatan" binding:"max=100" example:"Cibiru"`
 	Kota           string  `json:"kota" binding:"max=100" example:"Bandung"`
@@ -95,7 +99,7 @@ type CreateKesehatanRequest struct {
 	TinggiBadanMasuk   float64 `json:"tinggi_badan_masuk" example:"160.0"`
 	BeratBadanKeluar   float64 `json:"berat_badan_keluar" example:"55.0"`
 	TinggiBadanKeluar  float64 `json:"tinggi_badan_keluar" example:"165.0"`
-	GolonganDarah      string  `json:"golongan_darah" binding:"omitempty,oneof=A B AB O" example:"A"`
+	GolonganDarah      string  `json:"golongan_darah" example:"A"`
 	KesanggupanJasmani string  `json:"kesanggupan_jasmani" example:"Baik"`
 }
 
@@ -111,29 +115,37 @@ type CreateRiwayatPenyakitRequest struct {
 type CreatePendidikanRequest struct {
 	Tipe            string `json:"tipe" binding:"required,oneof=siswa_baru pindahan" example:"siswa_baru"`
 	TanggalDiterima string `json:"tanggal_diterima" binding:"required" example:"2024-07-15"`
-	AsalSekolah     string `json:"asal_sekolah" binding:"required,max=200" example:"SMP Negeri 1 Bandung"`
+	AsalSekolah     string `json:"asal_sekolah" binding:"max=200" example:"SMP Negeri 1 Bandung"`
 	AlamatSekolah   string `json:"alamat_sekolah" example:"Jl. Pendidikan No. 1"`
 	NoIjazah        string `json:"no_ijazah" binding:"max=50" example:"DN-01/MI-2024"`
 	TanggalIjazah   string `json:"tanggal_ijazah" example:"2024-06-10"`
 	NoSKHUN         string `json:"no_skhun" binding:"max=50" example:"DN-01/SK-2024"`
 	TanggalSKHUN    string `json:"tanggal_skhun" example:"2024-06-10"`
-	KelasDiterima   string `json:"kelas_diterima" binding:"required,oneof=X XI XII" example:"X"`
+	KelasDiterima   string `json:"kelas_diterima" binding:"omitempty" example:"X TKJ 1"`
 	AlasanPindah    string `json:"alasan_pindah" example:""`
 }
 
 // CreateKepribadianRequest for creating personality assessment
 type CreateKepribadianRequest struct {
-	Aspek          string `json:"aspek" binding:"required,max=100" example:"Disiplin/Ketertiban"`
-	Nilai          string `json:"nilai" binding:"required,oneof=Baik Cukup Kurang" example:"Baik"`
+	Aspek          string `json:"aspek" binding:"max=100" example:"Disiplin/Ketertiban"`
+	Nilai          string `json:"nilai" binding:"max=50" example:"Baik"`
 	TahunPelajaran string `json:"tahun_pelajaran" binding:"max=20" example:"2024/2025"`
 }
 
 // CreatePrestasiRequest for creating achievement
 type CreatePrestasiRequest struct {
-	Bidang     string `json:"bidang" binding:"required,oneof=Kesenian Olahraga Kemasyarakatan Pramuka 'Karya Tulis' Lainnya" example:"Olahraga"`
-	Keterangan string `json:"keterangan" example:"Juara 1 Lomba Lari"`
-	Tahun      uint   `json:"tahun" example:"2024"`
-	Tingkat    string `json:"tingkat" binding:"oneof=Sekolah Kecamatan Kota Provinsi Nasional Internasional" example:"Kota"`
+	Bidang       string `json:"bidang" binding:"required,oneof=Kesenian Olahraga Kemasyarakatan Pramuka 'Karya Tulis' Lainnya" example:"Olahraga"`
+	NamaPrestasi string `json:"nama_prestasi" binding:"required,max=255" example:"Juara 1 Lomba Lari"`
+	Keterangan   string `json:"keterangan" example:"Juara 1 Lomba Lari tingkat Kota"`
+	Tahun        uint   `json:"tahun" binding:"required" example:"2024"`
+	Tingkat      string `json:"tingkat" binding:"omitempty,oneof=Sekolah Kecamatan Kota Provinsi Nasional Internasional" example:"Kota"`
+}
+
+// CreateKeanggotaanEkskulRequest for adding student to an extracurricular
+type CreateKeanggotaanEkskulRequest struct {
+	SiswaID      uint   `json:"siswa_id" binding:"required" example:"1"`
+	NamaKegiatan string `json:"nama_kegiatan" binding:"required,max=100" example:"Pramuka"`
+	Keterangan   string `json:"keterangan" example:"Aktif / Baik"`
 }
 
 // CreateBeasiswaRequest for creating scholarship
@@ -146,7 +158,7 @@ type CreateBeasiswaRequest struct {
 // CreateKehadiranRequest for creating attendance
 type CreateKehadiranRequest struct {
 	Kelas             string  `json:"kelas" binding:"required,oneof=X XI XII" example:"X"`
-	Semester          uint8   `json:"semester" binding:"required,min=1,max=2" example:"1"`
+	Semester          uint8   `json:"semester" binding:"required,min=1,max=6" example:"1"`
 	JumlahHadir       uint    `json:"jumlah_hadir" example:"90"`
 	PersentaseHadir   float64 `json:"persentase_hadir" example:"95.5"`
 	JumlahSakit       uint    `json:"jumlah_sakit" example:"3"`
@@ -159,8 +171,8 @@ type CreateKehadiranRequest struct {
 type CreateNilaiSemesterRequest struct {
 	MataPelajaranID       uint   `json:"mata_pelajaran_id" binding:"required" example:"1"`
 	Kelas                 string `json:"kelas" binding:"required,oneof=X XI XII" example:"X"`
-	Semester              uint8  `json:"semester" binding:"required,min=1,max=2" example:"1"`
-	TahunPelajaran        string `json:"tahun_pelajaran" binding:"required,max=20" example:"2024/2025"`
+	Semester              uint8  `json:"semester" binding:"required,min=1,max=6" example:"1"`
+	TahunPelajaran        string `json:"tahun_pelajaran" binding:"max=20" example:"2024/2025"`
 	NilaiPengetahuan      uint   `json:"nilai_pengetahuan" binding:"max=100" example:"85"`
 	PredikatPengetahuan   string `json:"predikat_pengetahuan" binding:"omitempty,oneof=A B C D" example:"B"`
 	DeskripsiPengetahuan  string `json:"deskripsi_pengetahuan" example:"Baik dalam memahami materi"`
@@ -174,18 +186,35 @@ type BatchNilaiSemesterRequest struct {
 	Nilai []CreateNilaiSemesterRequest `json:"nilai" binding:"required,dive"`
 }
 
+// UpdateNilaiSemesterRequest for updating an existing semester grade
+type UpdateNilaiSemesterRequest struct {
+	TahunPelajaran        string `json:"tahun_pelajaran" binding:"max=20" example:"2024/2025"`
+	NilaiPengetahuan      uint   `json:"nilai_pengetahuan" binding:"max=100" example:"85"`
+	PredikatPengetahuan   string `json:"predikat_pengetahuan" binding:"omitempty,oneof=A B C D" example:"B"`
+	DeskripsiPengetahuan  string `json:"deskripsi_pengetahuan" example:"Baik dalam memahami materi"`
+	NilaiKeterampilan     uint   `json:"nilai_keterampilan" binding:"max=100" example:"88"`
+	PredikatKeterampilan  string `json:"predikat_keterampilan" binding:"omitempty,oneof=A B C D" example:"B"`
+	DeskripsiKeterampilan string `json:"deskripsi_keterampilan" example:"Mampu menerapkan dengan baik"`
+}
+
 // CreateNilaiSikapRequest for creating attitude grade
 type CreateNilaiSikapRequest struct {
 	Kelas              string `json:"kelas" binding:"required,oneof=X XI XII" example:"X"`
-	Semester           uint8  `json:"semester" binding:"required,min=1,max=2" example:"1"`
-	DeskripsiSpiritual string `json:"deskripsi_spiritual" example:"Taat beribadah"`
-	DeskripsiSosial    string `json:"deskripsi_sosial" example:"Aktif dalam kegiatan sosial"`
+	Semester           uint8  `json:"semester" binding:"required,min=1,max=6" example:"1"`
+	DeskripsiSpiritual string `json:"deskripsi_spiritual" example:"Baik dalam beribadah"`
+	DeskripsiSosial    string `json:"deskripsi_sosial" example:"Baik dalam bersosialisasi"`
 }
 
 // CreateCatatanSemesterRequest for creating semester notes
 type CreateCatatanSemesterRequest struct {
-	Kelas    string `json:"kelas" binding:"required,oneof=X XI XII" example:"X"`
-	Semester uint8  `json:"semester" binding:"required,min=1,max=2" example:"1"`
+	Kelas              string `json:"kelas" binding:"required,oneof=X XI XII" example:"X"`
+	Semester           uint8  `json:"semester" binding:"required,min=1,max=6" example:"1"`
+	CatatanWaliKelas   string `json:"catatan_wali_kelas" example:"Siswa ini menunjukkan perkembangan yang baik"`
+}
+
+// UpdateCatatanSemesterRequest for updating semester notes
+type UpdateCatatanSemesterRequest struct {
+	CatatanWaliKelas string `json:"catatan_wali_kelas" example:"Siswa ini menunjukkan perkembangan yang baik"`
 }
 
 // CreatePKLRequest for creating internship
@@ -199,6 +228,7 @@ type CreatePKLRequest struct {
 // CreateEkstrakurikulerRequest for creating extracurricular
 type CreateEkstrakurikulerRequest struct {
 	NamaKegiatan string `json:"nama_kegiatan" binding:"required,max=100" example:"Kepramukaan"`
+	Nilai        string `json:"nilai" example:"A"`
 	Keterangan   string `json:"keterangan" example:"Aktif"`
 }
 
@@ -282,7 +312,7 @@ type UpdateKesehatanRequest struct {
 	TinggiBadanMasuk   float64 `json:"tinggi_badan_masuk" example:"160.0"`
 	BeratBadanKeluar   float64 `json:"berat_badan_keluar" example:"55.0"`
 	TinggiBadanKeluar  float64 `json:"tinggi_badan_keluar" example:"165.0"`
-	GolonganDarah      string  `json:"golongan_darah" binding:"omitempty,oneof=A B AB O" example:"A"`
+	GolonganDarah      string  `json:"golongan_darah" example:"A"`
 	KesanggupanJasmani string  `json:"kesanggupan_jasmani" example:"Baik"`
 }
 
@@ -296,7 +326,7 @@ type UpdatePendidikanRequest struct {
 	TanggalIjazah   string `json:"tanggal_ijazah" example:"2024-06-10"`
 	NoSKHUN         string `json:"no_skhun" binding:"max=50" example:"DN-01/SK-2024"`
 	TanggalSKHUN    string `json:"tanggal_skhun" example:"2024-06-10"`
-	KelasDiterima   string `json:"kelas_diterima" binding:"omitempty,oneof=X XI XII" example:"X"`
+	KelasDiterima   string `json:"kelas_diterima" binding:"omitempty" example:"X TKJ 1"`
 	AlasanPindah    string `json:"alasan_pindah" example:""`
 }
 

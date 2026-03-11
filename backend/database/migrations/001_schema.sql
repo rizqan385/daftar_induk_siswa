@@ -157,7 +157,7 @@ CREATE TABLE pendidikan_sebelumnya (
     tanggal_ijazah DATE,
     no_skhun VARCHAR(50),
     tanggal_skhun DATE,
-    kelas_diterima ENUM('X', 'XI', 'XII') NOT NULL,
+    kelas_diterima VARCHAR(50) NOT NULL,
     alasan_pindah TEXT,
     FOREIGN KEY (siswa_id) REFERENCES siswa(id) ON DELETE CASCADE,
     INDEX idx_pendidikan_siswa (siswa_id)
@@ -231,6 +231,8 @@ CREATE TABLE mata_pelajaran (
     nama VARCHAR(100) NOT NULL,
     kelompok ENUM('A', 'B', 'C') NOT NULL COMMENT 'A=Muatan Nasional, B=Muatan Kewilayahan, C=Muatan Peminatan',
     sub_kelompok VARCHAR(50) COMMENT 'C1=Dasar Bidang, C2=Dasar Program, C3=Kompetensi Keahlian',
+    kelas_target_1 VARCHAR(100) DEFAULT 'Semua',
+    kelas_target_2 VARCHAR(100) DEFAULT 'Tidak ada',
     aktif BOOLEAN DEFAULT TRUE,
     INDEX idx_mapel_kelompok (kelompok)
 ) ENGINE=InnoDB;
@@ -242,14 +244,14 @@ CREATE TABLE nilai_semester (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     siswa_id BIGINT UNSIGNED NOT NULL,
     mata_pelajaran_id BIGINT UNSIGNED NOT NULL,
-    kelas ENUM('X', 'XI', 'XII') NOT NULL,
+    kelas VARCHAR(50) NOT NULL,
     semester TINYINT UNSIGNED NOT NULL,
     tahun_pelajaran VARCHAR(20) NOT NULL COMMENT '2024/2025',
     nilai_pengetahuan INT UNSIGNED,
-    predikat_pengetahuan ENUM('A', 'B', 'C', 'D'),
+    predikat_pengetahuan VARCHAR(10),
     deskripsi_pengetahuan TEXT,
     nilai_keterampilan INT UNSIGNED,
-    predikat_keterampilan ENUM('A', 'B', 'C', 'D'),
+    predikat_keterampilan VARCHAR(10),
     deskripsi_keterampilan TEXT,
     FOREIGN KEY (siswa_id) REFERENCES siswa(id) ON DELETE CASCADE,
     FOREIGN KEY (mata_pelajaran_id) REFERENCES mata_pelajaran(id) ON DELETE RESTRICT,
@@ -281,6 +283,7 @@ CREATE TABLE catatan_akhir_semester (
     siswa_id BIGINT UNSIGNED NOT NULL,
     kelas ENUM('X', 'XI', 'XII') NOT NULL,
     semester TINYINT UNSIGNED NOT NULL,
+    catatan_wali_kelas TEXT,
     FOREIGN KEY (siswa_id) REFERENCES siswa(id) ON DELETE CASCADE,
     UNIQUE INDEX idx_catatan_unique (siswa_id, kelas, semester),
     INDEX idx_catatan_siswa (siswa_id)
@@ -355,6 +358,18 @@ CREATE TABLE nilai_ijazah (
 ) ENGINE=InnoDB;
 
 -- =============================================
+-- TABLE: keanggotaan_ekskul
+-- =============================================
+CREATE TABLE keanggotaan_ekskul (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    siswa_id BIGINT UNSIGNED NOT NULL,
+    nama_kegiatan VARCHAR(100) NOT NULL,
+    keterangan TEXT,
+    FOREIGN KEY (siswa_id) REFERENCES siswa(id) ON DELETE CASCADE,
+    INDEX idx_keanggotaan_siswa (siswa_id)
+) ENGINE=InnoDB;
+
+-- =============================================
 -- TABLE: meninggalkan_sekolah
 -- =============================================
 CREATE TABLE meninggalkan_sekolah (
@@ -368,6 +383,24 @@ CREATE TABLE meninggalkan_sekolah (
     alasan TEXT,
     FOREIGN KEY (siswa_id) REFERENCES siswa(id) ON DELETE CASCADE,
     UNIQUE INDEX idx_keluar_siswa (siswa_id)
+) ENGINE=InnoDB;
+
+-- =============================================
+-- TABLE: activity_logs (Admin Audit Trail)
+-- =============================================
+CREATE TABLE IF NOT EXISTS activity_logs (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT UNSIGNED NOT NULL,
+    username VARCHAR(50) NOT NULL,
+    action VARCHAR(20) NOT NULL COMMENT 'VIEW, CREATE, UPDATE, DELETE, UPLOAD',
+    entity_type VARCHAR(50) NOT NULL COMMENT 'siswa, orang_tua, etc.',
+    entity_id BIGINT UNSIGNED DEFAULT 0,
+    description TEXT,
+    ip_address VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_activity_user (user_id),
+    INDEX idx_activity_created (created_at),
+    INDEX idx_activity_entity (entity_type, entity_id)
 ) ENGINE=InnoDB;
 
 -- =============================================

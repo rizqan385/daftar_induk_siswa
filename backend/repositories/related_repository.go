@@ -207,6 +207,14 @@ func (r *KepribadianRepository) FindBySiswaID(siswaID uint) ([]models.Kepribadia
 	return kepribadian, nil
 }
 
+func (r *KepribadianRepository) FindByID(id uint) (*models.Kepribadian, error) {
+	var kepribadian models.Kepribadian
+	if err := r.db.First(&kepribadian, id).Error; err != nil {
+		return nil, err
+	}
+	return &kepribadian, nil
+}
+
 func (r *KepribadianRepository) Update(kepribadian *models.Kepribadian) error {
 	return r.db.Save(kepribadian).Error
 }
@@ -271,6 +279,14 @@ func (r *BeasiswaRepository) FindBySiswaID(siswaID uint) ([]models.Beasiswa, err
 		return nil, err
 	}
 	return beasiswa, nil
+}
+
+func (r *BeasiswaRepository) FindByID(id uint) (*models.Beasiswa, error) {
+	var beasiswa models.Beasiswa
+	if err := r.db.First(&beasiswa, id).Error; err != nil {
+		return nil, err
+	}
+	return &beasiswa, nil
 }
 
 func (r *BeasiswaRepository) Update(beasiswa *models.Beasiswa) error {
