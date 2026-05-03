@@ -4,16 +4,17 @@ import { useState, useEffect } from 'react';
 import api from '../../services/api';
 
 const inputStyle: React.CSSProperties = {
-    padding: '10px 14px', borderRadius: '8px', border: '1px solid var(--border-color)',
-    background: 'var(--bg-color)', color: 'var(--text-primary)', width: '100%', fontSize: '0.9rem'
+    padding: '9px 13px', borderRadius: '8px', border: '1px solid var(--border)',
+    background: '#ffffff !important', color: 'var(--text-primary)', width: '100%', fontSize: '0.875rem',
+    fontFamily: 'inherit', outline: 'none'
 };
 
 const PageWrapper = ({ children }: { children: React.ReactNode }) => (
-    <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg-color)' }}>
+    <div className="app-layout">
         <Sidebar />
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <div className="main-content">
             <Navbar />
-            <main style={{ flex: 1, padding: '24px 32px' }}>{children}</main>
+            <main className="page-wrapper fade-in">{children}</main>
         </div>
     </div>
 );

@@ -16,22 +16,30 @@ interface DashboardStats {
     kelas_detail: { id: number; nama: string; tingkat: string; jurusan: string; jumlah: number }[];
 }
 
+const statCards = [
+    {
+        key: 'total_siswa', label: 'Total Siswa', color: '#6c4dab', light: '#f3f0ff',
+        icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6c4dab" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    },
+    {
+        key: 'total_kelas', label: 'Total Kelas', color: '#3b82f6', light: '#eff6ff',
+        icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    },
+    {
+        key: 'total_mapel', label: 'Mata Pelajaran', color: '#22c55e', light: '#f0fdf4',
+        icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+    },
+];
+
 const DashboardPage = () => {
     const [stats, setStats] = useState<DashboardStats | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchStats = async () => {
-            try {
-                const response = await api.get('/dashboard/stats');
-                setStats(response.data.data);
-            } catch (err) {
-                console.error('Failed to fetch stats', err);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchStats();
+        api.get('/dashboard/stats')
+            .then(res => setStats(res.data.data))
+            .catch(console.error)
+            .finally(() => setLoading(false));
     }, []);
 
     const userName = localStorage.getItem('userName') || 'Admin';
@@ -43,100 +51,89 @@ const DashboardPage = () => {
                 stats?.gender_stats?.find(g => g.jenis_kelamin === 'L')?.jumlah || 0,
                 stats?.gender_stats?.find(g => g.jenis_kelamin === 'P')?.jumlah || 0,
             ],
-            backgroundColor: ['#3b82f6', '#ec4899'],
-            borderColor: ['#2563eb', '#db2777'],
-            borderWidth: 2,
+            backgroundColor: ['#6c4dab', '#ec4899'],
+            borderWidth: 0,
         }],
     };
 
-    const kelasLabels = stats?.kelas_detail?.map(k => k.nama) || ['X', 'XI', 'XII'];
-    const kelasValues = stats?.kelas_detail?.map(k => k.jumlah) || [0, 0, 0];
-
     const kelasData = {
-        labels: kelasLabels,
+        labels: stats?.kelas_detail?.map(k => k.nama) || [],
         datasets: [{
             label: 'Jumlah Siswa',
-            data: kelasValues,
-            backgroundColor: [
-                '#3b82f6', '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ef4444',
-            ],
+            data: stats?.kelas_detail?.map(k => k.jumlah) || [],
+            backgroundColor: '#6c4dab',
             borderRadius: 6,
             borderSkipped: false,
         }],
     };
 
     return (
-        <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg-color)' }}>
+        <div className="app-layout">
             <Sidebar />
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <Navbar />
-                <main style={{ flex: 1, padding: '24px 32px' }}>
-                    {/* Welcome */}
-                    <h2 style={{ color: 'var(--text-primary)', marginBottom: '8px', fontSize: '1.5rem' }}>
-                        Selamat Datang, <span style={{ color: '#3b82f6' }}>{userName}</span> 👋
-                    </h2>
-                    <p style={{ color: 'var(--text-secondary)', marginBottom: '24px', fontSize: '0.9rem' }}>
-                        Berikut ringkasan data sekolah Anda
-                    </p>
+            <div className="main-content">
+                <Navbar title="Dashboard" />
+                <main className="page-wrapper fade-in">
+
+                    {/* Welcome Banner */}
+                    <div style={{
+                        background: 'linear-gradient(135deg, #6c4dab 0%, #9b72e6 100%)',
+                        borderRadius: '14px',
+                        padding: '24px 28px',
+                        marginBottom: '24px',
+                        color: 'white',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        overflow: 'hidden',
+                        position: 'relative'
+                    }}>
+                        <div style={{ position: 'absolute', right: '-30px', top: '-30px', width: '180px', height: '180px', borderRadius: '50%', background: 'rgba(255,255,255,0.07)' }} />
+                        <div style={{ position: 'absolute', right: '80px', bottom: '-50px', width: '140px', height: '140px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)' }} />
+                        <div>
+                            <div style={{ fontSize: '1.4rem', fontWeight: 700, marginBottom: '6px' }}>
+                                Selamat Datang, {userName}!
+                            </div>
+                            <div style={{ fontSize: '0.9rem', opacity: 0.85 }}>
+                                Berikut ringkasan data induk siswa hari ini
+                            </div>
+                        </div>
+                        <div style={{ opacity: 0.4, color: 'white' }}>
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+                        </div>
+                    </div>
 
                     {loading ? (
-                        <div style={{ textAlign: 'center', padding: '60px', color: 'var(--text-secondary)' }}>
-                            Memuat data...
+                        <div className="empty-state">
+                            <div className="empty-state-icon">⏳</div>
+                            <div className="empty-state-text">Memuat data dashboard...</div>
                         </div>
                     ) : (
                         <>
-                            {/* Stats Cards */}
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '28px' }}>
-                                {[
-                                    { label: 'Total Siswa', value: stats?.total_siswa || 0, icon: '👥', color: '#3b82f6' },
-                                    { label: 'Total Kelas', value: stats?.total_kelas || 0, icon: '🏫', color: '#8b5cf6' },
-                                    { label: 'Total Mapel', value: stats?.total_mapel || 0, icon: '📚', color: '#10b981' },
-                                ].map((card, i) => (
-                                    <div key={i} style={{
-                                        background: 'var(--bg-surface)',
-                                        borderRadius: '14px',
-                                        padding: '24px',
-                                        border: '1px solid var(--border-color)',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '16px',
-                                        boxShadow: '0 2px 12px rgba(0,0,0,0.08)'
-                                    }}>
-                                        <div style={{
-                                            width: '52px', height: '52px',
-                                            borderRadius: '12px',
-                                            background: `${card.color}20`,
-                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                            fontSize: '1.5rem'
-                                        }}>
-                                            {card.icon}
+                            {/* Stat Cards */}
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '24px' }}>
+                                {statCards.map(card => (
+                                    <div key={card.key} className="stat-card" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                                        <div className="stat-card-icon" style={{ background: card.light }}>
+                                            <span style={{ fontSize: '1.4rem' }}>{card.icon}</span>
                                         </div>
                                         <div>
-                                            <div style={{ fontSize: '1.8rem', fontWeight: 700, color: 'var(--text-primary)' }}>
-                                                {card.value}
+                                            <div className="stat-card-value" style={{ color: card.color }}>
+                                                {(stats as any)?.[card.key] ?? 0}
                                             </div>
-                                            <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                                                {card.label}
-                                            </div>
+                                            <div className="stat-card-label">{card.label}</div>
                                         </div>
                                     </div>
                                 ))}
                             </div>
 
                             {/* Charts */}
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-                                {/* Gender Donut */}
-                                <div style={{
-                                    background: 'var(--bg-surface)',
-                                    borderRadius: '14px',
-                                    padding: '24px',
-                                    border: '1px solid var(--border-color)',
-                                    boxShadow: '0 2px 12px rgba(0,0,0,0.08)'
-                                }}>
-                                    <h3 style={{ color: 'var(--text-primary)', marginBottom: '16px', fontSize: '1rem' }}>
-                                        📊 Distribusi Gender
-                                    </h3>
-                                    <div style={{ maxWidth: '280px', margin: '0 auto' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '16px' }}>
+                                {/* Donut */}
+                                <div className="card card-body" style={{ display: 'flex', flexDirection: 'column' }}>
+                                    <div style={{ fontWeight: 700, fontSize: '0.95rem', marginBottom: '16px', color: 'var(--text-primary)' }}>
+                                        Distribusi Gender
+                                    </div>
+                                    <div style={{ maxWidth: '220px', margin: '0 auto', flex: 1 }}>
                                         <Doughnut
                                             data={genderData}
                                             options={{
@@ -144,41 +141,33 @@ const DashboardPage = () => {
                                                 plugins: {
                                                     legend: {
                                                         position: 'bottom',
-                                                        labels: { color: '#94a3b8', padding: 16, usePointStyle: true }
+                                                        labels: { color: '#6b7280', padding: 12, usePointStyle: true, font: { size: 12 } }
                                                     }
                                                 },
-                                                cutout: '65%',
+                                                cutout: '68%',
                                             }}
                                         />
                                     </div>
                                 </div>
 
-                                {/* Kelas Bar */}
-                                <div style={{
-                                    background: 'var(--bg-surface)',
-                                    borderRadius: '14px',
-                                    padding: '24px',
-                                    border: '1px solid var(--border-color)',
-                                    boxShadow: '0 2px 12px rgba(0,0,0,0.08)'
-                                }}>
-                                    <h3 style={{ color: 'var(--text-primary)', marginBottom: '16px', fontSize: '1rem' }}>
-                                        📈 Siswa per Kelas
-                                    </h3>
+                                {/* Bar Chart */}
+                                <div className="card card-body">
+                                    <div style={{ fontWeight: 700, fontSize: '0.95rem', marginBottom: '16px', color: 'var(--text-primary)' }}>
+                                        Siswa per Kelas
+                                    </div>
                                     <Bar
                                         data={kelasData}
                                         options={{
                                             responsive: true,
-                                            plugins: {
-                                                legend: { display: false },
-                                            },
+                                            plugins: { legend: { display: false } },
                                             scales: {
                                                 y: {
                                                     beginAtZero: true,
-                                                    ticks: { color: '#94a3b8', stepSize: 1 },
-                                                    grid: { color: 'rgba(148,163,184,0.1)' }
+                                                    ticks: { color: '#9ca3af', stepSize: 1, font: { size: 11 } },
+                                                    grid: { color: '#f3f4f6' }
                                                 },
                                                 x: {
-                                                    ticks: { color: '#94a3b8', font: { size: 11 } },
+                                                    ticks: { color: '#9ca3af', font: { size: 11 } },
                                                     grid: { display: false }
                                                 }
                                             }
@@ -186,6 +175,41 @@ const DashboardPage = () => {
                                     />
                                 </div>
                             </div>
+
+                            {/* Kelas Detail Table */}
+                            {(stats?.kelas_detail?.length ?? 0) > 0 && (
+                                <div className="card" style={{ marginTop: '16px' }}>
+                                    <div className="card-header">
+                                        <div className="card-title">Detail Per Kelas</div>
+                                    </div>
+                                    <div style={{ overflowX: 'auto' }}>
+                                        <table className="data-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nama Kelas</th>
+                                                    <th>Tingkat</th>
+                                                    <th>Jurusan</th>
+                                                    <th>Jumlah Siswa</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {stats?.kelas_detail?.map(k => (
+                                                    <tr key={k.id}>
+                                                        <td style={{ fontWeight: 600 }}>{k.nama}</td>
+                                                        <td>
+                                                            <span className="badge badge-info">{k.tingkat}</span>
+                                                        </td>
+                                                        <td style={{ color: 'var(--text-secondary)' }}>{k.jurusan || '-'}</td>
+                                                        <td>
+                                                            <span className="badge badge-success">{k.jumlah} siswa</span>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            )}
                         </>
                     )}
                 </main>

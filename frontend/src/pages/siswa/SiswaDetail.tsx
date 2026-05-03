@@ -695,7 +695,7 @@ const SiswaDetail = () => {
     );
 
     return (
-        <div style={{ display: 'flex', minHeight: '100vh' }}>
+        <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
             <div className="no-print" style={{ display: 'contents' }}>
                 <Sidebar />
             </div>
@@ -709,11 +709,8 @@ const SiswaDetail = () => {
                     <div 
                         className="no-print" 
                         style={{ 
-                            position: 'sticky', 
-                            top: 0, 
-                            zIndex: 20, 
-                            background: 'var(--bg-color)',
-                            borderBottom: '1px solid var(--border-color)', 
+                            background: 'rgba(255, 255, 255, 0.9)',
+                            borderBottom: '1px solid var(--border)', 
                             backdropFilter: 'blur(16px)'
                         }}
                     >
@@ -744,6 +741,7 @@ const SiswaDetail = () => {
                             onWheel={handleTabWheel}
                             style={{
                                 display: 'flex',
+                                alignItems: 'flex-end',
                                 gap: '2px',
                                 overflowX: 'auto',
                                 overflowY: 'hidden',
@@ -764,7 +762,7 @@ const SiswaDetail = () => {
                                         padding: '10px 18px',
                                         fontSize: '0.85rem',
                                         fontWeight: activeTab === tab.id ? 600 : 400,
-                                        borderBottom: activeTab === tab.id ? '2px solid var(--accent-color)' : '2px solid transparent',
+                                        borderBottom: activeTab === tab.id ? '2px solid var(--accent)' : '2px solid transparent',
                                         boxShadow: 'none',
                                         transition: 'all 0.2s ease',
                                         outline: 'none',

@@ -1,0 +1,59 @@
+# ===========================
+# ENVIRONMENT & SECRETS
+# ===========================
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+*.env
+
+# ===========================
+# BACKEND (Go)
+# ===========================
+backend/.env
+backend/uploads/
+backend/tmp/
+backend/*.exe
+backend/*.out
+
+# Go build artifacts
+/backend/bin/
+/backend/vendor/
+
+# ===========================
+# FRONTEND (Node / Vite)
+# ===========================
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+frontend/.env.production
+
+# Vite cache
+frontend/.vite/
+
+# ===========================
+# OS & EDITOR
+# ===========================
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.vscode/settings.json
+.idea/
+
+# ===========================
+# LOGS & TEMP
+# ===========================
+*.log
+npm-debug.log*
+*.tmp
+*.bak
+
+# ===========================
+# API / RESPONSE DUMPS (dev only)
+# ===========================
+response_get*.json
+siswa2_data*.json
+build_errors.txt

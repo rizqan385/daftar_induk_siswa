@@ -269,7 +269,7 @@ const TabIdentitas = ({ siswa, isNew, onSave, section }: TabIdentitasProps) => {
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            background: 'rgba(15, 23, 42, 0.4)',
+                            background: '#ffffff',
                             flexShrink: 0
                         }}>
                             {(photoPreview || currentFotoUrl) ? (
@@ -347,7 +347,7 @@ const TabIdentitas = ({ siswa, isNew, onSave, section }: TabIdentitasProps) => {
                                 name="jenis_kelamin"
                                 value={formData.jenis_kelamin}
                                 onChange={handleChange}
-                                style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'rgba(15, 23, 42, 0.4)', color: 'var(--text-primary)' }}
+                                style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border-color)', background: '#ffffff', color: 'var(--text-primary)' }}
                             >
                                 <option value="L">Laki-laki</option>
                                 <option value="P">Perempuan</option>
@@ -376,7 +376,7 @@ const TabIdentitas = ({ siswa, isNew, onSave, section }: TabIdentitasProps) => {
                                 name="kelas_id"
                                 value={formData.kelas_id}
                                 onChange={handleChange}
-                                style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'rgba(15, 23, 42, 0.4)', color: 'var(--text-primary)' }}
+                                style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border-color)', background: '#ffffff', color: 'var(--text-primary)' }}
                             >
                                 <option value="">Pilih Kelas</option>
                                 {kelasList.map((k: any) => <option key={k.id} value={k.id}>{k.nama}</option>)}

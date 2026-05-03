@@ -27,7 +27,7 @@ type Siswa struct {
 	ID              uint           `gorm:"primaryKey" json:"id"`
 	NoInduk         string         `gorm:"uniqueIndex;size:20;not null" json:"no_induk"`
 	NISN            string         `gorm:"uniqueIndex;size:20;not null" json:"nisn"`
-	NamaLengkap     string         `gorm:"size:100;not null" json:"nama_lengkap"`
+	Nama            string         `gorm:"size:100;not null" json:"nama"`
 	NamaPanggilan   string         `gorm:"size:50" json:"nama_panggilan"`
 	JenisKelamin    string         `gorm:"type:enum('L','P');not null" json:"jenis_kelamin"`
 	TempatLahir     string         `gorm:"size:100;not null" json:"tempat_lahir"`
@@ -75,6 +75,7 @@ type AlamatSiswa struct {
 	ID             uint    `gorm:"primaryKey" json:"id"`
 	SiswaID        uint    `gorm:"not null;index" json:"siswa_id"`
 	AlamatLengkap  string  `gorm:"type:text;not null" json:"alamat_lengkap"`
+	Jalan          string  `gorm:"size:100" json:"jalan"`
 	Kelurahan      string  `gorm:"size:100" json:"kelurahan"`
 	Kecamatan      string  `gorm:"size:100" json:"kecamatan"`
 	Kota           string  `gorm:"size:100" json:"kota"`
@@ -104,6 +105,12 @@ type OrangTua struct {
 	Pekerjaan          string     `gorm:"size:100" json:"pekerjaan"`
 	PenghasilanBulanan float64    `gorm:"type:decimal(15,2)" json:"penghasilan_bulanan"`
 	Alamat             string     `gorm:"type:text" json:"alamat"`
+	Jalan              string     `gorm:"size:100" json:"jalan"`
+	Kelurahan          string     `gorm:"size:100" json:"kelurahan"`
+	Kecamatan          string     `gorm:"size:100" json:"kecamatan"`
+	Kota               string     `gorm:"size:100" json:"kota"`
+	Provinsi           string     `gorm:"size:100" json:"provinsi"`
+	KodePos            string     `gorm:"size:10" json:"kode_pos"`
 	NoTelepon          string     `gorm:"size:20" json:"no_telepon"`
 	MasihHidup         bool       `gorm:"default:true" json:"masih_hidup"`
 }
@@ -117,17 +124,17 @@ func (OrangTua) TableName() string {
 type Wali struct {
 	ID                  uint       `gorm:"primaryKey" json:"id"`
 	SiswaID             uint       `gorm:"uniqueIndex;not null" json:"siswa_id"`
-	Nama                string     `gorm:"size:100;not null" json:"nama"`
+	NamaWali            string     `gorm:"size:100;not null" json:"nama_wali"`
 	JenisKelamin        string     `gorm:"type:enum('L','P');not null" json:"jenis_kelamin"`
 	TempatLahir         string     `gorm:"size:100" json:"tempat_lahir"`
 	TanggalLahir        *time.Time `gorm:"type:date" json:"tanggal_lahir"`
 	Kewarganegaraan     string     `gorm:"size:50;default:'Indonesia'" json:"kewarganegaraan"`
 	PendidikanTerakhir  string     `gorm:"size:50" json:"pendidikan_terakhir"`
-	Pekerjaan           string     `gorm:"size:100" json:"pekerjaan"`
+	PekerjaanWali       string     `gorm:"size:100" json:"pekerjaan_wali"`
 	PenghasilanBulanan  float64    `gorm:"type:decimal(15,2)" json:"penghasilan_bulanan"`
 	Alamat              string     `gorm:"type:text" json:"alamat"`
-	NoTelepon           string     `gorm:"size:20" json:"no_telepon"`
-	HubunganDenganSiswa string     `gorm:"size:50" json:"hubungan_dengan_siswa"`
+	NoTelpWali          string     `gorm:"size:20" json:"no_telp_wali"`
+	Hubungan            string     `gorm:"size:50" json:"hubungan"`
 }
 
 // TableName returns the table name for Wali
@@ -139,8 +146,8 @@ func (Wali) TableName() string {
 type KesehatanSiswa struct {
 	ID                 uint    `gorm:"primaryKey" json:"id"`
 	SiswaID            uint    `gorm:"uniqueIndex;not null" json:"siswa_id"`
-	BeratBadanMasuk    float64 `gorm:"type:decimal(5,2)" json:"berat_badan_masuk"`
-	TinggiBadanMasuk   float64 `gorm:"type:decimal(5,2)" json:"tinggi_badan_masuk"`
+	BeratBadan         float64 `gorm:"type:decimal(5,2)" json:"berat_badan"`
+	TinggiBadan        float64 `gorm:"type:decimal(5,2)" json:"tinggi_badan"`
 	BeratBadanKeluar   float64 `gorm:"type:decimal(5,2)" json:"berat_badan_keluar"`
 	TinggiBadanKeluar  float64 `gorm:"type:decimal(5,2)" json:"tinggi_badan_keluar"`
 	GolonganDarah      string  `gorm:"type:enum('A','B','AB','O')" json:"golongan_darah"`
@@ -159,8 +166,8 @@ func (KesehatanSiswa) TableName() string {
 type RiwayatPenyakit struct {
 	ID            uint   `gorm:"primaryKey" json:"id"`
 	KesehatanID   uint   `gorm:"not null;index" json:"kesehatan_id"`
-	JenisPenyakit string `gorm:"size:100;not null" json:"jenis_penyakit"`
-	Tahun         uint   `json:"tahun"`
+	NamaPenyakit  string `gorm:"size:100;not null" json:"nama_penyakit"`
+	TahunSakit    uint   `json:"tahun_sakit"`
 	LamaSakit     string `gorm:"size:50" json:"lama_sakit"`
 	Keterangan    string `gorm:"type:text" json:"keterangan"`
 }
@@ -176,7 +183,7 @@ type PendidikanSebelumnya struct {
 	SiswaID         uint       `gorm:"not null;index" json:"siswa_id"`
 	Tipe            string     `gorm:"type:enum('siswa_baru','pindahan');not null" json:"tipe"`
 	TanggalDiterima time.Time  `gorm:"type:date;not null" json:"tanggal_diterima"`
-	AsalSekolah     string     `gorm:"size:200;not null" json:"asal_sekolah"`
+	NamaSekolah     string     `gorm:"size:200;not null" json:"nama_sekolah"`
 	AlamatSekolah   string     `gorm:"type:text" json:"alamat_sekolah"`
 	NoIjazah        string     `gorm:"size:50" json:"no_ijazah"`
 	TanggalIjazah   *time.Time `gorm:"type:date" json:"tanggal_ijazah"`
@@ -258,12 +265,13 @@ func (Kehadiran) TableName() string {
 type MataPelajaran struct {
 	ID           uint   `gorm:"primaryKey" json:"id"`
 	Kode         string `gorm:"uniqueIndex;size:20;not null" json:"kode"`
-	Nama         string `gorm:"size:100;not null" json:"nama"`
-	Kelompok     string `gorm:"type:enum('A','B','C');not null" json:"kelompok"`
-	SubKelompok  string `gorm:"size:50" json:"sub_kelompok"`
+	Nama         string `gorm:"size:100;not null" json:"nama_mapel"`
+	Kelompok     string `gorm:"type:enum('A','B','C');not null" json:"kelompok_mapel"`
+	SubKelompok  string `gorm:"size:50" json:"nama_sekolor"`
 	KelasTarget1 string `gorm:"column:kelas_target_1;size:100;default:'Semua'" json:"kelas_target_1"`
 	KelasTarget2 string `gorm:"column:kelas_target_2;size:100;default:'Tidak ada'" json:"kelas_target_2"`
 	Aktif        bool   `gorm:"default:true" json:"aktif"`
+	Keterangan   string `gorm:"type:text" json:"keterangan"`
 }
 
 // TableName returns the table name for MataPelajaran
@@ -322,7 +330,7 @@ type CatatanAkhirSemester struct {
 	PKL              []PraktikKerjaLapangan `gorm:"foreignKey:CatatanID" json:"pkl,omitempty"`
 	Ekstrakurikuler  []Ekstrakurikuler      `gorm:"foreignKey:CatatanID" json:"ekstrakurikuler,omitempty"`
 	PrestasiSemester []PrestasiSemester     `gorm:"foreignKey:CatatanID" json:"prestasi_semester,omitempty"`
-	Ketidakhadiran   *KetidakhadiranCatatan `gorm:"foreignKey:CatatanID" json:"ketidakhadiran,omitempty"`
+	KetidakhadiranCatatan *KetidakhadiranCatatan `gorm:"foreignKey:CatatanID" json:"ketidakhadiran_catatan,omitempty"`
 }
 
 // TableName returns the table name for CatatanAkhirSemester
@@ -365,9 +373,9 @@ func (KeanggotaanEkskul) TableName() string {
 type Ekstrakurikuler struct {
 	ID           uint   `gorm:"primaryKey" json:"id"`
 	CatatanID    uint   `gorm:"not null;index" json:"catatan_id"`
-	NamaKegiatan string `gorm:"size:100;not null" json:"nama_kegiatan"`
+	NamaEkskul   string `gorm:"size:100;not null" json:"nama_ekskul"`
 	Nilai        string `gorm:"size:10" json:"nilai"`
-	Keterangan   string `gorm:"type:text" json:"keterangan"`
+	Deskripsi    string `gorm:"type:text" json:"deskripsi"`
 }
 
 // TableName returns the table name for Ekstrakurikuler
@@ -379,7 +387,7 @@ func (Ekstrakurikuler) TableName() string {
 type PrestasiSemester struct {
 	ID            uint   `gorm:"primaryKey" json:"id"`
 	CatatanID     uint   `gorm:"not null;index" json:"catatan_id"`
-	JenisPrestasi string `gorm:"size:200;not null" json:"jenis_prestasi"`
+	NamaPrestasi  string `gorm:"size:200;not null" json:"nama_prestasi"`
 	Keterangan    string `gorm:"type:text" json:"keterangan"`
 }
 
@@ -408,8 +416,10 @@ type NilaiIjazah struct {
 	SiswaID         uint       `gorm:"not null;index" json:"siswa_id"`
 	MataPelajaranID uint       `gorm:"not null;index" json:"mata_pelajaran_id"`
 	NilaiAkhir      uint       `gorm:"not null" json:"nilai_akhir"`
+	NilaiRataRata   float64    `gorm:"type:decimal(5,2)" json:"nilai_rata_rata"`
 	TahunLulus      string     `gorm:"size:10" json:"tahun_lulus"`
 	NoIjazah        string     `gorm:"size:50" json:"no_ijazah"`
+	NomorIjazah     string     `gorm:"size:50" json:"nomor_ijazah"`
 	TanggalLulus    *time.Time `gorm:"type:date" json:"tanggal_lulus"`
 
 	// Relations
@@ -426,11 +436,12 @@ type MeninggalkanSekolah struct {
 	ID                  uint      `gorm:"primaryKey" json:"id"`
 	SiswaID             uint      `gorm:"uniqueIndex;not null" json:"siswa_id"`
 	Tipe                string    `gorm:"type:enum('tamat','pindah','putus');not null" json:"tipe"`
-	Tanggal             time.Time `gorm:"type:date;not null" json:"tanggal"`
+	TanggalKeluar       time.Time `gorm:"type:date;not null" json:"tanggal_keluar"`
 	SekolahTujuan       string    `gorm:"size:200" json:"sekolah_tujuan"`
 	AlamatSekolahTujuan string    `gorm:"type:text" json:"alamat_sekolah_tujuan"`
 	NoIjazah            string    `gorm:"size:50" json:"no_ijazah"`
 	Alasan              string    `gorm:"type:text" json:"alasan"`
+	Tujuan              string    `gorm:"size:200" json:"tujuan"`
 }
 
 // TableName returns the table name for MeninggalkanSekolah
@@ -459,11 +470,12 @@ func (ActivityLog) TableName() string {
 // PemeriksaanBuku model for book inspection
 type PemeriksaanBuku struct {
 	ID            uint      `gorm:"primaryKey" json:"id"`
+	SiswaID       uint      `gorm:"not null;index" json:"siswa_id"`
 	NoUrut        uint      `gorm:"not null" json:"no_urut"`
-	Tanggal       time.Time `gorm:"type:date;not null" json:"tanggal"`
+	TanggalPeriksa time.Time `gorm:"type:date;not null" json:"tanggal_periksa"`
 	NamaPemeriksa string    `gorm:"size:100;not null" json:"nama_pemeriksa"`
 	Jabatan       string    `gorm:"size:100" json:"jabatan"`
-	Keterangan    string    `gorm:"type:text" json:"keterangan"`
+	CatatanPetugas string   `gorm:"type:text" json:"catatan_petugas"`
 }
 
 // TableName returns the table name for PemeriksaanBuku

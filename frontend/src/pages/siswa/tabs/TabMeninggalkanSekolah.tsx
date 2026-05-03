@@ -85,7 +85,7 @@ const TabMeninggalkanSekolah = ({ siswa, isNew, onSave }: TabMeninggalkanSekolah
                         <select
                             value={data.tipe || ''}
                             onChange={(e) => handleChange('tipe', e.target.value)}
-                            style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'rgba(15, 23, 42, 0.4)', color: 'var(--text-primary)', fontSize: '1rem' }}
+                            style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border-color)', background: '#ffffff', color: 'var(--text-primary)', fontSize: '1rem' }}
                         >
                             <option value="">- Pilih Tipe -</option>
                             <option value="tamat">Tamat / Lulus</option>

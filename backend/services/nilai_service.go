@@ -553,26 +553,26 @@ func (s *NilaiService) GetCatatanSemester(siswaID uint) ([]responses.CatatanSeme
 		for _, eks := range c.Ekstrakurikuler {
 			resp.Ekstrakurikuler = append(resp.Ekstrakurikuler, responses.EkstrakurikulerResponse{
 				ID:           eks.ID,
-				NamaKegiatan: eks.NamaKegiatan,
+				NamaEkskul: eks.NamaEkskul,
 				Nilai:        eks.Nilai,
-				Keterangan:   eks.Keterangan,
+				Deskripsi:   eks.Deskripsi,
 			})
 		}
 
 		for _, pres := range c.PrestasiSemester {
 			resp.PrestasiSemester = append(resp.PrestasiSemester, responses.PrestasiSemesterResponse{
 				ID:            pres.ID,
-				JenisPrestasi: pres.JenisPrestasi,
+				NamaPrestasi: pres.NamaPrestasi,
 				Keterangan:    pres.Keterangan,
 			})
 		}
 
-		if c.Ketidakhadiran != nil {
-			resp.Ketidakhadiran = &responses.KetidakhadiranResponse{
-				ID:              c.Ketidakhadiran.ID,
-				KarenaSakit:     c.Ketidakhadiran.KarenaSakit,
-				DenganIzin:      c.Ketidakhadiran.DenganIzin,
-				TanpaKeterangan: c.Ketidakhadiran.TanpaKeterangan,
+		if c.KetidakhadiranCatatan != nil {
+			resp.KetidakhadiranCatatan = &responses.KetidakhadiranResponse{
+				ID:              c.KetidakhadiranCatatan.ID,
+				KarenaSakit:     c.KetidakhadiranCatatan.KarenaSakit,
+				DenganIzin:      c.KetidakhadiranCatatan.DenganIzin,
+				TanpaKeterangan: c.KetidakhadiranCatatan.TanpaKeterangan,
 			}
 		}
 
@@ -627,9 +627,9 @@ func (s *NilaiService) AddEkstrakurikuler(catatanID uint, req requests.CreateEks
 
 	ekskul := &models.Ekstrakurikuler{
 		CatatanID:    catatanID,
-		NamaKegiatan: utils.SanitizeString(req.NamaKegiatan),
+		NamaEkskul: utils.SanitizeString(req.NamaEkskul),
 		Nilai:        utils.SanitizeString(req.Nilai),
-		Keterangan:   utils.SanitizeString(req.Keterangan),
+		Deskripsi:   utils.SanitizeString(req.Deskripsi),
 	}
 
 	if err := s.catatanRepo.AddEkstrakurikuler(ekskul); err != nil {
@@ -638,9 +638,9 @@ func (s *NilaiService) AddEkstrakurikuler(catatanID uint, req requests.CreateEks
 
 	return &responses.EkstrakurikulerResponse{
 		ID:           ekskul.ID,
-		NamaKegiatan: ekskul.NamaKegiatan,
+		NamaEkskul: ekskul.NamaEkskul,
 		Nilai:        ekskul.Nilai,
-		Keterangan:   ekskul.Keterangan,
+		Deskripsi:   ekskul.Deskripsi,
 	}, nil
 }
 
@@ -694,9 +694,9 @@ func (s *NilaiService) UpdateEkstrakurikuler(id uint, req requests.CreateEkstrak
 		return nil, err
 	}
 
-	ekskul.NamaKegiatan = utils.SanitizeString(req.NamaKegiatan)
+	ekskul.NamaEkskul = utils.SanitizeString(req.NamaEkskul)
 	ekskul.Nilai = utils.SanitizeString(req.Nilai)
-	ekskul.Keterangan = utils.SanitizeString(req.Keterangan)
+	ekskul.Deskripsi = utils.SanitizeString(req.Deskripsi)
 
 	if err := s.catatanRepo.UpdateEkstrakurikuler(ekskul); err != nil {
 		return nil, err
@@ -704,9 +704,9 @@ func (s *NilaiService) UpdateEkstrakurikuler(id uint, req requests.CreateEkstrak
 
 	return &responses.EkstrakurikulerResponse{
 		ID:           ekskul.ID,
-		NamaKegiatan: ekskul.NamaKegiatan,
+		NamaEkskul: ekskul.NamaEkskul,
 		Nilai:        ekskul.Nilai,
-		Keterangan:   ekskul.Keterangan,
+		Deskripsi:   ekskul.Deskripsi,
 	}, nil
 }
 

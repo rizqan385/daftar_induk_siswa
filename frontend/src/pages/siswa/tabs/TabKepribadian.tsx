@@ -72,7 +72,7 @@ const TabKepribadian = ({ siswa, isNew, onSave }: TabKepribadianProps) => {
                                         <select
                                             value={item.nilai}
                                             onChange={(e) => updateItem(item.id, 'nilai', e.target.value)}
-                                            style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'rgba(15, 23, 42, 0.4)', color: 'var(--text-primary)', fontSize: '1rem' }}
+                                            style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border-color)', background: '#ffffff', color: 'var(--text-primary)', fontSize: '1rem' }}
                                         >
                                             <option value="">- Pilih Nilai -</option>
                                             <option value="Baik">Baik</option>

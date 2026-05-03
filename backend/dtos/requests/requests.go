@@ -19,7 +19,7 @@ type RegisterRequest struct {
 type CreateSiswaRequest struct {
 	NoInduk         string `json:"no_induk" binding:"required,max=20" example:"2024001"`
 	NISN            string `json:"nisn" binding:"required,max=20" example:"0012345678"`
-	NamaLengkap     string `json:"nama_lengkap" binding:"required,max=100" example:"Ahmad Syafiq"`
+	Nama            string `json:"nama" binding:"required,max=100" example:"Ahmad Syafiq"`
 	NamaPanggilan   string `json:"nama_panggilan" binding:"max=50" example:"Syafiq"`
 	JenisKelamin    string `json:"jenis_kelamin" binding:"required,oneof=L P" example:"L"`
 	TempatLahir     string `json:"tempat_lahir" binding:"required,max=100" example:"Jakarta"`
@@ -35,7 +35,7 @@ type CreateSiswaRequest struct {
 
 // UpdateSiswaRequest for updating a student
 type UpdateSiswaRequest struct {
-	NamaLengkap     string `json:"nama_lengkap" binding:"max=100" example:"Ahmad Syafiq Updated"`
+	Nama            string `json:"nama" binding:"max=100" example:"Ahmad Syafiq Updated"`
 	NamaPanggilan   string `json:"nama_panggilan" binding:"max=50" example:"Syafiq"`
 	JenisKelamin    string `json:"jenis_kelamin" binding:"omitempty,oneof=L P" example:"L"`
 	TempatLahir     string `json:"tempat_lahir" binding:"max=100" example:"Jakarta"`
@@ -52,6 +52,7 @@ type UpdateSiswaRequest struct {
 // CreateAlamatRequest for creating address
 type CreateAlamatRequest struct {
 	AlamatLengkap  string  `json:"alamat_lengkap" example:"Jl. Merdeka No. 123"`
+	Jalan          string  `json:"jalan" binding:"max=100" example:"Jl. Merdeka"`
 	Kelurahan      string  `json:"kelurahan" binding:"max=100" example:"Cibiru"`
 	Kecamatan      string  `json:"kecamatan" binding:"max=100" example:"Cibiru"`
 	Kota           string  `json:"kota" binding:"max=100" example:"Bandung"`
@@ -74,29 +75,35 @@ type CreateOrangTuaRequest struct {
 	Pekerjaan          string  `json:"pekerjaan" binding:"max=100" example:"Wiraswasta"`
 	PenghasilanBulanan float64 `json:"penghasilan_bulanan" example:"5000000"`
 	Alamat             string  `json:"alamat" example:"Jl. Merdeka No. 123"`
+	Jalan              string  `json:"jalan" binding:"max=100" example:"Jl. Merdeka"`
+	Kelurahan          string  `json:"kelurahan" binding:"max=100" example:"Cibiru"`
+	Kecamatan          string  `json:"kecamatan" binding:"max=100" example:"Cibiru"`
+	Kota               string  `json:"kota" binding:"max=100" example:"Bandung"`
+	Provinsi           string  `json:"provinsi" binding:"max=100" example:"Jawa Barat"`
+	KodePos            string  `json:"kode_pos" binding:"max=10" example:"40615"`
 	NoTelepon          string  `json:"no_telepon" binding:"max=20" example:"081234567890"`
 	MasihHidup         bool    `json:"masih_hidup" example:"true"`
 }
 
 // CreateWaliRequest for creating guardian
 type CreateWaliRequest struct {
-	Nama                string  `json:"nama" binding:"required,max=100" example:"Paman Ahmad"`
+	NamaWali            string  `json:"nama_wali" binding:"required,max=100" example:"Paman Ahmad"`
 	JenisKelamin        string  `json:"jenis_kelamin" binding:"required,oneof=L P" example:"L"`
 	TempatLahir         string  `json:"tempat_lahir" binding:"max=100" example:"Bandung"`
 	TanggalLahir        string  `json:"tanggal_lahir" example:"1970-01-15"`
 	Kewarganegaraan     string  `json:"kewarganegaraan" binding:"max=50" example:"Indonesia"`
 	PendidikanTerakhir  string  `json:"pendidikan_terakhir" binding:"max=50" example:"SMA"`
-	Pekerjaan           string  `json:"pekerjaan" binding:"max=100" example:"Petani"`
+	PekerjaanWali       string  `json:"pekerjaan_wali" binding:"max=100" example:"Petani"`
 	PenghasilanBulanan  float64 `json:"penghasilan_bulanan" example:"3000000"`
 	Alamat              string  `json:"alamat" example:"Jl. Desa No. 5"`
-	NoTelepon           string  `json:"no_telepon" binding:"max=20" example:"081234567891"`
-	HubunganDenganSiswa string  `json:"hubungan_dengan_siswa" binding:"max=50" example:"Paman"`
+	NoTelpWali          string  `json:"no_telp_wali" binding:"max=20" example:"081234567891"`
+	Hubungan            string  `json:"hubungan" binding:"max=50" example:"Paman"`
 }
 
 // CreateKesehatanRequest for creating health data
 type CreateKesehatanRequest struct {
-	BeratBadanMasuk    float64 `json:"berat_badan_masuk" example:"50.5"`
-	TinggiBadanMasuk   float64 `json:"tinggi_badan_masuk" example:"160.0"`
+	BeratBadan         float64 `json:"berat_badan" example:"50.5"`
+	TinggiBadan        float64 `json:"tinggi_badan" example:"160.0"`
 	BeratBadanKeluar   float64 `json:"berat_badan_keluar" example:"55.0"`
 	TinggiBadanKeluar  float64 `json:"tinggi_badan_keluar" example:"165.0"`
 	GolonganDarah      string  `json:"golongan_darah" example:"A"`
@@ -105,8 +112,8 @@ type CreateKesehatanRequest struct {
 
 // CreateRiwayatPenyakitRequest for adding disease history
 type CreateRiwayatPenyakitRequest struct {
-	JenisPenyakit string `json:"jenis_penyakit" binding:"required,max=100" example:"Demam"`
-	Tahun         uint   `json:"tahun" example:"2020"`
+	NamaPenyakit  string `json:"nama_penyakit" binding:"required,max=100" example:"Demam"`
+	TahunSakit    uint   `json:"tahun_sakit" example:"2020"`
 	LamaSakit     string `json:"lama_sakit" binding:"max=50" example:"1 Minggu"`
 	Keterangan    string `json:"keterangan" example:"Sembuh total"`
 }
@@ -115,7 +122,7 @@ type CreateRiwayatPenyakitRequest struct {
 type CreatePendidikanRequest struct {
 	Tipe            string `json:"tipe" binding:"required,oneof=siswa_baru pindahan" example:"siswa_baru"`
 	TanggalDiterima string `json:"tanggal_diterima" binding:"required" example:"2024-07-15"`
-	AsalSekolah     string `json:"asal_sekolah" binding:"max=200" example:"SMP Negeri 1 Bandung"`
+	NamaSekolah     string `json:"nama_sekolah" binding:"max=200" example:"SMP Negeri 1 Bandung"`
 	AlamatSekolah   string `json:"alamat_sekolah" example:"Jl. Pendidikan No. 1"`
 	NoIjazah        string `json:"no_ijazah" binding:"max=50" example:"DN-01/MI-2024"`
 	TanggalIjazah   string `json:"tanggal_ijazah" example:"2024-06-10"`
@@ -227,37 +234,41 @@ type CreatePKLRequest struct {
 
 // CreateEkstrakurikulerRequest for creating extracurricular
 type CreateEkstrakurikulerRequest struct {
-	NamaKegiatan string `json:"nama_kegiatan" binding:"required,max=100" example:"Kepramukaan"`
+	NamaEkskul   string `json:"nama_ekskul" binding:"required,max=100" example:"Kepramukaan"`
 	Nilai        string `json:"nilai" example:"A"`
-	Keterangan   string `json:"keterangan" example:"Aktif"`
+	Deskripsi    string `json:"deskripsi" example:"Aktif"`
 }
 
 // CreateNilaiIjazahRequest for creating certificate grade
 type CreateNilaiIjazahRequest struct {
 	MataPelajaranID uint   `json:"mata_pelajaran_id" binding:"required" example:"1"`
 	NilaiAkhir      uint   `json:"nilai_akhir" binding:"required,max=100" example:"85"`
+	NilaiRataRata   float64 `json:"nilai_rata_rata" example:"85.5"`
 	TahunLulus      string `json:"tahun_lulus" binding:"max=10" example:"2027"`
 	NoIjazah        string `json:"no_ijazah" binding:"max=50" example:"DN-01/IJ-2027"`
+	NomorIjazah     string `json:"nomor_ijazah" binding:"max=50" example:"DN-01/IJ-2027"`
 	TanggalLulus    string `json:"tanggal_lulus" example:"2027-06-15"`
 }
 
 // CreateMeninggalkanSekolahRequest for creating leaving school record
 type CreateMeninggalkanSekolahRequest struct {
 	Tipe                string `json:"tipe" binding:"required,oneof=tamat pindah putus" example:"tamat"`
-	Tanggal             string `json:"tanggal" binding:"required" example:"2027-06-15"`
+	TanggalKeluar       string `json:"tanggal_keluar" binding:"required" example:"2027-06-15"`
 	SekolahTujuan       string `json:"sekolah_tujuan" binding:"max=200" example:"Universitas Indonesia"`
 	AlamatSekolahTujuan string `json:"alamat_sekolah_tujuan" example:"Depok, Jawa Barat"`
 	NoIjazah            string `json:"no_ijazah" binding:"max=50" example:"DN-01/IJ-2027"`
 	Alasan              string `json:"alasan" example:"Melanjutkan studi"`
+	Tujuan              string `json:"tujuan" binding:"max=200" example:"Universitas Indonesia"`
 }
 
 // CreatePemeriksaanRequest for creating book inspection
 type CreatePemeriksaanRequest struct {
+	SiswaID       uint      `json:"siswa_id" binding:"required" example:"1"`
 	NoUrut        uint      `json:"no_urut" binding:"required" example:"1"`
-	Tanggal       time.Time `json:"tanggal" binding:"required" example:"2024-01-15"`
+	TanggalPeriksa time.Time `json:"tanggal_periksa" binding:"required" example:"2024-01-15"`
 	NamaPemeriksa string    `json:"nama_pemeriksa" binding:"required,max=100" example:"Kepala Sekolah"`
 	Jabatan       string    `json:"jabatan" binding:"max=100" example:"Kepala Sekolah"`
-	Keterangan    string    `json:"keterangan" example:"Pemeriksaan rutin semester ganjil"`
+	CatatanPetugas string   `json:"catatan_petugas" example:"Pemeriksaan rutin semester ganjil"`
 }
 
 // Pagination request params
@@ -287,29 +298,35 @@ type UpdateOrangTuaRequest struct {
 	Pekerjaan          string  `json:"pekerjaan" binding:"max=100" example:"Wiraswasta"`
 	PenghasilanBulanan float64 `json:"penghasilan_bulanan" example:"5000000"`
 	Alamat             string  `json:"alamat" example:"Jl. Merdeka No. 123"`
+	Jalan              string  `json:"jalan" binding:"max=100" example:"Jl. Merdeka"`
+	Kelurahan          string  `json:"kelurahan" binding:"max=100" example:"Cibiru"`
+	Kecamatan          string  `json:"kecamatan" binding:"max=100" example:"Cibiru"`
+	Kota               string  `json:"kota" binding:"max=100" example:"Bandung"`
+	Provinsi           string  `json:"provinsi" binding:"max=100" example:"Jawa Barat"`
+	KodePos            string  `json:"kode_pos" binding:"max=10" example:"40615"`
 	NoTelepon          string  `json:"no_telepon" binding:"max=20" example:"081234567890"`
 	MasihHidup         *bool   `json:"masih_hidup" example:"true"`
 }
 
 // UpdateWaliRequest for updating guardian
 type UpdateWaliRequest struct {
-	Nama                string  `json:"nama" binding:"omitempty,max=100" example:"Paman Ahmad"`
+	NamaWali            string  `json:"nama_wali" binding:"omitempty,max=100" example:"Paman Ahmad"`
 	JenisKelamin        string  `json:"jenis_kelamin" binding:"omitempty,oneof=L P" example:"L"`
 	TempatLahir         string  `json:"tempat_lahir" binding:"max=100" example:"Bandung"`
 	TanggalLahir        string  `json:"tanggal_lahir" example:"1970-01-15"`
 	Kewarganegaraan     string  `json:"kewarganegaraan" binding:"max=50" example:"Indonesia"`
 	PendidikanTerakhir  string  `json:"pendidikan_terakhir" binding:"max=50" example:"SMA"`
-	Pekerjaan           string  `json:"pekerjaan" binding:"max=100" example:"Petani"`
+	PekerjaanWali       string  `json:"pekerjaan_wali" binding:"max=100" example:"Petani"`
 	PenghasilanBulanan  float64 `json:"penghasilan_bulanan" example:"3000000"`
 	Alamat              string  `json:"alamat" example:"Jl. Desa No. 5"`
-	NoTelepon           string  `json:"no_telepon" binding:"max=20" example:"081234567891"`
-	HubunganDenganSiswa string  `json:"hubungan_dengan_siswa" binding:"max=50" example:"Paman"`
+	NoTelpWali          string  `json:"no_telp_wali" binding:"max=20" example:"081234567891"`
+	Hubungan            string  `json:"hubungan" binding:"max=50" example:"Paman"`
 }
 
 // UpdateKesehatanRequest for updating health data
 type UpdateKesehatanRequest struct {
-	BeratBadanMasuk    float64 `json:"berat_badan_masuk" example:"50.5"`
-	TinggiBadanMasuk   float64 `json:"tinggi_badan_masuk" example:"160.0"`
+	BeratBadan         float64 `json:"berat_badan" example:"50.5"`
+	TinggiBadan        float64 `json:"tinggi_badan" example:"160.0"`
 	BeratBadanKeluar   float64 `json:"berat_badan_keluar" example:"55.0"`
 	TinggiBadanKeluar  float64 `json:"tinggi_badan_keluar" example:"165.0"`
 	GolonganDarah      string  `json:"golongan_darah" example:"A"`
@@ -320,7 +337,7 @@ type UpdateKesehatanRequest struct {
 type UpdatePendidikanRequest struct {
 	Tipe            string `json:"tipe" binding:"omitempty,oneof=siswa_baru pindahan" example:"siswa_baru"`
 	TanggalDiterima string `json:"tanggal_diterima" example:"2024-07-15"`
-	AsalSekolah     string `json:"asal_sekolah" binding:"omitempty,max=200" example:"SMP Negeri 1 Bandung"`
+	NamaSekolah     string `json:"nama_sekolah" binding:"omitempty,max=200" example:"SMP Negeri 1 Bandung"`
 	AlamatSekolah   string `json:"alamat_sekolah" example:"Jl. Pendidikan No. 1"`
 	NoIjazah        string `json:"no_ijazah" binding:"max=50" example:"DN-01/MI-2024"`
 	TanggalIjazah   string `json:"tanggal_ijazah" example:"2024-06-10"`
@@ -333,6 +350,7 @@ type UpdatePendidikanRequest struct {
 // UpdateAlamatRequest for updating address
 type UpdateAlamatRequest struct {
 	AlamatLengkap  string  `json:"alamat_lengkap" example:"Jl. Merdeka No. 123"`
+	Jalan          string  `json:"jalan" binding:"max=100" example:"Jl. Merdeka"`
 	Kelurahan      string  `json:"kelurahan" binding:"max=100" example:"Cibiru"`
 	Kecamatan      string  `json:"kecamatan" binding:"max=100" example:"Cibiru"`
 	Kota           string  `json:"kota" binding:"max=100" example:"Bandung"`

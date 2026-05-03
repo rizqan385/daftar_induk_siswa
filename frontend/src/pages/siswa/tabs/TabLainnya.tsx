@@ -117,7 +117,7 @@ const TabLainnya = ({ siswa, isNew, onSave }: TabLainnyaProps) => {
                                     <select 
                                         value={p.bidang || ''}
                                         onChange={(e) => updatePrestasi(p.id, 'bidang', e.target.value)}
-                                        style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'rgba(15, 23, 42, 0.4)', color: 'var(--text-primary)' }}
+                                        style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border-color)', background: '#ffffff', color: 'var(--text-primary)' }}
                                     >
                                         <option value="">- Pilih Bidang -</option>
                                         <option value="Kesenian">Kesenian</option>
@@ -133,7 +133,7 @@ const TabLainnya = ({ siswa, isNew, onSave }: TabLainnyaProps) => {
                                     <select 
                                         value={p.tingkat}
                                         onChange={(e) => updatePrestasi(p.id, 'tingkat', e.target.value)}
-                                        style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'rgba(15, 23, 42, 0.4)', color: 'var(--text-primary)' }}
+                                        style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border-color)', background: '#ffffff', color: 'var(--text-primary)' }}
                                     >
                                         <option value="">- Pilih Tingkat -</option>
                                         <option value="Sekolah">Sekolah</option>
@@ -226,7 +226,7 @@ const TabLainnya = ({ siswa, isNew, onSave }: TabLainnyaProps) => {
                             <div key={p.id} style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center', background: 'rgba(255,255,255,0.02)', padding: '16px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: '0 0 100px' }}>
                                     <label style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Kelas</label>
-                                    <select value={p.kelas} onChange={(e) => updatePkl(p.id, 'kelas', e.target.value)} style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'rgba(15, 23, 42, 0.4)', color: 'var(--text-primary)' }}>
+                                    <select value={p.kelas} onChange={(e) => updatePkl(p.id, 'kelas', e.target.value)} style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', background: '#ffffff', color: 'var(--text-primary)' }}>
                                         <option value="X">X</option>
                                         <option value="XI">XI</option>
                                         <option value="XII">XII</option>
@@ -234,7 +234,7 @@ const TabLainnya = ({ siswa, isNew, onSave }: TabLainnyaProps) => {
                                 </div>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: '0 0 100px' }}>
                                     <label style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Semester</label>
-                                    <select value={p.semester} onChange={(e) => updatePkl(p.id, 'semester', Number(e.target.value))} style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'rgba(15, 23, 42, 0.4)', color: 'var(--text-primary)' }}>
+                                    <select value={p.semester} onChange={(e) => updatePkl(p.id, 'semester', Number(e.target.value))} style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', background: '#ffffff', color: 'var(--text-primary)' }}>
                                         {[1,2,3,4,5,6].map(s => <option key={s} value={s}>{s}</option>)}
                                     </select>
                                 </div>
@@ -272,7 +272,7 @@ const TabLainnya = ({ siswa, isNew, onSave }: TabLainnyaProps) => {
                             <div key={e.id} style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center', background: 'rgba(255,255,255,0.02)', padding: '16px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: '0 0 100px' }}>
                                     <label style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Kelas</label>
-                                    <select value={e.kelas} onChange={(ev) => updateEkskul(e.id, 'kelas', ev.target.value)} style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'rgba(15, 23, 42, 0.4)', color: 'var(--text-primary)' }}>
+                                    <select value={e.kelas} onChange={(ev) => updateEkskul(e.id, 'kelas', ev.target.value)} style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', background: '#ffffff', color: 'var(--text-primary)' }}>
                                         <option value="X">X</option>
                                         <option value="XI">XI</option>
                                         <option value="XII">XII</option>
@@ -280,7 +280,7 @@ const TabLainnya = ({ siswa, isNew, onSave }: TabLainnyaProps) => {
                                 </div>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: '0 0 100px' }}>
                                     <label style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Semester</label>
-                                    <select value={e.semester} onChange={(ev) => updateEkskul(e.id, 'semester', Number(ev.target.value))} style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'rgba(15, 23, 42, 0.4)', color: 'var(--text-primary)' }}>
+                                    <select value={e.semester} onChange={(ev) => updateEkskul(e.id, 'semester', Number(ev.target.value))} style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', background: '#ffffff', color: 'var(--text-primary)' }}>
                                         {[1,2,3,4,5,6].map(s => <option key={s} value={s}>{s}</option>)}
                                     </select>
                                 </div>

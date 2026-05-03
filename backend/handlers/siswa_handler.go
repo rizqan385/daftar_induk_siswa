@@ -63,7 +63,7 @@ func (h *SiswaHandler) Create(c *gin.Context) {
 	// Audit log
 	uid, uname := getUserInfo(c)
 	h.activityService.LogActivity(uid, uname, "CREATE", "siswa", response.ID,
-		fmt.Sprintf("Menambah siswa baru: %s", response.NamaLengkap), c.ClientIP())
+		fmt.Sprintf("Menambah siswa baru: %s", response.Nama), c.ClientIP())
 
 	utils.CreatedResponse(c, "Student created successfully", response)
 }
@@ -94,7 +94,7 @@ func (h *SiswaHandler) FindByID(c *gin.Context) {
 	// Audit log
 	uid, uname := getUserInfo(c)
 	h.activityService.LogActivity(uid, uname, "VIEW", "siswa", uint(id),
-		fmt.Sprintf("Melihat data siswa: %s", response.NamaLengkap), c.ClientIP())
+		fmt.Sprintf("Melihat data siswa: %s", response.Nama), c.ClientIP())
 
 	utils.SuccessResponse(c, "Student retrieved", response)
 }
@@ -163,7 +163,7 @@ func (h *SiswaHandler) Update(c *gin.Context) {
 	// Audit log
 	uid, uname := getUserInfo(c)
 	h.activityService.LogActivity(uid, uname, "UPDATE", "siswa", uint(id),
-		fmt.Sprintf("Mengubah data siswa: %s", response.NamaLengkap), c.ClientIP())
+		fmt.Sprintf("Mengubah data siswa: %s", response.Nama), c.ClientIP())
 
 	utils.SuccessResponse(c, "Student updated successfully", response)
 }

@@ -10,9 +10,35 @@ import (
 
 // Seed populates the database with initial data
 func Seed(db *gorm.DB) {
-	// Auto-migrate tables that are added after initial schema
-	if err := db.AutoMigrate(&models.ActivityLog{}, &models.KeanggotaanEkskul{}); err != nil {
-		log.Printf("Warning: Failed to auto-migrate ActivityLog: %v", err)
+	// Auto-migrate all tables
+	if err := db.AutoMigrate(
+		&models.User{},
+		&models.Kelas{},
+		&models.Siswa{},
+		&models.AlamatSiswa{},
+		&models.OrangTua{},
+		&models.Wali{},
+		&models.KesehatanSiswa{},
+		&models.RiwayatPenyakit{},
+		&models.PendidikanSebelumnya{},
+		&models.Kepribadian{},
+		&models.Prestasi{},
+		&models.Beasiswa{},
+		&models.MataPelajaran{},
+		&models.NilaiSemester{},
+		&models.Kehadiran{},
+		&models.CatatanAkhirSemester{},
+		&models.NilaiSikap{},
+		&models.NilaiIjazah{},
+		&models.MeninggalkanSekolah{},
+		&models.PraktikKerjaLapangan{},
+		&models.Ekstrakurikuler{},
+		&models.PrestasiSemester{},
+		&models.PemeriksaanBuku{},
+		&models.ActivityLog{},
+		&models.KeanggotaanEkskul{},
+	); err != nil {
+		log.Printf("Warning: Failed to auto-migrate models: %v", err)
 	}
 
 	seedUsers(db)
@@ -29,7 +55,8 @@ func seedUsers(db *gorm.DB) {
 	var admin models.User
 	result := db.Where("username = ?", "admin").First(&admin)
 
-	if result.Error == gorm.ErrRecordNotFound {
+	switch result.Error {
+	case gorm.ErrRecordNotFound:
 		// Create new
 		admin = models.User{
 			Username:     "admin",
@@ -42,7 +69,7 @@ func seedUsers(db *gorm.DB) {
 		} else {
 			log.Println("Default admin user created: admin / admin123")
 		}
-	} else if result.Error == nil {
+	case nil:
 		// Update existing
 		admin.PasswordHash = password
 		admin.IsActive = true // Ensure active
@@ -51,7 +78,7 @@ func seedUsers(db *gorm.DB) {
 		} else {
 			log.Println("Default admin user updated: admin / admin123")
 		}
-	} else {
+	default:
 		log.Printf("Failed to check admin user: %v", result.Error)
 	}
 }

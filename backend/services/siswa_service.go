@@ -80,7 +80,7 @@ func (s *SiswaService) Create(req requests.CreateSiswaRequest) (*responses.Siswa
 	siswa := &models.Siswa{
 		NoInduk:         utils.SanitizeString(req.NoInduk),
 		NISN:            req.NISN,
-		NamaLengkap:     utils.SanitizeString(req.NamaLengkap),
+		Nama:     utils.SanitizeString(req.Nama),
 		NamaPanggilan:   utils.SanitizeString(req.NamaPanggilan),
 		JenisKelamin:    req.JenisKelamin,
 		TempatLahir:     utils.SanitizeString(req.TempatLahir),
@@ -146,7 +146,7 @@ func (s *SiswaService) FindAll(req requests.PaginationRequest) ([]responses.Sisw
 			ID:           siswa.ID,
 			NoInduk:      siswa.NoInduk,
 			NISN:         siswa.NISN,
-			NamaLengkap:  siswa.NamaLengkap,
+			Nama:  siswa.Nama,
 			JenisKelamin: siswa.JenisKelamin,
 			KelasID:      siswa.KelasID,
 			KelasRef:     kelasRef,
@@ -182,8 +182,8 @@ func (s *SiswaService) Update(id uint, req requests.UpdateSiswaRequest) (*respon
 	}
 
 	// Update fields if provided
-	if req.NamaLengkap != "" {
-		siswa.NamaLengkap = utils.SanitizeString(req.NamaLengkap)
+	if req.Nama != "" {
+		siswa.Nama = utils.SanitizeString(req.Nama)
 	}
 	if req.NamaPanggilan != "" {
 		siswa.NamaPanggilan = utils.SanitizeString(req.NamaPanggilan)
@@ -282,7 +282,7 @@ func (s *SiswaService) toDetailResponse(siswa *models.Siswa) *responses.SiswaDet
 		ID:              siswa.ID,
 		NoInduk:         siswa.NoInduk,
 		NISN:            siswa.NISN,
-		NamaLengkap:     siswa.NamaLengkap,
+		Nama:     siswa.Nama,
 		NamaPanggilan:   siswa.NamaPanggilan,
 		JenisKelamin:    siswa.JenisKelamin,
 		TempatLahir:     siswa.TempatLahir,
@@ -336,25 +336,25 @@ func (s *SiswaService) toDetailResponse(siswa *models.Siswa) *responses.SiswaDet
 	if siswa.Wali != nil {
 		resp.Wali = &responses.WaliResponse{
 			ID:                  siswa.Wali.ID,
-			Nama:                siswa.Wali.Nama,
+			NamaWali:                siswa.Wali.NamaWali,
 			JenisKelamin:        siswa.Wali.JenisKelamin,
 			TempatLahir:         siswa.Wali.TempatLahir,
 			TanggalLahir:        siswa.Wali.TanggalLahir,
 			Kewarganegaraan:     siswa.Wali.Kewarganegaraan,
 			PendidikanTerakhir:  siswa.Wali.PendidikanTerakhir,
-			Pekerjaan:           siswa.Wali.Pekerjaan,
+			PekerjaanWali:           siswa.Wali.PekerjaanWali,
 			PenghasilanBulanan:  siswa.Wali.PenghasilanBulanan,
 			Alamat:              siswa.Wali.Alamat,
-			NoTelepon:           siswa.Wali.NoTelepon,
-			HubunganDenganSiswa: siswa.Wali.HubunganDenganSiswa,
+			NoTelpWali:           siswa.Wali.NoTelpWali,
+			Hubungan: siswa.Wali.Hubungan,
 		}
 	}
 
 	if siswa.Kesehatan != nil {
 		resp.Kesehatan = &responses.KesehatanResponse{
 			ID:                 siswa.Kesehatan.ID,
-			BeratBadanMasuk:    siswa.Kesehatan.BeratBadanMasuk,
-			TinggiBadanMasuk:   siswa.Kesehatan.TinggiBadanMasuk,
+			BeratBadan:    siswa.Kesehatan.BeratBadan,
+			TinggiBadan:   siswa.Kesehatan.TinggiBadan,
 			BeratBadanKeluar:   siswa.Kesehatan.BeratBadanKeluar,
 			TinggiBadanKeluar:  siswa.Kesehatan.TinggiBadanKeluar,
 			GolonganDarah:      siswa.Kesehatan.GolonganDarah,
@@ -363,8 +363,8 @@ func (s *SiswaService) toDetailResponse(siswa *models.Siswa) *responses.SiswaDet
 		for _, rp := range siswa.Kesehatan.RiwayatPenyakit {
 			resp.Kesehatan.RiwayatPenyakit = append(resp.Kesehatan.RiwayatPenyakit, responses.RiwayatPenyakitResponse{
 				ID:            rp.ID,
-				JenisPenyakit: rp.JenisPenyakit,
-				Tahun:         rp.Tahun,
+				NamaPenyakit: rp.NamaPenyakit,
+				TahunSakit:         rp.TahunSakit,
 				LamaSakit:     rp.LamaSakit,
 				Keterangan:    rp.Keterangan,
 			})
@@ -376,7 +376,7 @@ func (s *SiswaService) toDetailResponse(siswa *models.Siswa) *responses.SiswaDet
 			ID:              pend.ID,
 			Tipe:            pend.Tipe,
 			TanggalDiterima: pend.TanggalDiterima,
-			AsalSekolah:     pend.AsalSekolah,
+			NamaSekolah:     pend.NamaSekolah,
 			AlamatSekolah:   pend.AlamatSekolah,
 			NoIjazah:        pend.NoIjazah,
 			TanggalIjazah:   pend.TanggalIjazah,
@@ -484,24 +484,24 @@ func (s *SiswaService) toDetailResponse(siswa *models.Siswa) *responses.SiswaDet
 		for _, eks := range c.Ekstrakurikuler {
 			cresp.Ekstrakurikuler = append(cresp.Ekstrakurikuler, responses.EkstrakurikulerResponse{
 				ID:           eks.ID,
-				NamaKegiatan: eks.NamaKegiatan,
+				NamaEkskul: eks.NamaEkskul,
 				Nilai:        eks.Nilai,
-				Keterangan:   eks.Keterangan,
+				Deskripsi:   eks.Deskripsi,
 			})
 		}
 		for _, pres := range c.PrestasiSemester {
 			cresp.PrestasiSemester = append(cresp.PrestasiSemester, responses.PrestasiSemesterResponse{
 				ID:            pres.ID,
-				JenisPrestasi: pres.JenisPrestasi,
+				NamaPrestasi: pres.NamaPrestasi,
 				Keterangan:    pres.Keterangan,
 			})
 		}
-		if c.Ketidakhadiran != nil {
-			cresp.Ketidakhadiran = &responses.KetidakhadiranResponse{
-				ID:              c.Ketidakhadiran.ID,
-				KarenaSakit:     c.Ketidakhadiran.KarenaSakit,
-				DenganIzin:      c.Ketidakhadiran.DenganIzin,
-				TanpaKeterangan: c.Ketidakhadiran.TanpaKeterangan,
+		if c.KetidakhadiranCatatan != nil {
+			cresp.KetidakhadiranCatatan = &responses.KetidakhadiranResponse{
+				ID:              c.KetidakhadiranCatatan.ID,
+				KarenaSakit:     c.KetidakhadiranCatatan.KarenaSakit,
+				DenganIzin:      c.KetidakhadiranCatatan.DenganIzin,
+				TanpaKeterangan: c.KetidakhadiranCatatan.TanpaKeterangan,
 			}
 		}
 		resp.CatatanSemester = append(resp.CatatanSemester, cresp)
@@ -531,11 +531,12 @@ func (s *SiswaService) toDetailResponse(siswa *models.Siswa) *responses.SiswaDet
 		resp.MeninggalkanSekolah = &responses.MeninggalkanSekolahResponse{
 			ID:                  siswa.MeninggalkanSekolah.ID,
 			Tipe:                siswa.MeninggalkanSekolah.Tipe,
-			Tanggal:             siswa.MeninggalkanSekolah.Tanggal,
+			TanggalKeluar:             siswa.MeninggalkanSekolah.TanggalKeluar,
 			SekolahTujuan:       siswa.MeninggalkanSekolah.SekolahTujuan,
 			AlamatSekolahTujuan: siswa.MeninggalkanSekolah.AlamatSekolahTujuan,
 			NoIjazah:            siswa.MeninggalkanSekolah.NoIjazah,
 			Alasan:              siswa.MeninggalkanSekolah.Alasan,
+			Tujuan:              siswa.MeninggalkanSekolah.Tujuan,
 		}
 	}
 
@@ -554,7 +555,7 @@ func (s *SiswaService) AddMeninggalkanSekolah(siswaID uint, req requests.CreateM
 	}
 
 	// Parse date
-	parsedTanggal, err := time.Parse("2006-01-02", req.Tanggal)
+	parsedTanggal, err := time.Parse("2006-01-02", req.TanggalKeluar)
 	if err != nil {
 		return nil, errors.New("invalid date format, use YYYY-MM-DD")
 	}
@@ -562,11 +563,12 @@ func (s *SiswaService) AddMeninggalkanSekolah(siswaID uint, req requests.CreateM
 	data := &models.MeninggalkanSekolah{
 		SiswaID:             siswaID,
 		Tipe:                req.Tipe,
-		Tanggal:             parsedTanggal,
+		TanggalKeluar:             parsedTanggal,
 		SekolahTujuan:       utils.SanitizeString(req.SekolahTujuan),
 		AlamatSekolahTujuan: utils.SanitizeString(req.AlamatSekolahTujuan),
 		NoIjazah:            utils.SanitizeString(req.NoIjazah),
 		Alasan:              utils.SanitizeString(req.Alasan),
+		Tujuan:              utils.SanitizeString(req.Tujuan),
 	}
 
 	if err := s.siswaRepo.AddMeninggalkanSekolah(data); err != nil {
@@ -580,11 +582,12 @@ func (s *SiswaService) AddMeninggalkanSekolah(siswaID uint, req requests.CreateM
 	return &responses.MeninggalkanSekolahResponse{
 		ID:                  data.ID,
 		Tipe:                data.Tipe,
-		Tanggal:             data.Tanggal,
+		TanggalKeluar:             data.TanggalKeluar,
 		SekolahTujuan:       data.SekolahTujuan,
 		AlamatSekolahTujuan: data.AlamatSekolahTujuan,
 		NoIjazah:            data.NoIjazah,
 		Alasan:              data.Alasan,
+		Tujuan:              data.Tujuan,
 	}, nil
 }
 
@@ -709,7 +712,7 @@ func (s *SiswaService) ImportExcel(file *multipart.FileHeader) (int, error) {
 		siswa := &models.Siswa{
 			NISN:            nisn,
 			NoInduk:         noInduk,
-			NamaLengkap:     utils.SanitizeString(nama),
+			Nama:     utils.SanitizeString(nama),
 			NamaPanggilan:   utils.SanitizeString(strings.Split(nama, " ")[0]),
 			JenisKelamin:    gender,
 			KelasID:         nil,

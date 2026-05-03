@@ -52,17 +52,17 @@ func (s *WaliService) CreateOrUpdate(siswaID uint, req requests.CreateWaliReques
 
 	if existingWali != nil {
 		// Update existing
-		existingWali.Nama = utils.SanitizeString(req.Nama)
+		existingWali.NamaWali = utils.SanitizeString(req.NamaWali)
 		existingWali.JenisKelamin = req.JenisKelamin
 		existingWali.TempatLahir = utils.SanitizeString(req.TempatLahir)
 		existingWali.TanggalLahir = tanggalLahir
 		existingWali.Kewarganegaraan = utils.SanitizeString(req.Kewarganegaraan)
 		existingWali.PendidikanTerakhir = utils.SanitizeString(req.PendidikanTerakhir)
-		existingWali.Pekerjaan = utils.SanitizeString(req.Pekerjaan)
+		existingWali.PekerjaanWali = utils.SanitizeString(req.PekerjaanWali)
 		existingWali.PenghasilanBulanan = req.PenghasilanBulanan
 		existingWali.Alamat = utils.SanitizeString(req.Alamat)
-		existingWali.NoTelepon = utils.SanitizeString(req.NoTelepon)
-		existingWali.HubunganDenganSiswa = utils.SanitizeString(req.HubunganDenganSiswa)
+		existingWali.NoTelpWali = utils.SanitizeString(req.NoTelpWali)
+		existingWali.Hubungan = utils.SanitizeString(req.Hubungan)
 
 		if err := s.waliRepo.Update(existingWali); err != nil {
 			return nil, err
@@ -73,17 +73,17 @@ func (s *WaliService) CreateOrUpdate(siswaID uint, req requests.CreateWaliReques
 	// Create new
 	wali := &models.Wali{
 		SiswaID:             siswaID,
-		Nama:                utils.SanitizeString(req.Nama),
+		NamaWali:                utils.SanitizeString(req.NamaWali),
 		JenisKelamin:        req.JenisKelamin,
 		TempatLahir:         utils.SanitizeString(req.TempatLahir),
 		TanggalLahir:        tanggalLahir,
 		Kewarganegaraan:     utils.SanitizeString(req.Kewarganegaraan),
 		PendidikanTerakhir:  utils.SanitizeString(req.PendidikanTerakhir),
-		Pekerjaan:           utils.SanitizeString(req.Pekerjaan),
+		PekerjaanWali:           utils.SanitizeString(req.PekerjaanWali),
 		PenghasilanBulanan:  req.PenghasilanBulanan,
 		Alamat:              utils.SanitizeString(req.Alamat),
-		NoTelepon:           utils.SanitizeString(req.NoTelepon),
-		HubunganDenganSiswa: utils.SanitizeString(req.HubunganDenganSiswa),
+		NoTelpWali:           utils.SanitizeString(req.NoTelpWali),
+		Hubungan: utils.SanitizeString(req.Hubungan),
 	}
 
 	if err := s.waliRepo.Create(wali); err != nil {
@@ -97,16 +97,16 @@ func (s *WaliService) CreateOrUpdate(siswaID uint, req requests.CreateWaliReques
 func (s *WaliService) toResponse(wali *models.Wali) *responses.WaliResponse {
 	return &responses.WaliResponse{
 		ID:                  wali.ID,
-		Nama:                wali.Nama,
+		NamaWali:                wali.NamaWali,
 		JenisKelamin:        wali.JenisKelamin,
 		TempatLahir:         wali.TempatLahir,
 		TanggalLahir:        wali.TanggalLahir,
 		Kewarganegaraan:     wali.Kewarganegaraan,
 		PendidikanTerakhir:  wali.PendidikanTerakhir,
-		Pekerjaan:           wali.Pekerjaan,
+		PekerjaanWali:           wali.PekerjaanWali,
 		PenghasilanBulanan:  wali.PenghasilanBulanan,
 		Alamat:              wali.Alamat,
-		NoTelepon:           wali.NoTelepon,
-		HubunganDenganSiswa: wali.HubunganDenganSiswa,
+		NoTelpWali:           wali.NoTelpWali,
+		Hubungan: wali.Hubungan,
 	}
 }

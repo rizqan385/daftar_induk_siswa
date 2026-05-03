@@ -91,7 +91,7 @@ const TabKesehatan = ({ siswa, isNew, onSave, section: _section }: TabKesehatanP
                         <select 
                             value={kesehatan.golongan_darah || ''}
                             onChange={(e) => setKesehatan({...kesehatan, golongan_darah: e.target.value})}
-                            style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'rgba(15, 23, 42, 0.4)', color: 'var(--text-primary)' }}
+                            style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border-color)', background: '#ffffff', color: 'var(--text-primary)' }}
                         >
                             <option value="">- Pilih Golongan Darah -</option>
                             <option value="A">A</option>

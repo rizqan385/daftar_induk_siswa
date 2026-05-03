@@ -56,97 +56,100 @@ const DataKelasPage = () => {
         fetchData();
     };
 
-    const inputStyle: React.CSSProperties = {
-        padding: '10px 14px', borderRadius: '8px', border: '1px solid var(--border-color)',
-        background: 'var(--bg-color)', color: 'var(--text-primary)', width: '100%', fontSize: '0.9rem'
-    };
-
     return (
-        <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg-color)' }}>
+        <div className="app-layout">
             <Sidebar />
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <Navbar />
-                <main style={{ flex: 1, padding: '24px 32px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                        <h2 style={{ color: 'var(--text-primary)', fontSize: '1.3rem' }}>🏫 Data Kelas</h2>
-                        <button onClick={() => { setShowForm(true); setEditItem(null); setForm({ nama: '', tingkat: 'X', jurusan: '', tahun_pelajaran: '2024/2025', wali_kelas: '' }); }}
-                            style={{ padding: '10px 20px', borderRadius: '8px', background: '#3b82f6', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: '0.9rem' }}>
+            <div className="main-content">
+                <Navbar title="Data Kelas" />
+                <main className="page-wrapper fade-in">
+                    <div className="page-toolbar">
+                        <h2 className="page-title">Data Kelas</h2>
+                        <button
+                            className="btn btn-primary"
+                            onClick={() => { setShowForm(true); setEditItem(null); setForm({ nama: '', tingkat: 'X', jurusan: '', tahun_pelajaran: '2024/2025', wali_kelas: '' }); }}
+                        >
                             + Tambah Kelas
                         </button>
                     </div>
 
                     {showForm && (
-                        <div style={{ background: 'var(--bg-surface)', padding: '24px', borderRadius: '12px', border: '1px solid var(--border-color)', marginBottom: '20px' }}>
-                            <h3 style={{ color: 'var(--text-primary)', marginBottom: '16px' }}>{editItem ? 'Edit Kelas' : 'Tambah Kelas'}</h3>
-                            <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
-                                <div>
-                                    <label style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', display: 'block', marginBottom: '6px' }}>Nama Kelas</label>
-                                    <input value={form.nama} onChange={e => setForm({ ...form, nama: e.target.value })} placeholder="X TKJ" required style={inputStyle} />
-                                </div>
-                                <div>
-                                    <label style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', display: 'block', marginBottom: '6px' }}>Tingkat</label>
-                                    <select value={form.tingkat} onChange={e => setForm({ ...form, tingkat: e.target.value })} style={inputStyle}>
-                                        <option value="X">X</option>
-                                        <option value="XI">XI</option>
-                                        <option value="XII">XII</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', display: 'block', marginBottom: '6px' }}>Jurusan</label>
-                                    <input value={form.jurusan} onChange={e => setForm({ ...form, jurusan: e.target.value })} placeholder="TKJ" style={inputStyle} />
-                                </div>
-                                <div>
-                                    <label style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', display: 'block', marginBottom: '6px' }}>Tahun Pelajaran</label>
-                                    <input value={form.tahun_pelajaran} onChange={e => setForm({ ...form, tahun_pelajaran: e.target.value })} placeholder="2024/2025" style={inputStyle} />
-                                </div>
-                                <div>
-                                    <label style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', display: 'block', marginBottom: '6px' }}>Wali Kelas</label>
-                                    <input value={form.wali_kelas} onChange={e => setForm({ ...form, wali_kelas: e.target.value })} placeholder="Nama guru" style={inputStyle} />
-                                </div>
-                                <div style={{ display: 'flex', alignItems: 'end', gap: '8px' }}>
-                                    <button type="submit" style={{ padding: '10px 20px', borderRadius: '8px', background: '#10b981', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600 }}>
-                                        {editItem ? 'Update' : 'Simpan'}
-                                    </button>
-                                    <button type="button" onClick={() => setShowForm(false)} style={{ padding: '10px 20px', borderRadius: '8px', background: '#6b7280', color: '#fff', border: 'none', cursor: 'pointer' }}>
-                                        Batal
-                                    </button>
-                                </div>
-                            </form>
+                        <div className="card" style={{ marginBottom: '18px' }}>
+                            <div className="card-header">
+                                <div className="card-title">{editItem ? 'Edit Kelas' : 'Tambah Kelas Baru'}</div>
+                            </div>
+                            <div className="card-body">
+                                <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '14px' }}>
+                                    <div className="form-group">
+                                        <label className="form-label">Nama Kelas</label>
+                                        <input className="form-input" value={form.nama} onChange={e => setForm({ ...form, nama: e.target.value })} placeholder="X TKJ" required />
+                                    </div>
+                                    <div className="form-group">
+                                        <label className="form-label">Tingkat</label>
+                                        <select className="form-input" value={form.tingkat} onChange={e => setForm({ ...form, tingkat: e.target.value })}>
+                                            <option value="X">X</option>
+                                            <option value="XI">XI</option>
+                                            <option value="XII">XII</option>
+                                        </select>
+                                    </div>
+                                    <div className="form-group">
+                                        <label className="form-label">Jurusan</label>
+                                        <input className="form-input" value={form.jurusan} onChange={e => setForm({ ...form, jurusan: e.target.value })} placeholder="TKJ" />
+                                    </div>
+                                    <div className="form-group">
+                                        <label className="form-label">Tahun Pelajaran</label>
+                                        <input className="form-input" value={form.tahun_pelajaran} onChange={e => setForm({ ...form, tahun_pelajaran: e.target.value })} placeholder="2024/2025" />
+                                    </div>
+                                    <div className="form-group">
+                                        <label className="form-label">Wali Kelas</label>
+                                        <input className="form-input" value={form.wali_kelas} onChange={e => setForm({ ...form, wali_kelas: e.target.value })} placeholder="Nama guru" />
+                                    </div>
+                                    <div style={{ display: 'flex', alignItems: 'flex-end', gap: '8px' }}>
+                                        <button type="submit" className="btn btn-green">{editItem ? 'Update' : 'Simpan'}</button>
+                                        <button type="button" className="btn btn-outline" onClick={() => setShowForm(false)}>Batal</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     )}
 
-                    <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border-color)', overflow: 'hidden' }}>
-                        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                            <thead>
-                                <tr style={{ background: 'rgba(59,130,246,0.1)' }}>
-                                    {['No', 'Nama Kelas', 'Tingkat', 'Jurusan', 'Tahun', 'Wali Kelas', 'Aksi'].map(h => (
-                                        <th key={h} style={{ padding: '14px 16px', textAlign: 'left', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border-color)' }}>{h}</th>
-                                    ))}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {loading ? (
-                                    <tr><td colSpan={7} style={{ padding: '40px', textAlign: 'center', color: 'var(--text-secondary)' }}>Memuat...</td></tr>
-                                ) : kelasList.length === 0 ? (
-                                    <tr><td colSpan={7} style={{ padding: '40px', textAlign: 'center', color: 'var(--text-secondary)' }}>Belum ada data kelas</td></tr>
-                                ) : kelasList.map((k, i) => (
-                                    <tr key={k.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
-                                        <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontSize: '0.9rem' }}>{i + 1}</td>
-                                        <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontSize: '0.9rem', fontWeight: 600 }}>{k.nama}</td>
-                                        <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontSize: '0.9rem' }}>{k.tingkat}</td>
-                                        <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontSize: '0.9rem' }}>{k.jurusan || '-'}</td>
-                                        <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontSize: '0.9rem' }}>{k.tahun_pelajaran}</td>
-                                        <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontSize: '0.9rem' }}>{k.wali_kelas || '-'}</td>
-                                        <td style={{ padding: '12px 16px' }}>
-                                            <div style={{ display: 'flex', gap: '8px' }}>
-                                                <button onClick={() => handleEdit(k)} style={{ padding: '6px 14px', borderRadius: '6px', background: '#f59e0b', color: '#fff', border: 'none', cursor: 'pointer', fontSize: '0.8rem' }}>Edit</button>
-                                                <button onClick={() => handleDelete(k.id)} style={{ padding: '6px 14px', borderRadius: '6px', background: '#ef4444', color: '#fff', border: 'none', cursor: 'pointer', fontSize: '0.8rem' }}>Hapus</button>
-                                            </div>
-                                        </td>
+                    <div className="card">
+                        <div style={{ overflowX: 'auto' }}>
+                            <table className="data-table">
+                                <thead>
+                                    <tr>
+                                        {['No', 'Nama Kelas', 'Tingkat', 'Jurusan', 'Tahun', 'Wali Kelas', 'Aksi'].map(h => (
+                                            <th key={h}>{h}</th>
+                                        ))}
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {loading ? (
+                                        <tr><td colSpan={7}><div className="empty-state"><div className="empty-state-text">Memuat...</div></div></td></tr>
+                                    ) : kelasList.length === 0 ? (
+                                        <tr><td colSpan={7}><div className="empty-state"><div className="empty-state-text">Belum ada data kelas</div></div></td></tr>
+                                    ) : kelasList.map((k, i) => (
+                                        <tr key={k.id}>
+                                            <td style={{ color: 'var(--text-muted)', width: '50px' }}>{i + 1}</td>
+                                            <td style={{ fontWeight: 600 }}>{k.nama}</td>
+                                            <td><span className="badge badge-info">{k.tingkat}</span></td>
+                                            <td style={{ color: 'var(--text-secondary)' }}>{k.jurusan || '-'}</td>
+                                            <td style={{ color: 'var(--text-secondary)' }}>{k.tahun_pelajaran}</td>
+                                            <td style={{ color: 'var(--text-secondary)' }}>{k.wali_kelas || '-'}</td>
+                                            <td>
+                                                <div style={{ display: 'flex', gap: '6px' }}>
+                                                    <button className="action-btn" onClick={() => handleEdit(k)} title="Edit">
+                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                                                    </button>
+                                                    <button className="action-btn danger" onClick={() => handleDelete(k.id)} title="Hapus">
+                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </main>
             </div>

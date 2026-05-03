@@ -41,8 +41,8 @@ func (s *KesehatanService) CreateOrUpdate(siswaID uint, req requests.CreateKeseh
 
 	if existingKesehatan != nil {
 		// Update existing
-		existingKesehatan.BeratBadanMasuk = req.BeratBadanMasuk
-		existingKesehatan.TinggiBadanMasuk = req.TinggiBadanMasuk
+		existingKesehatan.BeratBadan = req.BeratBadan
+		existingKesehatan.TinggiBadan = req.TinggiBadan
 		existingKesehatan.BeratBadanKeluar = req.BeratBadanKeluar
 		existingKesehatan.TinggiBadanKeluar = req.TinggiBadanKeluar
 		existingKesehatan.GolonganDarah = req.GolonganDarah
@@ -57,8 +57,8 @@ func (s *KesehatanService) CreateOrUpdate(siswaID uint, req requests.CreateKeseh
 	// Create new
 	kesehatan := &models.KesehatanSiswa{
 		SiswaID:            siswaID,
-		BeratBadanMasuk:    req.BeratBadanMasuk,
-		TinggiBadanMasuk:   req.TinggiBadanMasuk,
+		BeratBadan:    req.BeratBadan,
+		TinggiBadan:   req.TinggiBadan,
 		BeratBadanKeluar:   req.BeratBadanKeluar,
 		TinggiBadanKeluar:  req.TinggiBadanKeluar,
 		GolonganDarah:      req.GolonganDarah,
@@ -76,8 +76,8 @@ func (s *KesehatanService) CreateOrUpdate(siswaID uint, req requests.CreateKeseh
 func (s *KesehatanService) AddRiwayatPenyakit(kesehatanID uint, req requests.CreateRiwayatPenyakitRequest) (*responses.RiwayatPenyakitResponse, error) {
 	penyakit := &models.RiwayatPenyakit{
 		KesehatanID:   kesehatanID,
-		JenisPenyakit: utils.SanitizeString(req.JenisPenyakit),
-		Tahun:         req.Tahun,
+		NamaPenyakit: utils.SanitizeString(req.NamaPenyakit),
+		TahunSakit:         req.TahunSakit,
 		LamaSakit:     utils.SanitizeString(req.LamaSakit),
 		Keterangan:    utils.SanitizeString(req.Keterangan),
 	}
@@ -88,8 +88,8 @@ func (s *KesehatanService) AddRiwayatPenyakit(kesehatanID uint, req requests.Cre
 
 	return &responses.RiwayatPenyakitResponse{
 		ID:            penyakit.ID,
-		JenisPenyakit: penyakit.JenisPenyakit,
-		Tahun:         penyakit.Tahun,
+		NamaPenyakit: penyakit.NamaPenyakit,
+		TahunSakit:         penyakit.TahunSakit,
 		LamaSakit:     penyakit.LamaSakit,
 		Keterangan:    penyakit.Keterangan,
 	}, nil
@@ -104,8 +104,8 @@ func (s *KesehatanService) DeleteRiwayatPenyakit(id uint) error {
 func (s *KesehatanService) toResponse(kesehatan *models.KesehatanSiswa) *responses.KesehatanResponse {
 	resp := &responses.KesehatanResponse{
 		ID:                 kesehatan.ID,
-		BeratBadanMasuk:    kesehatan.BeratBadanMasuk,
-		TinggiBadanMasuk:   kesehatan.TinggiBadanMasuk,
+		BeratBadan:    kesehatan.BeratBadan,
+		TinggiBadan:   kesehatan.TinggiBadan,
 		BeratBadanKeluar:   kesehatan.BeratBadanKeluar,
 		TinggiBadanKeluar:  kesehatan.TinggiBadanKeluar,
 		GolonganDarah:      kesehatan.GolonganDarah,
@@ -115,8 +115,8 @@ func (s *KesehatanService) toResponse(kesehatan *models.KesehatanSiswa) *respons
 	for _, p := range kesehatan.RiwayatPenyakit {
 		resp.RiwayatPenyakit = append(resp.RiwayatPenyakit, responses.RiwayatPenyakitResponse{
 			ID:            p.ID,
-			JenisPenyakit: p.JenisPenyakit,
-			Tahun:         p.Tahun,
+			NamaPenyakit: p.NamaPenyakit,
+			TahunSakit:         p.TahunSakit,
 			LamaSakit:     p.LamaSakit,
 			Keterangan:    p.Keterangan,
 		})

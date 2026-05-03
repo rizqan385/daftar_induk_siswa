@@ -108,7 +108,7 @@ const TabAkademik = ({ siswa, isNew, onSave }: TabAkademikProps) => {
         }
     };
 
-    const selectStyle = { padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'rgba(15, 23, 42, 0.4)', color: 'var(--text-primary)', width: '100%' };
+    const selectStyle = { padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border-color)', background: '#ffffff', color: 'var(--text-primary)', width: '100%' };
 
     console.log("TabAkademik Render - activeSubTab:", activeSubTab, "filteredNilai length:", filteredNilai.length);
 
@@ -354,7 +354,7 @@ const TabAkademik = ({ siswa, isNew, onSave }: TabAkademikProps) => {
                                                 rows={3}
                                                 onChange={e => handleSikapChange('deskripsi_spiritual', e.target.value)}
                                                 placeholder="Contoh: Selalu taat beribadah, bersyukur, dan berdoa sebelum belajar."
-                                                style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'rgba(15, 23, 42, 0.4)', color: 'var(--text-primary)', resize: 'vertical', width: '100%', boxSizing: 'border-box' }}
+                                                style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', background: '#ffffff', color: 'var(--text-primary)', resize: 'vertical', width: '100%', boxSizing: 'border-box' }}
                                             />
                                         </div>
                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -364,7 +364,7 @@ const TabAkademik = ({ siswa, isNew, onSave }: TabAkademikProps) => {
                                                 rows={3}
                                                 onChange={e => handleSikapChange('deskripsi_sosial', e.target.value)}
                                                 placeholder="Contoh: Jujur, disiplin, dan bertanggung jawab dalam kegiatan sekolah."
-                                                style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'rgba(15, 23, 42, 0.4)', color: 'var(--text-primary)', resize: 'vertical', width: '100%', boxSizing: 'border-box' }}
+                                                style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', background: '#ffffff', color: 'var(--text-primary)', resize: 'vertical', width: '100%', boxSizing: 'border-box' }}
                                             />
                                         </div>
                                         {!existing && (

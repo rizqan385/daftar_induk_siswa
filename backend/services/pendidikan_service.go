@@ -62,7 +62,7 @@ func (s *PendidikanService) Add(siswaID uint, req requests.CreatePendidikanReque
 		SiswaID:         siswaID,
 		Tipe:            req.Tipe,
 		TanggalDiterima: tanggalDiterima,
-		AsalSekolah:     utils.SanitizeString(req.AsalSekolah),
+		NamaSekolah:     utils.SanitizeString(req.NamaSekolah),
 		AlamatSekolah:   utils.SanitizeString(req.AlamatSekolah),
 		NoIjazah:        utils.SanitizeString(req.NoIjazah),
 		TanggalIjazah:   tanggalIjazah,
@@ -99,8 +99,8 @@ func (s *PendidikanService) Update(id uint, req requests.UpdatePendidikanRequest
 		}
 		pendidikan.TanggalDiterima = parsed
 	}
-	if req.AsalSekolah != "" {
-		pendidikan.AsalSekolah = utils.SanitizeString(req.AsalSekolah)
+	if req.NamaSekolah != "" {
+		pendidikan.NamaSekolah = utils.SanitizeString(req.NamaSekolah)
 	}
 	if req.AlamatSekolah != "" {
 		pendidikan.AlamatSekolah = utils.SanitizeString(req.AlamatSekolah)
@@ -158,7 +158,7 @@ func (s *PendidikanService) toResponse(p *models.PendidikanSebelumnya) *response
 		ID:              p.ID,
 		Tipe:            p.Tipe,
 		TanggalDiterima: p.TanggalDiterima,
-		AsalSekolah:     p.AsalSekolah,
+		NamaSekolah:     p.NamaSekolah,
 		AlamatSekolah:   p.AlamatSekolah,
 		NoIjazah:        p.NoIjazah,
 		TanggalIjazah:   p.TanggalIjazah,

@@ -28,22 +28,21 @@ const DataSiswa = () => {
 
     const filtered = siswaList.filter((siswa: any) => {
         const matchKelas = !filterKelas || String(siswa.kelas_id) === filterKelas;
-        const matchSearch = !searchTerm || 
-            (siswa.nama_lengkap || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        const q = searchTerm.toLowerCase();
+        const matchSearch = !searchTerm ||
+            (siswa.nama || siswa.nama_lengkap || '').toLowerCase().includes(q) ||
             (siswa.nisn || '').includes(searchTerm) ||
             (siswa.no_induk || '').includes(searchTerm);
         return matchKelas && matchSearch;
     });
 
-    const openCreatePage = () => navigate('/siswa/new');
-    const openEditPage = (id: number) => navigate(`/siswa/${id}`);
+    const API_BASE = import.meta.env.VITE_API_URL?.replace('/api/v1', '') || 'http://localhost:8080';
+
     const handleDelete = (id: number) => {
         if (window.confirm("Yakin ingin menghapus siswa ini?")) {
             deleteSiswa.mutate(id);
         }
     };
-
-    const API_BASE = import.meta.env.VITE_API_URL?.replace('/api/v1', '') || 'http://localhost:8080';
 
     const handleImportExcel = async () => {
         if (!importFile) return;
@@ -58,7 +57,6 @@ const DataSiswa = () => {
             const count = res.data?.data?.imported_count ?? 0;
             setImportMsg({ type: 'success', text: `${count} siswa berhasil diimport!` });
             setImportFile(null);
-            // Refresh page data after short delay
             setTimeout(() => window.location.reload(), 1500);
         } catch (err: any) {
             const errMsg = err?.response?.data?.errors || err?.response?.data?.message || 'Gagal import file Excel';
@@ -74,142 +72,204 @@ const DataSiswa = () => {
             ['0012345678', '12345', 'Ahmad Rizki', 'L', 'X TKJ'],
         ];
         const ws = XLSX.utils.aoa_to_sheet(wsData);
-        // Set column widths for readability
-        ws['!cols'] = [
-            { wch: 15 }, { wch: 10 }, { wch: 25 }, { wch: 20 }, { wch: 12 }
-        ];
+        ws['!cols'] = [{ wch: 15 }, { wch: 10 }, { wch: 25 }, { wch: 20 }, { wch: 12 }];
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, 'Data Siswa');
         XLSX.writeFile(wb, 'template_import_siswa.xlsx');
     };
 
-    const inputStyle: React.CSSProperties = {
-        padding: '10px 14px', borderRadius: '8px', border: '1px solid var(--border-color)',
-        background: 'var(--bg-color)', color: 'var(--text-primary)', fontSize: '0.9rem'
+    const getStatusBadge = (status: string) => {
+        const map: Record<string, { cls: string; label: string }> = {
+            'aktif':        { cls: 'badge badge-success', label: 'Aktif' },
+            'lulus':        { cls: 'badge badge-info', label: 'Lulus' },
+            'pindah':       { cls: 'badge badge-warning', label: 'Pindah' },
+            'tinggal_kelas':{ cls: 'badge badge-danger', label: 'Tinggal Kelas' },
+            'keluar':       { cls: 'badge badge-secondary', label: 'Tidak Aktif' },
+        };
+        const s = map[status] || map['aktif'];
+        return <span className={s.cls}>{s.label}</span>;
     };
 
-    const statusBadge = (status: string) => {
-        const colors: Record<string, { bg: string; color: string }> = {
-            'aktif': { bg: '#10b98120', color: '#10b981' },
-            'lulus': { bg: '#3b82f620', color: '#3b82f6' },
-            'pindah': { bg: '#f59e0b20', color: '#f59e0b' },
-            'tinggal_kelas': { bg: '#ef444420', color: '#ef4444' },
-            'keluar': { bg: '#6b728020', color: '#6b7280' },
-        };
-        const c = colors[status] || colors['aktif'];
-        const label = status === 'tinggal_kelas' ? 'Tinggal Kelas' : 
-                      status === 'keluar' ? 'Tidak Aktif Lagi' : 
-                      (status || 'Aktif').charAt(0).toUpperCase() + (status || 'aktif').slice(1);
+    const getGenderBadge = (jk: string) => {
+        const isL = jk === 'L';
         return (
-            <span style={{ padding: '4px 10px', borderRadius: '12px', fontSize: '0.8rem', fontWeight: 600, background: c.bg, color: c.color }}>
-                {label}
+            <span className={`badge ${isL ? 'badge-info' : 'badge-danger'}`}>
+                {isL ? 'Laki-laki' : 'Perempuan'}
             </span>
         );
     };
 
     return (
-        <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg-color)' }}>
+        <div className="app-layout">
             <Sidebar />
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <Navbar />
-                <main style={{ flex: 1, padding: '24px 32px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                        <h2 style={{ color: 'var(--text-primary)', fontSize: '1.3rem' }}>👥 Data Siswa</h2>
-                        <div style={{ display: 'flex', gap: '10px' }}>
-                            <button onClick={() => { setShowImportModal(true); setImportMsg(null); setImportFile(null); }} style={{ padding: '10px 20px', borderRadius: '8px', background: '#10b981', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                📥 Import Excel
+            <div className="main-content">
+                <Navbar title="Data Siswa" />
+                <main className="page-wrapper fade-in">
+
+                    {/* Toolbar */}
+                    <div className="page-toolbar">
+                        <div className="page-toolbar-left">
+                            <h2 className="page-title">Data Siswa</h2>
+                            <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+                                Total: <strong style={{ color: 'var(--accent)' }}>{filtered.length}</strong> siswa
+                            </span>
+                        </div>
+                        <div className="page-toolbar-right">
+                            <button
+                                className="btn btn-outline"
+                                onClick={() => { setShowImportModal(true); setImportMsg(null); setImportFile(null); }}
+                            >
+                                <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
+                                </svg>
+                                Import Excel
                             </button>
-                            <button onClick={openCreatePage} style={{ padding: '10px 20px', borderRadius: '8px', background: '#3b82f6', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: '0.9rem' }}>
-                                + Tambah Siswa
+                            <button
+                                className="btn btn-primary"
+                                onClick={() => navigate('/siswa/new')}
+                            >
+                                <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+                                </svg>
+                                Tambah Siswa
                             </button>
                         </div>
                     </div>
 
-                    {/* Filter bar */}
-                    <div style={{ display: 'flex', gap: '16px', marginBottom: '16px' }}>
-                        <input placeholder="🔍 Cari nama / NISN / NIS..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} style={{ ...inputStyle, width: '300px' }} />
-                        <select value={filterKelas} onChange={e => setFilterKelas(e.target.value)} style={{ ...inputStyle, width: '200px' }}>
-                            <option value="">Semua Kelas</option>
-                            {kelasList.map((k: any) => <option key={k.id} value={k.id}>{k.nama}</option>)}
-                        </select>
-                    </div>
+                    {/* Card */}
+                    <div className="card">
+                        {/* Search & Filter */}
+                        <div className="card-header">
+                            <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
+                                <div className="search-input-wrapper">
+                                    <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <circle cx="8" cy="8" r="6" /><path d="m13 13 4 4" />
+                                    </svg>
+                                    <input
+                                        type="text"
+                                        placeholder="Cari nama, NISN, NIS..."
+                                        value={searchTerm}
+                                        onChange={e => setSearchTerm(e.target.value)}
+                                    />
+                                </div>
+                                <select
+                                    className="filter-select"
+                                    value={filterKelas}
+                                    onChange={e => setFilterKelas(e.target.value)}
+                                >
+                                    <option value="">Semua Kelas</option>
+                                    {kelasList.map((k: any) => <option key={k.id} value={k.id}>{k.nama}</option>)}
+                                </select>
+                            </div>
+                            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                                Menampilkan {filtered.length} dari {siswaList.length}
+                            </div>
+                        </div>
 
-                    <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border-color)', overflow: 'hidden' }}>
+                        {/* Table */}
                         {isLoading ? (
-                            <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-secondary)' }}>Memuat data...</div>
+                            <div className="empty-state">
+                                <div className="empty-state-icon">⏳</div>
+                                <div className="empty-state-text">Memuat data siswa...</div>
+                            </div>
                         ) : (
-                            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                                <thead>
-                                    <tr style={{ background: 'rgba(59,130,246,0.1)' }}>
-                                        {['No', 'Foto', 'NISN/NIS', 'Nama', 'L/P', 'Kelas', 'Status', 'Aksi'].map(h => (
-                                            <th key={h} style={{ padding: '14px 16px', textAlign: 'left', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border-color)' }}>{h}</th>
-                                        ))}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {filtered.length === 0 ? (
+                            <div style={{ overflowX: 'auto' }}>
+                                <table className="data-table">
+                                    <thead>
                                         <tr>
-                                            <td colSpan={8} style={{ padding: '40px', textAlign: 'center', color: 'var(--text-secondary)' }}>
-                                                Tidak ada data siswa
-                                            </td>
+                                            <th>No</th>
+                                            <th>Foto</th>
+                                            <th>Nama Siswa</th>
+                                            <th>NISN / NIS</th>
+                                            <th>Jenis Kelamin</th>
+                                            <th>Kelas</th>
+                                            <th>Status</th>
+                                            <th>Aksi</th>
                                         </tr>
-                                    ) : filtered.map((siswa: any, i: number) => (
-                                        <tr key={siswa.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
-                                            <td style={{ padding: '12px 16px', color: 'var(--text-primary)' }}>{i + 1}</td>
-                                            <td style={{ padding: '12px 16px' }}>
-                                                {siswa.foto_path ? (
-                                                    <img src={`${API_BASE}/uploads/${siswa.foto_path}`} alt="foto"
-                                                        style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--border-color)' }} />
-                                                ) : (
-                                                    <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 600, fontSize: '1rem' }}>
-                                                        {(siswa.nama_lengkap || 'S').charAt(0).toUpperCase()}
+                                    </thead>
+                                    <tbody>
+                                        {filtered.length === 0 ? (
+                                            <tr>
+                                                <td colSpan={8}>
+                                                    <div className="empty-state">
+                                                        <div className="empty-state-icon">👤</div>
+                                                        <div className="empty-state-text">Tidak ada data siswa ditemukan</div>
                                                     </div>
-                                                )}
-                                            </td>
-                                            <td style={{ padding: '12px 16px' }}>
-                                                <div style={{ color: 'var(--text-primary)', fontWeight: 600, fontSize: '0.85rem' }}>{siswa.nisn}</div>
-                                                <div style={{ color: 'var(--text-secondary)', fontSize: '0.8rem' }}>{siswa.no_induk}</div>
-                                            </td>
-                                            <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontWeight: 500 }}>{siswa.nama_lengkap}</td>
-                                            <td style={{ padding: '12px 16px' }}>
-                                                <span style={{
-                                                    padding: '4px 10px', borderRadius: '12px', fontSize: '0.8rem', fontWeight: 600,
-                                                    background: siswa.jenis_kelamin === 'L' ? '#3b82f620' : '#ec489920',
-                                                    color: siswa.jenis_kelamin === 'L' ? '#3b82f6' : '#ec4899'
-                                                }}>
-                                                    {siswa.jenis_kelamin === 'L' ? 'Laki-laki' : 'Perempuan'}
-                                                </span>
-                                            </td>
-                                            <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontWeight: 500 }}>{getKelasName(siswa.kelas_id)}</td>
-                                            <td style={{ padding: '12px 16px' }}>{statusBadge(siswa.status || 'aktif')}</td>
-                                            <td style={{ padding: '12px 16px' }}>
-                                                <div style={{ display: 'flex', gap: '8px' }}>
-                                                    <button onClick={() => openEditPage(siswa.id)} style={{ padding: '6px 14px', borderRadius: '6px', background: '#3b82f6', color: '#fff', border: 'none', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600 }}>Edit</button>
-                                                    <button onClick={() => handleDelete(siswa.id)} style={{ padding: '6px 14px', borderRadius: '6px', background: '#ef4444', color: '#fff', border: 'none', cursor: 'pointer', fontSize: '0.8rem' }}>Hapus</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                                </td>
+                                            </tr>
+                                        ) : filtered.map((siswa: any, i: number) => (
+                                            <tr key={siswa.id}>
+                                                <td style={{ color: 'var(--text-muted)', width: '50px' }}>{i + 1}</td>
+                                                <td style={{ width: '60px' }}>
+                                                    {siswa.foto_path ? (
+                                                        <img
+                                                            src={`${API_BASE}/uploads/${siswa.foto_path}`}
+                                                            alt="foto"
+                                                            className="avatar"
+                                                        />
+                                                    ) : (
+                                                        <div className="avatar-placeholder">
+                                                            {((siswa.nama || siswa.nama_lengkap) || 'S').charAt(0).toUpperCase()}
+                                                        </div>
+                                                    )}
+                                                </td>
+                                                <td>
+                                                    <div style={{ fontWeight: 600, fontSize: '0.875rem', color: 'var(--text-primary)' }}>
+                                                        {siswa.nama || siswa.nama_lengkap || '-'}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style={{ fontWeight: 600, fontSize: '0.82rem' }}>{siswa.nisn}</div>
+                                                    <div style={{ color: 'var(--text-muted)', fontSize: '0.78rem' }}>{siswa.no_induk}</div>
+                                                </td>
+                                                <td>{getGenderBadge(siswa.jenis_kelamin)}</td>
+                                                <td style={{ fontWeight: 500 }}>{getKelasName(siswa.kelas_id)}</td>
+                                                <td>{getStatusBadge(siswa.status || 'aktif')}</td>
+                                                <td>
+                                                    <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                                                        <button
+                                                            className="action-btn"
+                                                            onClick={() => navigate(`/siswa/${siswa.id}`)}
+                                                            title="Edit"
+                                                        >
+                                                            ✏️
+                                                        </button>
+                                                        <button
+                                                            className="action-btn danger"
+                                                            onClick={() => handleDelete(siswa.id)}
+                                                            title="Hapus"
+                                                        >
+                                                            🗑️
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         )}
                     </div>
 
-                    {/* Import Excel Modal */}
+                    {/* Import Modal */}
                     {showImportModal && (
-                        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }} onClick={() => setShowImportModal(false)}>
-                            <div onClick={e => e.stopPropagation()} style={{ background: 'var(--bg-surface)', borderRadius: '16px', padding: '32px', width: '500px', maxWidth: '90vw', boxShadow: '0 20px 60px rgba(0,0,0,0.3)', border: '1px solid var(--border-color)' }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                                    <h3 style={{ color: 'var(--text-primary)', margin: 0 }}>📥 Import Data Siswa</h3>
-                                    <button onClick={() => setShowImportModal(false)} style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', fontSize: '1.5rem', cursor: 'pointer', lineHeight: 1 }}>×</button>
+                        <div className="modal-overlay" onClick={() => setShowImportModal(false)}>
+                            <div className="modal-box" onClick={e => e.stopPropagation()}>
+                                <div className="modal-header">
+                                    <div className="modal-title">📥 Import Data Siswa</div>
+                                    <button className="modal-close" onClick={() => setShowImportModal(false)}>×</button>
                                 </div>
 
                                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '16px', lineHeight: 1.6 }}>
-                                    Upload file Excel (.xlsx / .csv) dengan kolom:<br />
+                                    Upload file Excel (.xlsx) dengan kolom:<br />
                                     <strong>NISN, NIS, Nama Lengkap, Jenis Kelamin (L/P), Kelas</strong>
                                 </p>
 
-                                <button onClick={downloadTemplate} style={{ background: 'none', border: '1px dashed var(--border-color)', color: '#3b82f6', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.85rem', marginBottom: '20px', fontWeight: 500 }}>
+                                <button
+                                    className="btn btn-outline"
+                                    style={{ marginBottom: '16px', width: '100%', justifyContent: 'center', borderStyle: 'dashed' }}
+                                    onClick={downloadTemplate}
+                                >
                                     📄 Download Template Excel
                                 </button>
 
@@ -219,37 +279,46 @@ const DataSiswa = () => {
                                     onDragOver={e => { e.preventDefault(); e.stopPropagation(); }}
                                     onDrop={e => { e.preventDefault(); e.stopPropagation(); const f = e.dataTransfer.files?.[0]; if (f) setImportFile(f); }}
                                     style={{
-                                        border: '2px dashed var(--border-color)', borderRadius: '12px', padding: '32px', textAlign: 'center',
-                                        cursor: 'pointer', background: importFile ? 'rgba(16,185,129,0.05)' : 'transparent', transition: 'all 0.2s',
-                                        marginBottom: '20px'
+                                        border: `2px dashed ${importFile ? 'var(--success)' : 'var(--border)'}`,
+                                        borderRadius: '10px',
+                                        padding: '28px',
+                                        textAlign: 'center',
+                                        cursor: 'pointer',
+                                        background: importFile ? 'var(--success-bg)' : 'var(--bg-surface)',
+                                        marginBottom: '16px',
+                                        transition: 'all 0.2s'
                                     }}
                                 >
                                     <input ref={fileInputRef} type="file" accept=".xlsx,.xls,.csv" style={{ display: 'none' }} onChange={e => { if (e.target.files?.[0]) setImportFile(e.target.files[0]); }} />
                                     {importFile ? (
                                         <div>
-                                            <span style={{ fontSize: '2rem' }}>✅</span>
-                                            <p style={{ color: 'var(--text-primary)', fontWeight: 600, marginTop: '8px' }}>{importFile.name}</p>
-                                            <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem' }}>{(importFile.size / 1024).toFixed(1)} KB</p>
+                                            <div style={{ fontSize: '1.8rem', marginBottom: '8px' }}>✅</div>
+                                            <div style={{ fontWeight: 600, fontSize: '0.875rem' }}>{importFile.name}</div>
+                                            <div style={{ color: 'var(--text-muted)', fontSize: '0.78rem', marginTop: '4px' }}>{(importFile.size / 1024).toFixed(1)} KB</div>
                                         </div>
                                     ) : (
                                         <div>
-                                            <span style={{ fontSize: '2rem' }}>📁</span>
-                                            <p style={{ color: 'var(--text-secondary)', marginTop: '8px' }}>Klik atau drop file Excel di sini</p>
+                                            <div style={{ fontSize: '1.8rem', marginBottom: '8px' }}>📁</div>
+                                            <div style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>Klik atau drag & drop file Excel di sini</div>
                                         </div>
                                     )}
                                 </div>
 
                                 {importMsg && (
-                                    <div style={{ padding: '12px 16px', borderRadius: '8px', marginBottom: '16px', background: importMsg.type === 'success' ? '#10b98120' : '#ef444420', color: importMsg.type === 'success' ? '#10b981' : '#ef4444', fontSize: '0.85rem', fontWeight: 600 }}>
+                                    <div className={`badge ${importMsg.type === 'success' ? 'badge-success' : 'badge-danger'}`}
+                                        style={{ display: 'block', padding: '10px 14px', borderRadius: '8px', marginBottom: '16px', fontSize: '0.85rem' }}>
                                         {importMsg.text}
                                     </div>
                                 )}
 
                                 <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
-                                    <button onClick={() => setShowImportModal(false)} style={{ padding: '10px 20px', borderRadius: '8px', background: 'transparent', color: 'var(--text-secondary)', border: '1px solid var(--border-color)', cursor: 'pointer', fontWeight: 500 }}>
-                                        Batal
-                                    </button>
-                                    <button onClick={handleImportExcel} disabled={!importFile || importing} style={{ padding: '10px 24px', borderRadius: '8px', background: !importFile || importing ? '#6b7280' : '#10b981', color: '#fff', border: 'none', cursor: !importFile || importing ? 'not-allowed' : 'pointer', fontWeight: 600, fontSize: '0.9rem' }}>
+                                    <button className="btn btn-outline" onClick={() => setShowImportModal(false)}>Batal</button>
+                                    <button
+                                        className="btn btn-green"
+                                        onClick={handleImportExcel}
+                                        disabled={!importFile || importing}
+                                        style={{ opacity: !importFile || importing ? 0.6 : 1, cursor: !importFile || importing ? 'not-allowed' : 'pointer' }}
+                                    >
                                         {importing ? '⏳ Mengimport...' : '🚀 Import Sekarang'}
                                     </button>
                                 </div>

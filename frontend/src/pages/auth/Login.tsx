@@ -15,14 +15,12 @@ const Login = () => {
         e.preventDefault();
         setError('');
         setIsLoading(true);
-
         try {
             const response = await loginApi({ username, password });
             setAuth(response.user, response.token);
             navigate('/dashboard', { replace: true });
         } catch (err: any) {
-            const message = err.response?.data?.message || 'Login gagal. Periksa username dan password.';
-            setError(message);
+            setError(err.response?.data?.message || 'Login gagal. Periksa username dan password.');
         } finally {
             setIsLoading(false);
         }
@@ -32,160 +30,115 @@ const Login = () => {
         <div style={{
             minHeight: '100vh',
             display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            background: 'var(--bg-color)',
-            padding: '20px'
+            background: 'linear-gradient(135deg, #f0f2f8 0%, #e8e5f5 100%)',
         }}>
-            {/* Background decoration */}
+            {/* Left purple panel */}
             <div style={{
-                position: 'fixed',
-                top: '-200px',
-                right: '-200px',
-                width: '600px',
-                height: '600px',
-                borderRadius: '50%',
-                background: 'radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 70%)',
-                pointerEvents: 'none'
-            }} />
-            <div style={{
-                position: 'fixed',
-                bottom: '-200px',
-                left: '-200px',
-                width: '500px',
-                height: '500px',
-                borderRadius: '50%',
-                background: 'radial-gradient(circle, rgba(139, 92, 246, 0.06) 0%, transparent 70%)',
-                pointerEvents: 'none'
-            }} />
-
-            <div className="fade-in" style={{
-                width: '100%',
-                maxWidth: '420px',
+                width: '42%',
+                background: 'linear-gradient(160deg, #5c3d8f 0%, #3d2465 100%)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '48px',
                 position: 'relative',
-                zIndex: 1
+                overflow: 'hidden'
             }}>
-                {/* Logo / Header */}
-                <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-                    <div style={{
-                        width: '72px',
-                        height: '72px',
-                        borderRadius: '20px',
-                        background: 'var(--accent-gradient)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        margin: '0 auto 20px',
-                        fontSize: '2rem',
-                        boxShadow: '0 8px 32px rgba(59, 130, 246, 0.3)'
-                    }}>
-                        📚
-                    </div>
-                    <h1 style={{
-                        fontSize: '1.8rem',
-                        fontWeight: 700,
-                        background: 'var(--accent-gradient)',
-                        WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent',
-                        marginBottom: '8px'
-                    }}>
-                        SIM Siswa
-                    </h1>
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>
-                        Sistem Informasi Manajemen Data Induk Siswa
-                    </p>
-                </div>
+                {/* Decorative circles */}
+                <div style={{ position: 'absolute', top: '-60px', right: '-60px', width: '220px', height: '220px', borderRadius: '50%', background: 'rgba(255,255,255,0.06)' }} />
+                <div style={{ position: 'absolute', bottom: '-80px', left: '-40px', width: '280px', height: '280px', borderRadius: '50%', background: 'rgba(255,255,255,0.04)' }} />
 
-                {/* Login Card */}
-                <div className="glass-panel" style={{ padding: '36px' }}>
-                    <h2 style={{
-                        fontSize: '1.3rem',
-                        fontWeight: 600,
-                        marginBottom: '24px',
-                        color: 'var(--text-primary)',
-                        textAlign: 'center'
-                    }}>
-                        Masuk ke Sistem
-                    </h2>
+                <div style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
+                    <div style={{
+                        width: '80px', height: '80px',
+                        background: 'rgba(255,255,255,0.15)',
+                        borderRadius: '20px',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontSize: '2.5rem',
+                        margin: '0 auto 28px',
+                        backdropFilter: 'blur(10px)'
+                    }}>📘</div>
+                    <h1 style={{ color: 'white', fontSize: '1.8rem', fontWeight: 800, marginBottom: '10px', lineHeight: 1.2 }}>
+                        BUKU INDUK SISWA
+                    </h1>
+                    <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: '0.9rem', lineHeight: 1.6, maxWidth: '280px' }}>
+                        Sistem Informasi Manajemen Data Induk Siswa SMK
+                    </p>
+
+                    <div style={{ marginTop: '48px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                        {['Data Siswa Lengkap', 'Nilai & Akademik', 'Log Aktivitas', 'Export & Cetak'].map(f => (
+                            <div key={f} style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'rgba(255,255,255,0.75)', fontSize: '0.875rem' }}>
+                                <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.65rem' }}>✓</div>
+                                {f}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            {/* Right login form */}
+            <div style={{
+                flex: 1,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '48px'
+            }}>
+                <div className="fade-in" style={{ width: '100%', maxWidth: '400px' }}>
+                    <div style={{ marginBottom: '36px' }}>
+                        <h2 style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '8px' }}>
+                            Selamat Datang 👋
+                        </h2>
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+                            Masuk ke sistem dengan akun administrator
+                        </p>
+                    </div>
 
                     {error && (
                         <div style={{
                             padding: '12px 16px',
                             borderRadius: '8px',
-                            background: 'rgba(244, 63, 94, 0.1)',
-                            border: '1px solid rgba(244, 63, 94, 0.3)',
-                            color: '#fb7185',
-                            fontSize: '0.9rem',
+                            background: 'var(--danger-bg)',
+                            border: '1px solid #fecaca',
+                            color: 'var(--danger-text)',
+                            fontSize: '0.875rem',
                             marginBottom: '20px',
-                            textAlign: 'center'
                         }}>
                             ⚠️ {error}
                         </div>
                     )}
 
-                    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                            <label style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
-                                Username
+                    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+                        <div>
+                            <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '7px' }}>
+                                USERNAME
                             </label>
                             <input
                                 id="login-username"
                                 type="text"
                                 value={username}
-                                onChange={(e) => setUsername(e.target.value)}
+                                onChange={e => setUsername(e.target.value)}
                                 placeholder="Masukkan username"
                                 required
                                 autoFocus
-                                style={{
-                                    padding: '14px 16px',
-                                    borderRadius: '10px',
-                                    border: '1px solid var(--border-color)',
-                                    background: 'rgba(15, 23, 42, 0.4)',
-                                    color: 'var(--text-primary)',
-                                    fontSize: '1rem',
-                                    outline: 'none',
-                                    transition: 'border-color 0.2s ease, box-shadow 0.2s ease'
-                                }}
-                                onFocus={(e) => {
-                                    e.target.style.borderColor = 'var(--accent-color)';
-                                    e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
-                                }}
-                                onBlur={(e) => {
-                                    e.target.style.borderColor = 'var(--border-color)';
-                                    e.target.style.boxShadow = 'none';
-                                }}
+                                className="form-input"
+                                style={{ padding: '12px 14px', fontSize: '0.95rem' }}
                             />
                         </div>
 
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                            <label style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
-                                Password
+                        <div>
+                            <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '7px' }}>
+                                PASSWORD
                             </label>
                             <input
                                 id="login-password"
                                 type="password"
                                 value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                onChange={e => setPassword(e.target.value)}
                                 placeholder="Masukkan password"
                                 required
-                                style={{
-                                    padding: '14px 16px',
-                                    borderRadius: '10px',
-                                    border: '1px solid var(--border-color)',
-                                    background: 'rgba(15, 23, 42, 0.4)',
-                                    color: 'var(--text-primary)',
-                                    fontSize: '1rem',
-                                    outline: 'none',
-                                    transition: 'border-color 0.2s ease, box-shadow 0.2s ease'
-                                }}
-                                onFocus={(e) => {
-                                    e.target.style.borderColor = 'var(--accent-color)';
-                                    e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
-                                }}
-                                onBlur={(e) => {
-                                    e.target.style.borderColor = 'var(--border-color)';
-                                    e.target.style.boxShadow = 'none';
-                                }}
+                                className="form-input"
+                                style={{ padding: '12px 14px', fontSize: '0.95rem' }}
                             />
                         </div>
 
@@ -194,43 +147,27 @@ const Login = () => {
                             type="submit"
                             disabled={isLoading}
                             style={{
-                                padding: '14px',
+                                padding: '13px',
                                 borderRadius: '10px',
-                                background: isLoading ? 'rgba(59, 130, 246, 0.4)' : 'var(--accent-gradient)',
+                                background: isLoading ? '#9b8fd0' : 'linear-gradient(135deg, #6c4dab 0%, #9b72e6 100%)',
                                 color: 'white',
-                                fontSize: '1rem',
-                                fontWeight: 600,
+                                fontSize: '0.95rem',
+                                fontWeight: 700,
                                 border: 'none',
                                 cursor: isLoading ? 'not-allowed' : 'pointer',
-                                transition: 'all 0.3s ease',
-                                boxShadow: isLoading ? 'none' : '0 4px 16px rgba(59, 130, 246, 0.3)',
-                                marginTop: '8px'
-                            }}
-                            onMouseEnter={(e) => {
-                                if (!isLoading) {
-                                    e.currentTarget.style.transform = 'translateY(-1px)';
-                                    e.currentTarget.style.boxShadow = '0 6px 24px rgba(59, 130, 246, 0.4)';
-                                }
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.transform = 'translateY(0)';
-                                e.currentTarget.style.boxShadow = '0 4px 16px rgba(59, 130, 246, 0.3)';
+                                boxShadow: '0 4px 14px rgba(108, 77, 171, 0.35)',
+                                marginTop: '6px',
+                                transition: 'all 0.2s ease'
                             }}
                         >
-                            {isLoading ? '🔄 Memproses...' : '🔐 Masuk'}
+                            {isLoading ? '🔄 Memproses...' : '🔐 Masuk ke Sistem'}
                         </button>
                     </form>
-                </div>
 
-                <p style={{
-                    textAlign: 'center',
-                    color: 'var(--text-secondary)',
-                    fontSize: '0.8rem',
-                    marginTop: '24px',
-                    opacity: 0.7
-                }}>
-                    © 2026 SIM Siswa — Sistem Informasi Data Induk
-                </p>
+                    <p style={{ textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.78rem', marginTop: '28px' }}>
+                        © 2026 SIM Siswa — Sistem Informasi Data Induk
+                    </p>
+                </div>
             </div>
         </div>
     );

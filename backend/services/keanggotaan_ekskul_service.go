@@ -41,7 +41,7 @@ func (s *KeanggotaanEkskulService) GetAll() ([]responses.KeanggotaanEkskulRespon
 		nama := ""
 		kelas := ""
 		if item.Siswa != nil {
-			nama = item.Siswa.NamaLengkap
+			nama = item.Siswa.Nama
 			if item.Siswa.Kelas != nil {
 				kelas = item.Siswa.Kelas.Nama
 			}
@@ -68,7 +68,7 @@ func (s *KeanggotaanEkskulService) GetByID(id uint) (*responses.KeanggotaanEksku
 	nama := ""
 	kelas := ""
 	if item.Siswa != nil {
-		nama = item.Siswa.NamaLengkap
+		nama = item.Siswa.Nama
 		// We might need an extra query or preload for Kelas in FindByID, but it's optional here.
 	}
 
