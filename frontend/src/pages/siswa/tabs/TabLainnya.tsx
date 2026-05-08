@@ -93,7 +93,7 @@ const TabLainnya = ({ siswa, isNew, onSave }: TabLainnyaProps) => {
             
             {/* Form Section: Prestasi */}
             <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>
                     <h3 style={{ color: 'var(--text-primary)' }}>Prestasi (Luar Akademik)</h3>
                     <Button type="button" variant="secondary" size="sm" onClick={addPrestasi}>+ Tambah Prestasi</Button>
                 </div>
@@ -103,7 +103,7 @@ const TabLainnya = ({ siswa, isNew, onSave }: TabLainnyaProps) => {
                 ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                         {prestasiList.map((p) => (
-                            <div key={p.id} style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center', background: 'rgba(255,255,255,0.02)', padding: '16px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                            <div key={p.id} style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center', background: 'rgba(255,255,255,0.02)', padding: '16px', borderRadius: '8px', border: '1px solid var(--border)' }}>
                                 <div style={{ flex: 2 }}>
                                     <Input 
                                         label="Nama Lomba / Prestasi" 
@@ -117,7 +117,7 @@ const TabLainnya = ({ siswa, isNew, onSave }: TabLainnyaProps) => {
                                     <select 
                                         value={p.bidang || ''}
                                         onChange={(e) => updatePrestasi(p.id, 'bidang', e.target.value)}
-                                        style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border-color)', background: '#ffffff', color: 'var(--text-primary)' }}
+                                        style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border)', background: '#ffffff', color: 'var(--text-primary)' }}
                                     >
                                         <option value="">- Pilih Bidang -</option>
                                         <option value="Kesenian">Kesenian</option>
@@ -133,7 +133,7 @@ const TabLainnya = ({ siswa, isNew, onSave }: TabLainnyaProps) => {
                                     <select 
                                         value={p.tingkat}
                                         onChange={(e) => updatePrestasi(p.id, 'tingkat', e.target.value)}
-                                        style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border-color)', background: '#ffffff', color: 'var(--text-primary)' }}
+                                        style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border)', background: '#ffffff', color: 'var(--text-primary)' }}
                                     >
                                         <option value="">- Pilih Tingkat -</option>
                                         <option value="Sekolah">Sekolah</option>
@@ -169,7 +169,7 @@ const TabLainnya = ({ siswa, isNew, onSave }: TabLainnyaProps) => {
 
             {/* Form Section: Beasiswa */}
             <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>
                     <h3 style={{ color: 'var(--text-primary)' }}>Riwayat Beasiswa</h3>
                     <Button type="button" variant="secondary" size="sm" onClick={addBeasiswa}>+ Tambah Beasiswa</Button>
                 </div>
@@ -179,7 +179,7 @@ const TabLainnya = ({ siswa, isNew, onSave }: TabLainnyaProps) => {
                 ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                         {beasiswaList.map((b) => (
-                            <div key={b.id} style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center', background: 'rgba(255,255,255,0.02)', padding: '16px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                            <div key={b.id} style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center', background: 'rgba(255,255,255,0.02)', padding: '16px', borderRadius: '8px', border: '1px solid var(--border)' }}>
                                 <div style={{ flex: 1 }}>
                                     <Input 
                                         label="Tahun Pelajaran" 
@@ -213,7 +213,7 @@ const TabLainnya = ({ siswa, isNew, onSave }: TabLainnyaProps) => {
 
             {/* Form Section: PKL */}
             <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>
                     <h3 style={{ color: 'var(--text-primary)' }}>Praktik Kerja Lapangan (PKL)</h3>
                     <Button type="button" variant="secondary" size="sm" onClick={addPkl}>+ Tambah PKL</Button>
                 </div>
@@ -223,10 +223,10 @@ const TabLainnya = ({ siswa, isNew, onSave }: TabLainnyaProps) => {
                 ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                         {pklList.map((p) => (
-                            <div key={p.id} style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center', background: 'rgba(255,255,255,0.02)', padding: '16px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                            <div key={p.id} style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center', background: 'rgba(255,255,255,0.02)', padding: '16px', borderRadius: '8px', border: '1px solid var(--border)' }}>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: '0 0 100px' }}>
                                     <label style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Kelas</label>
-                                    <select value={p.kelas} onChange={(e) => updatePkl(p.id, 'kelas', e.target.value)} style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', background: '#ffffff', color: 'var(--text-primary)' }}>
+                                    <select value={p.kelas} onChange={(e) => updatePkl(p.id, 'kelas', e.target.value)} style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border)', background: '#ffffff', color: 'var(--text-primary)' }}>
                                         <option value="X">X</option>
                                         <option value="XI">XI</option>
                                         <option value="XII">XII</option>
@@ -234,7 +234,7 @@ const TabLainnya = ({ siswa, isNew, onSave }: TabLainnyaProps) => {
                                 </div>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: '0 0 100px' }}>
                                     <label style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Semester</label>
-                                    <select value={p.semester} onChange={(e) => updatePkl(p.id, 'semester', Number(e.target.value))} style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', background: '#ffffff', color: 'var(--text-primary)' }}>
+                                    <select value={p.semester} onChange={(e) => updatePkl(p.id, 'semester', Number(e.target.value))} style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border)', background: '#ffffff', color: 'var(--text-primary)' }}>
                                         {[1,2,3,4,5,6].map(s => <option key={s} value={s}>{s}</option>)}
                                     </select>
                                 </div>
@@ -259,7 +259,7 @@ const TabLainnya = ({ siswa, isNew, onSave }: TabLainnyaProps) => {
 
             {/* Form Section: Ekstrakurikuler */}
             <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>
                     <h3 style={{ color: 'var(--text-primary)' }}>Ekstrakurikuler</h3>
                     <Button type="button" variant="secondary" size="sm" onClick={addEkskul}>+ Tambah Ekskul</Button>
                 </div>
@@ -269,10 +269,10 @@ const TabLainnya = ({ siswa, isNew, onSave }: TabLainnyaProps) => {
                 ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                         {ekskulList.map((e) => (
-                            <div key={e.id} style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center', background: 'rgba(255,255,255,0.02)', padding: '16px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                            <div key={e.id} style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center', background: 'rgba(255,255,255,0.02)', padding: '16px', borderRadius: '8px', border: '1px solid var(--border)' }}>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: '0 0 100px' }}>
                                     <label style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Kelas</label>
-                                    <select value={e.kelas} onChange={(ev) => updateEkskul(e.id, 'kelas', ev.target.value)} style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', background: '#ffffff', color: 'var(--text-primary)' }}>
+                                    <select value={e.kelas} onChange={(ev) => updateEkskul(e.id, 'kelas', ev.target.value)} style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border)', background: '#ffffff', color: 'var(--text-primary)' }}>
                                         <option value="X">X</option>
                                         <option value="XI">XI</option>
                                         <option value="XII">XII</option>
@@ -280,7 +280,7 @@ const TabLainnya = ({ siswa, isNew, onSave }: TabLainnyaProps) => {
                                 </div>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: '0 0 100px' }}>
                                     <label style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Semester</label>
-                                    <select value={e.semester} onChange={(ev) => updateEkskul(e.id, 'semester', Number(ev.target.value))} style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', background: '#ffffff', color: 'var(--text-primary)' }}>
+                                    <select value={e.semester} onChange={(ev) => updateEkskul(e.id, 'semester', Number(ev.target.value))} style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border)', background: '#ffffff', color: 'var(--text-primary)' }}>
                                         {[1,2,3,4,5,6].map(s => <option key={s} value={s}>{s}</option>)}
                                     </select>
                                 </div>
@@ -305,7 +305,7 @@ const TabLainnya = ({ siswa, isNew, onSave }: TabLainnyaProps) => {
             </div>
 
             {/* Action Buttons */}
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px', paddingTop: '24px', borderTop: '1px solid var(--border-color)' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px', paddingTop: '24px', borderTop: '1px solid var(--border)' }}>
                 <Button type="submit" size="lg">
                     💾 Simpan Data Lainnya
                 </Button>

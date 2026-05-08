@@ -17,7 +17,7 @@ const Button: React.FC<ButtonProps> = ({
     ...props 
 }) => {
     
-    let background = 'var(--accent-color)';
+    let background = 'var(--accent)';
     let color = 'white';
     let borderColor = 'transparent';
 

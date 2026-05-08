@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react';
 import api from '../../services/api';
 
 const inputStyle: React.CSSProperties = {
-    padding: '10px 14px', borderRadius: '8px', border: '1px solid var(--border-color)',
-    background: 'var(--bg-color)', color: 'var(--text-primary)', width: '100%', fontSize: '0.9rem'
+    padding: '10px 14px', borderRadius: '8px', border: '1px solid var(--border)',
+    background: 'var(--bg-app)', color: 'var(--text-primary)', width: '100%', fontSize: '0.9rem'
 };
 
 const PrestasiPage = () => {
@@ -91,7 +91,7 @@ const PrestasiPage = () => {
     };
 
     return (
-        <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg-color)' }}>
+        <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg-app)' }}>
             <Sidebar />
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                 <Navbar />
@@ -112,7 +112,7 @@ const PrestasiPage = () => {
                         </button>
                     </div>
                     {showForm && (
-                        <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border-color)', padding: '20px', marginBottom: '16px' }}>
+                        <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border)', padding: '20px', marginBottom: '16px' }}>
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
                                 <div>
                                     <label style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', display: 'block', marginBottom: '4px' }}>Siswa</label>
@@ -154,12 +154,12 @@ const PrestasiPage = () => {
                             </div>
                         </div>
                     )}
-                    <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border-color)', overflow: 'hidden' }}>
+                    <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border)', overflow: 'hidden' }}>
                         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                             <thead>
                                 <tr style={{ background: 'rgba(59,130,246,0.1)' }}>
                                     {['No', 'Nama Siswa', 'Nama Prestasi', 'Bidang', 'Tingkat', 'Tahun', 'Keterangan', 'Aksi'].map(h => (
-                                        <th key={h} style={{ padding: '14px 16px', textAlign: 'left', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border-color)' }}>{h}</th>
+                                        <th key={h} style={{ padding: '14px 16px', textAlign: 'left', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border)' }}>{h}</th>
                                     ))}
                                 </tr>
                             </thead>
@@ -169,7 +169,7 @@ const PrestasiPage = () => {
                                 ) : data.length === 0 ? (
                                     <tr><td colSpan={7} style={{ padding: '40px', textAlign: 'center', color: 'var(--text-secondary)' }}>Belum ada data prestasi</td></tr>
                                 ) : data.map((p, i) => (
-                                    <tr key={i} style={{ borderBottom: '1px solid var(--border-color)' }}>
+                                    <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
                                         <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontSize: '0.9rem' }}>{i + 1}</td>
                                         <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontSize: '0.9rem', fontWeight: 600 }}>{p.siswa_nama}</td>
                                         <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontSize: '0.9rem' }}>{p.nama_prestasi || '-'}</td>

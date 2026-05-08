@@ -72,7 +72,7 @@ const TabKesehatan = ({ siswa, isNew, onSave, section: _section }: TabKesehatanP
             
             {/* Form Section: Data Fisik */}
             <div>
-                <h3 style={{ marginBottom: '16px', color: 'var(--text-primary)', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>Data Fisik & Jasmani Siswa</h3>
+                <h3 style={{ marginBottom: '16px', color: 'var(--text-primary)', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>Data Fisik & Jasmani Siswa</h3>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
                     <Input 
                         label="Tinggi Badan (cm)" 
@@ -91,7 +91,7 @@ const TabKesehatan = ({ siswa, isNew, onSave, section: _section }: TabKesehatanP
                         <select 
                             value={kesehatan.golongan_darah || ''}
                             onChange={(e) => setKesehatan({...kesehatan, golongan_darah: e.target.value})}
-                            style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border-color)', background: '#ffffff', color: 'var(--text-primary)' }}
+                            style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border)', background: '#ffffff', color: 'var(--text-primary)' }}
                         >
                             <option value="">- Pilih Golongan Darah -</option>
                             <option value="A">A</option>
@@ -113,7 +113,7 @@ const TabKesehatan = ({ siswa, isNew, onSave, section: _section }: TabKesehatanP
 
             {/* Form Section: Riwayat Penyakit Khusus */}
             <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>
                     <h3 style={{ color: 'var(--text-primary)' }}>Riwayat Penyakit Menahun / Serius</h3>
                     <Button type="button" variant="secondary" size="sm" onClick={addPenyakit}>+ Tambah Riwayat Penyakit</Button>
                 </div>
@@ -123,7 +123,7 @@ const TabKesehatan = ({ siswa, isNew, onSave, section: _section }: TabKesehatanP
                 ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                         {riwayatPenyakit.map((p) => (
-                            <div key={p.id} style={{ display: 'flex', gap: '16px', alignItems: 'center', background: 'rgba(255,255,255,0.02)', padding: '16px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                            <div key={p.id} style={{ display: 'flex', gap: '16px', alignItems: 'center', background: 'rgba(255,255,255,0.02)', padding: '16px', borderRadius: '8px', border: '1px solid var(--border)' }}>
                                 <div style={{ flex: 2 }}>
                                     <Input 
                                         label="Nama Penyakit" 
@@ -156,7 +156,7 @@ const TabKesehatan = ({ siswa, isNew, onSave, section: _section }: TabKesehatanP
             </div>
 
             {/* Action Buttons */}
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px', paddingTop: '24px', borderTop: '1px solid var(--border-color)' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px', paddingTop: '24px', borderTop: '1px solid var(--border)' }}>
                 <Button type="submit" size="lg">
                     💾 Simpan Data Kesehatan
                 </Button>

@@ -45,7 +45,7 @@ const TabKepribadian = ({ siswa, isNew, onSave }: TabKepribadianProps) => {
     return (
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
             <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>
                     <h3 style={{ color: 'var(--text-primary)', margin: 0 }}>Data Kepribadian Siswa</h3>
                     <Button type="button" variant="secondary" size="sm" onClick={addItem}>+ Tambah Kepribadian</Button>
                 </div>
@@ -55,9 +55,9 @@ const TabKepribadian = ({ siswa, isNew, onSave }: TabKepribadianProps) => {
                 ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                         {list.map((item) => (
-                            <div key={item.id} style={{ background: 'rgba(255,255,255,0.02)', padding: '20px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+                            <div key={item.id} style={{ background: 'rgba(255,255,255,0.02)', padding: '20px', borderRadius: '12px', border: '1px solid var(--border)' }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                                    <span style={{ fontSize: '0.85rem', color: 'var(--accent-color)', fontWeight: 600 }}>Catatan Kepribadian #{item.id}</span>
+                                    <span style={{ fontSize: '0.85rem', color: 'var(--accent)', fontWeight: 600 }}>Catatan Kepribadian #{item.id}</span>
                                     <Button type="button" variant="danger" size="sm" onClick={() => removeItem(item.id)}>Hapus</Button>
                                 </div>
                                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
@@ -72,7 +72,7 @@ const TabKepribadian = ({ siswa, isNew, onSave }: TabKepribadianProps) => {
                                         <select
                                             value={item.nilai}
                                             onChange={(e) => updateItem(item.id, 'nilai', e.target.value)}
-                                            style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border-color)', background: '#ffffff', color: 'var(--text-primary)', fontSize: '1rem' }}
+                                            style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border)', background: '#ffffff', color: 'var(--text-primary)', fontSize: '1rem' }}
                                         >
                                             <option value="">- Pilih Nilai -</option>
                                             <option value="Baik">Baik</option>
@@ -93,7 +93,7 @@ const TabKepribadian = ({ siswa, isNew, onSave }: TabKepribadianProps) => {
                 )}
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'flex-end', paddingTop: '24px', borderTop: '1px solid var(--border-color)' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', paddingTop: '24px', borderTop: '1px solid var(--border)' }}>
                 <Button type="submit" size="lg">💾 Simpan Data Kepribadian</Button>
             </div>
         </form>

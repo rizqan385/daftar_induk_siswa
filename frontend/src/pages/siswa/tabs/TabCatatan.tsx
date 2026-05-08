@@ -55,7 +55,7 @@ const TabCatatan = ({ siswa, isNew, onSave }: TabCatatanProps) => {
             
             {/* Form Section: Catatan Akhir Semester */}
             <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>
                     <h3 style={{ color: 'var(--text-primary)' }}>Catatan Akhir Semester (CAS)</h3>
                     <Button type="button" variant="secondary" size="sm" onClick={addCas}>+ Tambah Semester</Button>
                 </div>
@@ -65,9 +65,9 @@ const TabCatatan = ({ siswa, isNew, onSave }: TabCatatanProps) => {
                 ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                         {casList.map((cas) => (
-                            <div key={cas.id} style={{ display: 'flex', flexDirection: 'column', gap: '16px', background: 'rgba(255,255,255,0.02)', padding: '24px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                            <div key={cas.id} style={{ display: 'flex', flexDirection: 'column', gap: '16px', background: 'rgba(255,255,255,0.02)', padding: '24px', borderRadius: '8px', border: '1px solid var(--border)' }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <h4 style={{ margin: 0, color: 'var(--accent-color)' }}>Semester {cas.semester}</h4>
+                                    <h4 style={{ margin: 0, color: 'var(--accent)' }}>Semester {cas.semester}</h4>
                                     <Button type="button" variant="danger" size="sm" onClick={() => removeCas(cas.id)}>Hapus Semester</Button>
                                 </div>
                                 
@@ -77,7 +77,7 @@ const TabCatatan = ({ siswa, isNew, onSave }: TabCatatanProps) => {
                                         value={cas.catatan_wali_kelas}
                                         rows={3}
                                         onChange={(e) => updateCas(cas.id, 'catatan_wali_kelas', e.target.value)}
-                                        style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-color)', color: 'var(--text-primary)', width: '100%', resize: 'vertical' }}
+                                        style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border)', background: 'var(--bg-app)', color: 'var(--text-primary)', width: '100%', resize: 'vertical' }}
                                     />
                                 </div>
 
@@ -110,7 +110,7 @@ const TabCatatan = ({ siswa, isNew, onSave }: TabCatatanProps) => {
             </div>
 
             {/* Action Buttons */}
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--border-color)' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--border)' }}>
                 <Button type="submit" size="lg">
                     💾 Simpan Catatan Akhir
                 </Button>

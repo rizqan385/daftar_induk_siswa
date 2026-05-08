@@ -40,7 +40,7 @@ const TabPemeriksaanBuku = ({ siswa, isNew, onSave }: TabPemeriksaanBukuProps) =
     return (
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
             <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>
                     <h3 style={{ color: 'var(--text-primary)', margin: 0 }}>Riwayat Pemeriksaan Buku Induk</h3>
                     <Button type="button" variant="secondary" size="sm" onClick={addItem}>+ Tambah Catatan Pemeriksaan</Button>
                 </div>
@@ -50,9 +50,9 @@ const TabPemeriksaanBuku = ({ siswa, isNew, onSave }: TabPemeriksaanBukuProps) =
                 ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                         {list.map((item, index) => (
-                            <div key={item.id} style={{ background: 'rgba(255,255,255,0.02)', padding: '20px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+                            <div key={item.id} style={{ background: 'rgba(255,255,255,0.02)', padding: '20px', borderRadius: '12px', border: '1px solid var(--border)' }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                                    <span style={{ fontSize: '0.85rem', color: 'var(--accent-color)', fontWeight: 600 }}>Pemeriksaan #{index + 1}</span>
+                                    <span style={{ fontSize: '0.85rem', color: 'var(--accent)', fontWeight: 600 }}>Pemeriksaan #{index + 1}</span>
                                     <Button type="button" variant="danger" size="sm" onClick={() => removeItem(item.id)}>Hapus</Button>
                                 </div>
                                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
@@ -69,7 +69,7 @@ const TabPemeriksaanBuku = ({ siswa, isNew, onSave }: TabPemeriksaanBukuProps) =
                 )}
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'flex-end', paddingTop: '24px', borderTop: '1px solid var(--border-color)' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', paddingTop: '24px', borderTop: '1px solid var(--border)' }}>
                 <Button type="submit" size="lg">💾 Simpan Catatan Pemeriksaan</Button>
             </div>
         </form>

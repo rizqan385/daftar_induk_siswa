@@ -108,7 +108,7 @@ const TabAkademik = ({ siswa, isNew, onSave }: TabAkademikProps) => {
         }
     };
 
-    const selectStyle = { padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border-color)', background: '#ffffff', color: 'var(--text-primary)', width: '100%' };
+    const selectStyle = { padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border)', background: '#ffffff', color: 'var(--text-primary)', width: '100%' };
 
     console.log("TabAkademik Render - activeSubTab:", activeSubTab, "filteredNilai length:", filteredNilai.length);
 
@@ -116,7 +116,7 @@ const TabAkademik = ({ siswa, isNew, onSave }: TabAkademikProps) => {
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             
             {/* Sub-navigation */}
-            <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '8px', borderBottom: '1px solid var(--border-color)' }}>
+            <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '8px', borderBottom: '1px solid var(--border)' }}>
                 {subTabs.map(tab => (
                     <button 
                         key={tab.id}
@@ -130,7 +130,7 @@ const TabAkademik = ({ siswa, isNew, onSave }: TabAkademikProps) => {
                             fontSize: '0.85rem',
                             whiteSpace: 'nowrap',
                             boxShadow: 'none',
-                            border: activeSubTab === tab.id ? 'none' : '1px solid var(--border-color)'
+                            border: activeSubTab === tab.id ? 'none' : '1px solid var(--border)'
                         }}
                     >
                         {tab.label}
@@ -144,7 +144,7 @@ const TabAkademik = ({ siswa, isNew, onSave }: TabAkademikProps) => {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
                         {/* Pendidikan Sebelumnya */}
                         <div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>
                                 <h3 style={{ color: 'var(--text-primary)' }}>Pendidikan Sebelumnya</h3>
                                 <Button type="button" size="sm" variant="secondary" onClick={() => setPendidikanList([...pendidikanList, { id: Date.now(), tipe: 'siswa_baru', tanggal_diterima: '', nama_sekolah: '', kelas_diterima: 'X' }])}>+ Tambah Riwayat</Button>
                             </div>
@@ -153,7 +153,7 @@ const TabAkademik = ({ siswa, isNew, onSave }: TabAkademikProps) => {
                             ) : (
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                                     {pendidikanList.map((p) => (
-                                        <div key={p.id} style={{ display: 'flex', flexDirection: 'column', gap: '16px', background: 'rgba(255,255,255,0.02)', padding: '20px', borderRadius: '8px', border: '1px solid var(--border-color)', position: 'relative' }}>
+                                        <div key={p.id} style={{ display: 'flex', flexDirection: 'column', gap: '16px', background: 'rgba(255,255,255,0.02)', padding: '20px', borderRadius: '8px', border: '1px solid var(--border)', position: 'relative' }}>
                                             <Button type="button" variant="danger" size="sm" onClick={() => setPendidikanList(pendidikanList.filter(item => item.id !== p.id))} style={{ position: 'absolute', top: '16px', right: '16px', padding: '4px 8px' }}>x</Button>
                                             
                                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
@@ -191,7 +191,7 @@ const TabAkademik = ({ siswa, isNew, onSave }: TabAkademikProps) => {
 
                         {/* Nilai Ijazah SMP */}
                         <div>
-                            <h3 style={{ marginBottom: '16px', color: 'var(--text-primary)', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>Informasi Kelulusan / Ijazah SMP/MTs</h3>
+                            <h3 style={{ marginBottom: '16px', color: 'var(--text-primary)', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>Informasi Kelulusan / Ijazah SMP/MTs</h3>
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
                                 <Input label="Nomor Ijazah" value={ijazah.nomor_ijazah} onChange={(e) => setIjazah({...ijazah, nomor_ijazah: e.target.value})} />
                                 <Input label="Nilai Rata-rata Ujian" type="number" step="0.01" value={ijazah.nilai_rata_rata?.toString() || ''} onChange={(e) => setIjazah({...ijazah, nilai_rata_rata: parseFloat(e.target.value) || 0})} />
@@ -208,10 +208,10 @@ const TabAkademik = ({ siswa, isNew, onSave }: TabAkademikProps) => {
                         
                         {/* Kehadiran */}
                         <div>
-                            <h3 style={{ marginBottom: '16px', color: 'var(--text-primary)', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>
+                            <h3 style={{ marginBottom: '16px', color: 'var(--text-primary)', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>
                                 Kehadiran — Semester {activeSubTab} (Kelas {semesterToKelas(activeSubTab as number)})
                             </h3>
-                            <div key={'kehadiran-' + activeSubTab} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '16px', background: 'rgba(255,255,255,0.02)', padding: '20px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                            <div key={'kehadiran-' + activeSubTab} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '16px', background: 'rgba(255,255,255,0.02)', padding: '20px', borderRadius: '8px', border: '1px solid var(--border)' }}>
                                 <Input label="Hari Efektif" type="number" value={kehadiranSubTab?.jumlah_hari_efektif?.toString() || '0'} onChange={(e) => handleKehadiranChange(activeSubTab as number, 'jumlah_hari_efektif', parseInt(e.target.value) || 0)} />
                                 <Input label="Hadir (hari)" type="number" value={kehadiranSubTab?.jumlah_hadir?.toString() || '0'} onChange={(e) => handleKehadiranChange(activeSubTab as number, 'jumlah_hadir', parseInt(e.target.value) || 0)} />
                                 <Input label="Sakit (hari)" type="number" value={kehadiranSubTab?.jumlah_sakit?.toString() || '0'} onChange={(e) => handleKehadiranChange(activeSubTab as number, 'jumlah_sakit', parseInt(e.target.value) || 0)} />
@@ -223,7 +223,7 @@ const TabAkademik = ({ siswa, isNew, onSave }: TabAkademikProps) => {
 
                         {/* Nilai Mata Pelajaran */}
                         <div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>
                                 <h3 style={{ color: 'var(--text-primary)' }}>Nilai Mata Pelajaran — Semester {activeSubTab}</h3>
                                 <Button type="button" variant="secondary" size="sm" onClick={() => setNilaiSemesterList([...nilaiSemesterList, {
                                     id: Date.now(),
@@ -242,7 +242,7 @@ const TabAkademik = ({ siswa, isNew, onSave }: TabAkademikProps) => {
                             ) : (
                                 <div key={'mapel-container-' + activeSubTab} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                                     {filteredNilai.map((n) => (
-                                        <div key={n.id} style={{ display: 'flex', flexDirection: 'column', gap: '12px', background: 'rgba(255,255,255,0.02)', padding: '16px', borderRadius: '8px', border: '1px solid var(--border-color)', position: 'relative' }}>
+                                        <div key={n.id} style={{ display: 'flex', flexDirection: 'column', gap: '12px', background: 'rgba(255,255,255,0.02)', padding: '16px', borderRadius: '8px', border: '1px solid var(--border)', position: 'relative' }}>
                                             <Button type="button" variant="danger" size="sm" onClick={() => setNilaiSemesterList(nilaiSemesterList.filter(item => item.id !== n.id))} style={{ position: 'absolute', top: '12px', right: '12px', padding: '4px 8px' }}>x</Button>
                                             
                                             {/* Row 1: Mata Pelajaran + Tahun Pelajaran */}
@@ -316,7 +316,7 @@ const TabAkademik = ({ siswa, isNew, onSave }: TabAkademikProps) => {
 
                         {/* Penilaian Sikap */}
                         <div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>
                                 <h3 style={{ color: 'var(--text-primary)' }}>Penilaian Sikap — Semester {activeSubTab} (Kelas {semesterToKelas(activeSubTab as number)})</h3>
                             </div>
                             
@@ -342,10 +342,10 @@ const TabAkademik = ({ siswa, isNew, onSave }: TabAkademikProps) => {
                                 };
 
                                 return (
-                                    <div style={{ background: 'rgba(255,255,255,0.02)', padding: '20px', borderRadius: '8px', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                                    <div style={{ background: 'rgba(255,255,255,0.02)', padding: '20px', borderRadius: '8px', border: '1px solid var(--border)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
                                         <div style={{ display: 'grid', gridTemplateColumns: '80px 1fr', gap: '12px', alignItems: 'center' }}>
                                             <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 500 }}>Kelas:</span>
-                                            <span style={{ color: 'var(--accent-color)', fontWeight: 600 }}>{kelas}</span>
+                                            <span style={{ color: 'var(--accent)', fontWeight: 600 }}>{kelas}</span>
                                         </div>
                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                                             <label style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', fontWeight: 500 }}>Deskripsi Sikap Spiritual</label>
@@ -354,7 +354,7 @@ const TabAkademik = ({ siswa, isNew, onSave }: TabAkademikProps) => {
                                                 rows={3}
                                                 onChange={e => handleSikapChange('deskripsi_spiritual', e.target.value)}
                                                 placeholder="Contoh: Selalu taat beribadah, bersyukur, dan berdoa sebelum belajar."
-                                                style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', background: '#ffffff', color: 'var(--text-primary)', resize: 'vertical', width: '100%', boxSizing: 'border-box' }}
+                                                style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border)', background: '#ffffff', color: 'var(--text-primary)', resize: 'vertical', width: '100%', boxSizing: 'border-box' }}
                                             />
                                         </div>
                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -364,7 +364,7 @@ const TabAkademik = ({ siswa, isNew, onSave }: TabAkademikProps) => {
                                                 rows={3}
                                                 onChange={e => handleSikapChange('deskripsi_sosial', e.target.value)}
                                                 placeholder="Contoh: Jujur, disiplin, dan bertanggung jawab dalam kegiatan sekolah."
-                                                style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', background: '#ffffff', color: 'var(--text-primary)', resize: 'vertical', width: '100%', boxSizing: 'border-box' }}
+                                                style={{ padding: '12px', borderRadius: '8px', border: '1px solid var(--border)', background: '#ffffff', color: 'var(--text-primary)', resize: 'vertical', width: '100%', boxSizing: 'border-box' }}
                                             />
                                         </div>
                                         {!existing && (
@@ -381,7 +381,7 @@ const TabAkademik = ({ siswa, isNew, onSave }: TabAkademikProps) => {
             </div>
 
             {/* Submit */}
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '8px', paddingTop: '24px', borderTop: '1px solid var(--border-color)' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '8px', paddingTop: '24px', borderTop: '1px solid var(--border)' }}>
                 <Button type="submit" size="lg">💾 Simpan Data Akademik</Button>
             </div>
         </form>

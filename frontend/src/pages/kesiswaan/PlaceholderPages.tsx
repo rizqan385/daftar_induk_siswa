@@ -114,7 +114,7 @@ export const BeasiswaPage = () => {
                 </button>
             </div>
             {showForm && (
-                <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border-color)', padding: '20px', marginBottom: '16px' }}>
+                <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border)', padding: '20px', marginBottom: '16px' }}>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
                         <div>
                             <label style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', display: 'block', marginBottom: '4px' }}>Siswa</label>
@@ -143,12 +143,12 @@ export const BeasiswaPage = () => {
                     </div>
                 </div>
             )}
-            <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border-color)', overflow: 'hidden' }}>
+            <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border)', overflow: 'hidden' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                     <thead>
                         <tr style={{ background: 'rgba(59,130,246,0.1)' }}>
                             {['No', 'Nama Siswa', 'NISN', 'Tahun Pelajaran', 'Pemberi', 'Keterangan', 'Aksi'].map(h => (
-                                <th key={h} style={{ padding: '14px 16px', textAlign: 'left', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border-color)' }}>{h}</th>
+                                <th key={h} style={{ padding: '14px 16px', textAlign: 'left', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border)' }}>{h}</th>
                             ))}
                         </tr>
                     </thead>
@@ -158,7 +158,7 @@ export const BeasiswaPage = () => {
                         ) : data.length === 0 ? (
                             <tr><td colSpan={6} style={{ padding: '40px', textAlign: 'center', color: 'var(--text-secondary)' }}>Belum ada data beasiswa</td></tr>
                         ) : data.map((b, i) => (
-                            <tr key={i} style={{ borderBottom: '1px solid var(--border-color)' }}>
+                            <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
                                 <td style={{ padding: '12px 16px', color: 'var(--text-primary)' }}>{i + 1}</td>
                                 <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontWeight: 600 }}>{b.siswa_nama}</td>
                                 <td style={{ padding: '12px 16px', color: 'var(--text-secondary)' }}>{b.siswa_nisn}</td>
@@ -277,7 +277,7 @@ export const EkstrakurikulerPage = () => {
                 </button>
             </div>
             {showForm && (
-                <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border-color)', padding: '20px', marginBottom: '16px' }}>
+                <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border)', padding: '20px', marginBottom: '16px' }}>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px' }}>
                         <div>
                             <label style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', display: 'block', marginBottom: '4px' }}>Siswa</label>
@@ -302,12 +302,12 @@ export const EkstrakurikulerPage = () => {
                     </div>
                 </div>
             )}
-            <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border-color)', overflow: 'hidden' }}>
+            <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border)', overflow: 'hidden' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                     <thead>
                         <tr style={{ background: 'rgba(59,130,246,0.1)' }}>
                             {['No', 'Nama Siswa', 'Kelas', 'Jenis Kegiatan', 'Keterangan', 'Aksi'].map(h => (
-                                <th key={h} style={{ padding: '14px 16px', textAlign: 'left', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border-color)' }}>{h}</th>
+                                <th key={h} style={{ padding: '14px 16px', textAlign: 'left', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border)' }}>{h}</th>
                             ))}
                         </tr>
                     </thead>
@@ -317,7 +317,7 @@ export const EkstrakurikulerPage = () => {
                         ) : data.length === 0 ? (
                             <tr><td colSpan={6} style={{ padding: '40px', textAlign: 'center', color: 'var(--text-secondary)' }}>Belum ada data ekstrakurikuler</td></tr>
                         ) : data.map((e, i) => (
-                            <tr key={i} style={{ borderBottom: '1px solid var(--border-color)' }}>
+                            <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
                                 <td style={{ padding: '12px 16px', color: 'var(--text-primary)' }}>{i + 1}</td>
                                 <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontWeight: 600 }}>{e.siswa_nama}</td>
                                 <td style={{ padding: '12px 16px', color: 'var(--text-primary)' }}>{e.siswa_kelas || '-'}</td>
@@ -457,7 +457,7 @@ export const PKLPage = () => {
                 </button>
             </div>
             {showForm && (
-                <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border-color)', padding: '20px', marginBottom: '16px' }}>
+                <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border)', padding: '20px', marginBottom: '16px' }}>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px' }}>
                         <div>
                             <label style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', display: 'block', marginBottom: '4px' }}>Siswa</label>
@@ -504,12 +504,12 @@ export const PKLPage = () => {
                     </div>
                 </div>
             )}
-            <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border-color)', overflow: 'hidden' }}>
+            <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border)', overflow: 'hidden' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                     <thead>
                         <tr style={{ background: 'rgba(59,130,246,0.1)' }}>
                             {['No', 'Nama Siswa', 'Kelas', 'Nama DUDI', 'Lokasi', 'Lama (Bulan)', 'Keterangan', 'Aksi'].map(h => (
-                                <th key={h} style={{ padding: '14px 16px', textAlign: 'left', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border-color)' }}>{h}</th>
+                                <th key={h} style={{ padding: '14px 16px', textAlign: 'left', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border)' }}>{h}</th>
                             ))}
                         </tr>
                     </thead>
@@ -519,7 +519,7 @@ export const PKLPage = () => {
                         ) : data.length === 0 ? (
                             <tr><td colSpan={7} style={{ padding: '40px', textAlign: 'center', color: 'var(--text-secondary)' }}>Belum ada data PKL</td></tr>
                         ) : data.map((p, i) => (
-                            <tr key={i} style={{ borderBottom: '1px solid var(--border-color)' }}>
+                            <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
                                 <td style={{ padding: '12px 16px', color: 'var(--text-primary)' }}>{i + 1}</td>
                                 <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontWeight: 600 }}>{p.siswa_nama}</td>
                                 <td style={{ padding: '12px 16px', color: 'var(--text-primary)' }}>{p.kelas}</td>
@@ -694,29 +694,29 @@ export const InputNilaiPage = () => {
                             </button>
                         </div>
                     </div>
-                    <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border-color)', overflow: 'hidden', overflowX: 'auto' }}>
+                    <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border)', overflow: 'hidden', overflowX: 'auto' }}>
                         <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '1300px' }}>
                             <thead>
                                 <tr style={{ background: 'rgba(59,130,246,0.1)' }}>
-                                    <th rowSpan={2} style={{ padding: '14px 16px', textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border-color)', borderRight: '1px solid var(--border-color)', width: '4%' }}>No</th>
-                                    <th rowSpan={2} style={{ padding: '14px 16px', textAlign: 'left', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border-color)', borderRight: '1px solid var(--border-color)', width: '8%' }}>Kode</th>
-                                    <th rowSpan={2} style={{ padding: '14px 16px', textAlign: 'left', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border-color)', borderRight: '1px solid var(--border-color)' }}>Mata Pelajaran</th>
-                                    <th colSpan={3} style={{ padding: '14px 16px', textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border-color)', borderRight: '1px solid var(--border-color)' }}>Pengetahuan</th>
-                                    <th colSpan={3} style={{ padding: '14px 16px', textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border-color)', borderRight: semester === 6 ? '1px solid var(--border-color)' : 'none' }}>Keterampilan</th>
+                                    <th rowSpan={2} style={{ padding: '14px 16px', textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)', width: '4%' }}>No</th>
+                                    <th rowSpan={2} style={{ padding: '14px 16px', textAlign: 'left', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)', width: '8%' }}>Kode</th>
+                                    <th rowSpan={2} style={{ padding: '14px 16px', textAlign: 'left', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)' }}>Mata Pelajaran</th>
+                                    <th colSpan={3} style={{ padding: '14px 16px', textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)' }}>Pengetahuan</th>
+                                    <th colSpan={3} style={{ padding: '14px 16px', textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border)', borderRight: semester === 6 ? '1px solid var(--border)' : 'none' }}>Keterampilan</th>
                                     {semester === 6 && (
-                                        <th rowSpan={2} style={{ padding: '14px 16px', textAlign: 'center', color: '#8b5cf6', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border-color)' }}>Nilai Ijazah SMK</th>
+                                        <th rowSpan={2} style={{ padding: '14px 16px', textAlign: 'center', color: '#8b5cf6', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border)' }}>Nilai Ijazah SMK</th>
                                     )}
                                 </tr>
                                 <tr style={{ background: 'rgba(59,130,246,0.05)' }}>
                                     {/* Subheadings for Pengetahuan */}
-                                    <th style={{ padding: '8px 16px', textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border-color)', width: '80px' }}>Angka</th>
-                                    <th style={{ padding: '8px 16px', textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border-color)', width: '80px' }}>Predikat</th>
-                                    <th style={{ padding: '8px 16px', textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border-color)', borderRight: '1px solid var(--border-color)', width: '200px' }}>Deskripsi</th>
+                                    <th style={{ padding: '8px 16px', textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border)', width: '80px' }}>Angka</th>
+                                    <th style={{ padding: '8px 16px', textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border)', width: '80px' }}>Predikat</th>
+                                    <th style={{ padding: '8px 16px', textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)', width: '200px' }}>Deskripsi</th>
                                     
                                     {/* Subheadings for Keterampilan */}
-                                    <th style={{ padding: '8px 16px', textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border-color)', width: '80px' }}>Angka</th>
-                                    <th style={{ padding: '8px 16px', textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border-color)', width: '80px' }}>Predikat</th>
-                                    <th style={{ padding: '8px 16px', textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border-color)', borderRight: semester === 6 ? '1px solid var(--border-color)' : 'none', width: '200px' }}>Deskripsi</th>
+                                    <th style={{ padding: '8px 16px', textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border)', width: '80px' }}>Angka</th>
+                                    <th style={{ padding: '8px 16px', textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border)', width: '80px' }}>Predikat</th>
+                                    <th style={{ padding: '8px 16px', textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border)', borderRight: semester === 6 ? '1px solid var(--border)' : 'none', width: '200px' }}>Deskripsi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -724,10 +724,10 @@ export const InputNilaiPage = () => {
                                     const studentClassName = selectedSiswa?.kelas_ref?.nama || kelasList.find((k: any) => k.id === selectedSiswa?.kelas_id)?.nama || '';
                                     return m.kelas_target_1 === 'Semua' || m.kelas_target_1 === studentClassName || m.kelas_target_2 === studentClassName;
                                 }).map((m: any, i: number) => (
-                                    <tr key={m.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
-                                        <td style={{ padding: '10px 16px', color: 'var(--text-primary)', borderRight: '1px solid var(--border-color)', textAlign: 'center' }}>{i + 1}</td>
-                                        <td style={{ padding: '10px 16px', color: '#3b82f6', fontWeight: 600, borderRight: '1px solid var(--border-color)' }}>{m.kode}</td>
-                                        <td style={{ padding: '10px 16px', color: 'var(--text-primary)', borderRight: '1px solid var(--border-color)' }}>{m.nama}</td>
+                                    <tr key={m.id} style={{ borderBottom: '1px solid var(--border)' }}>
+                                        <td style={{ padding: '10px 16px', color: 'var(--text-primary)', borderRight: '1px solid var(--border)', textAlign: 'center' }}>{i + 1}</td>
+                                        <td style={{ padding: '10px 16px', color: '#3b82f6', fontWeight: 600, borderRight: '1px solid var(--border)' }}>{m.kode}</td>
+                                        <td style={{ padding: '10px 16px', color: 'var(--text-primary)', borderRight: '1px solid var(--border)' }}>{m.nama}</td>
                                         
                                         {/* Pengetahuan inputs */}
                                         <td style={{ padding: '10px 16px', textAlign: 'center' }}>
@@ -750,7 +750,7 @@ export const InputNilaiPage = () => {
                                                 <option value="D">D</option>
                                             </select>
                                         </td>
-                                        <td style={{ padding: '10px 16px', borderRight: '1px solid var(--border-color)' }}>
+                                        <td style={{ padding: '10px 16px', borderRight: '1px solid var(--border)' }}>
                                             <input type="text"
                                                 value={nilai[m.id]?.p_deskripsi || ''}
                                                 onChange={e => setNilai({ ...nilai, [m.id]: { ...nilai[m.id], p_deskripsi: e.target.value } })}
@@ -779,7 +779,7 @@ export const InputNilaiPage = () => {
                                                 <option value="D">D</option>
                                             </select>
                                         </td>
-                                        <td style={{ padding: '10px 16px', borderRight: semester === 6 ? '1px solid var(--border-color)' : 'none' }}>
+                                        <td style={{ padding: '10px 16px', borderRight: semester === 6 ? '1px solid var(--border)' : 'none' }}>
                                             <input type="text"
                                                 value={nilai[m.id]?.k_deskripsi || ''}
                                                 onChange={e => setNilai({ ...nilai, [m.id]: { ...nilai[m.id], k_deskripsi: e.target.value } })}
@@ -810,12 +810,12 @@ export const InputNilaiPage = () => {
                             {kelasList.map((k: any) => <option key={k.id} value={k.id}>{k.nama}</option>)}
                         </select>
                     </div>
-                    <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border-color)', overflow: 'hidden' }}>
+                    <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border)', overflow: 'hidden' }}>
                         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                             <thead>
                                 <tr style={{ background: 'rgba(59,130,246,0.1)' }}>
                                     {['No', 'Nama Siswa', 'NIS', 'NISN', 'Aksi'].map(h => (
-                                        <th key={h} style={{ padding: '14px 16px', textAlign: 'left', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border-color)' }}>{h}</th>
+                                        <th key={h} style={{ padding: '14px 16px', textAlign: 'left', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border)' }}>{h}</th>
                                     ))}
                                 </tr>
                             </thead>
@@ -825,7 +825,7 @@ export const InputNilaiPage = () => {
                                 ) : filtered.length === 0 ? (
                                     <tr><td colSpan={5} style={{ padding: '40px', textAlign: 'center', color: 'var(--text-secondary)' }}>Tidak ada siswa</td></tr>
                                 ) : filtered.map((s: any, i: number) => (
-                                    <tr key={s.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
+                                    <tr key={s.id} style={{ borderBottom: '1px solid var(--border)' }}>
                                         <td style={{ padding: '12px 16px', color: 'var(--text-primary)' }}>{i + 1}</td>
                                         <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontWeight: 600 }}>{s.nama_lengkap}</td>
                                         <td style={{ padding: '12px 16px', color: 'var(--text-primary)' }}>{s.no_induk}</td>
@@ -941,12 +941,12 @@ export const InputNilaiEkskulPage = () => {
                 </div>
             </div>
             
-            <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border-color)', overflow: 'hidden' }}>
+            <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border)', overflow: 'hidden' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                     <thead>
                         <tr style={{ background: 'rgba(59,130,246,0.1)' }}>
                             {['No', 'Nama', 'Kelas', 'Kegiatan', 'Predikat', 'Keterangan Predikat'].map(h => (
-                                <th key={h} style={{ padding: '14px 16px', textAlign: 'left', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border-color)' }}>{h}</th>
+                                <th key={h} style={{ padding: '14px 16px', textAlign: 'left', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border)' }}>{h}</th>
                             ))}
                         </tr>
                     </thead>
@@ -956,7 +956,7 @@ export const InputNilaiEkskulPage = () => {
                         ) : filtered.length === 0 ? (
                             <tr><td colSpan={6} style={{ padding: '40px', textAlign: 'center', color: 'var(--text-secondary)' }}>Tidak ada data Ekstrakurikuler yang sesuai kriteria. Pastikan siswa telah ditambahkan ke data Ekstrakurikuler pada tab Kesiswaan &gt; Ekstrakurikuler.</td></tr>
                         ) : filtered.map((item: any, i: number) => (
-                            <tr key={item.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
+                            <tr key={item.id} style={{ borderBottom: '1px solid var(--border)' }}>
                                 <td style={{ padding: '10px 16px', color: 'var(--text-primary)' }}>{i + 1}</td>
                                 <td style={{ padding: '10px 16px', color: 'var(--text-primary)', fontWeight: 600 }}>{item.siswa_nama}</td>
                                 <td style={{ padding: '10px 16px', color: 'var(--text-secondary)' }}>{item.siswa_kelas}</td>
@@ -1166,12 +1166,12 @@ export const InputKetidakhadiranPage = () => {
                     {saving ? 'Menyimpan...' : '💾 Simpan Semua'}
                 </button>
             </div>
-            <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border-color)', overflow: 'hidden' }}>
+            <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border)', overflow: 'hidden' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                     <thead>
                         <tr style={{ background: 'rgba(59,130,246,0.1)' }}>
                             {['No', 'Nama', 'NIS', 'Sakit', 'Izin', 'Alpha'].map(h => (
-                                <th key={h} style={{ padding: '14px 16px', textAlign: 'left', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border-color)' }}>{h}</th>
+                                <th key={h} style={{ padding: '14px 16px', textAlign: 'left', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border)' }}>{h}</th>
                             ))}
                         </tr>
                     </thead>
@@ -1183,7 +1183,7 @@ export const InputKetidakhadiranPage = () => {
                         ) : filtered.length === 0 ? (
                             <tr><td colSpan={6} style={{ padding: '40px', textAlign: 'center', color: 'var(--text-secondary)' }}>Tidak ada siswa di kelas ini</td></tr>
                         ) : filtered.map((s: any, i: number) => (
-                            <tr key={s.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
+                            <tr key={s.id} style={{ borderBottom: '1px solid var(--border)' }}>
                                 <td style={{ padding: '10px 16px', color: 'var(--text-primary)' }}>{i + 1}</td>
                                 <td style={{ padding: '10px 16px', color: 'var(--text-primary)', fontWeight: 600 }}>{s.nama_lengkap}</td>
                                 <td style={{ padding: '10px 16px', color: 'var(--text-secondary)' }}>{s.no_induk}</td>
@@ -1287,7 +1287,7 @@ export const KenaikanKelasPage = () => {
         <PageWrapper>
             <h2 style={{ color: 'var(--text-primary)', fontSize: '1.3rem', marginBottom: '20px' }}>📈 Kenaikan Kelas</h2>
 
-            <div style={{ background: 'var(--bg-surface)', padding: '20px', borderRadius: '12px', border: '1px solid var(--border-color)', marginBottom: '16px' }}>
+            <div style={{ background: 'var(--bg-surface)', padding: '20px', borderRadius: '12px', border: '1px solid var(--border)', marginBottom: '16px' }}>
                 <div style={{ display: 'flex', gap: '16px', alignItems: 'end' }}>
                     <div>
                         <label style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', display: 'block', marginBottom: '4px' }}>Filter Kelas</label>
@@ -1306,12 +1306,12 @@ export const KenaikanKelasPage = () => {
                 </div>
             </div>
 
-            <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border-color)', overflow: 'hidden' }}>
+            <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border)', overflow: 'hidden' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                     <thead>
                         <tr style={{ background: 'rgba(59,130,246,0.1)' }}>
                             {['No', 'Nama Siswa', 'NIS', 'Kelas Saat Ini', 'Status', 'Tinggal Kelas?'].map(h => (
-                                <th key={h} style={{ padding: '14px 16px', textAlign: 'left', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border-color)' }}>{h}</th>
+                                <th key={h} style={{ padding: '14px 16px', textAlign: 'left', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border)' }}>{h}</th>
                             ))}
                         </tr>
                     </thead>
@@ -1324,7 +1324,7 @@ export const KenaikanKelasPage = () => {
                             const status = getStatus(s);
                             const statusColor = status === 'Lulus' ? '#10b981' : status === 'Naik Kelas' ? '#3b82f6' : '#ef4444';
                             return (
-                                <tr key={s.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
+                                <tr key={s.id} style={{ borderBottom: '1px solid var(--border)' }}>
                                     <td style={{ padding: '12px 16px', color: 'var(--text-primary)' }}>{i + 1}</td>
                                     <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontWeight: 600 }}>{s.nama_lengkap}</td>
                                     <td style={{ padding: '12px 16px', color: 'var(--text-secondary)' }}>{s.no_induk}</td>

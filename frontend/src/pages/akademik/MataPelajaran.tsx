@@ -57,14 +57,14 @@ const MataPelajaranPage = () => {
     };
 
     const inputStyle: React.CSSProperties = {
-        padding: '10px 14px', borderRadius: '8px', border: '1px solid var(--border-color)',
-        background: 'var(--bg-color)', color: 'var(--text-primary)', width: '100%', fontSize: '0.9rem'
+        padding: '10px 14px', borderRadius: '8px', border: '1px solid var(--border)',
+        background: 'var(--bg-app)', color: 'var(--text-primary)', width: '100%', fontSize: '0.9rem'
     };
 
     const kelompokLabel = (k: string) => k === 'A' ? 'Muatan Nasional' : k === 'B' ? 'Muatan Kewilayahan' : 'Muatan Peminatan';
 
     return (
-        <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg-color)' }}>
+        <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg-app)' }}>
             <Sidebar />
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                 <Navbar />
@@ -78,7 +78,7 @@ const MataPelajaranPage = () => {
                     </div>
 
                     {showForm && (
-                        <div style={{ background: 'var(--bg-surface)', padding: '24px', borderRadius: '12px', border: '1px solid var(--border-color)', marginBottom: '20px' }}>
+                        <div style={{ background: 'var(--bg-surface)', padding: '24px', borderRadius: '12px', border: '1px solid var(--border)', marginBottom: '20px' }}>
                             <h3 style={{ color: 'var(--text-primary)', marginBottom: '16px' }}>{editItem ? 'Edit Mapel' : 'Tambah Mapel'}</h3>
                             <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
                                 <div>
@@ -133,12 +133,12 @@ const MataPelajaranPage = () => {
                         </div>
                     )}
 
-                    <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border-color)', overflow: 'hidden' }}>
+                    <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border)', overflow: 'hidden' }}>
                         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                             <thead>
                                 <tr style={{ background: 'rgba(59,130,246,0.1)' }}>
                                     {['No', 'Kode', 'Nama', 'Kelompok', 'Target Kelas', 'Aksi'].map(h => (
-                                        <th key={h} style={{ padding: '14px 16px', textAlign: 'left', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border-color)' }}>{h}</th>
+                                        <th key={h} style={{ padding: '14px 16px', textAlign: 'left', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border)' }}>{h}</th>
                                     ))}
                                 </tr>
                             </thead>
@@ -146,7 +146,7 @@ const MataPelajaranPage = () => {
                                 {loading ? (
                                     <tr><td colSpan={6} style={{ padding: '40px', textAlign: 'center', color: 'var(--text-secondary)' }}>Memuat...</td></tr>
                                 ) : mapelList.map((m, i) => (
-                                    <tr key={m.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
+                                    <tr key={m.id} style={{ borderBottom: '1px solid var(--border)' }}>
                                         <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontSize: '0.9rem' }}>{i + 1}</td>
                                         <td style={{ padding: '12px 16px', color: '#3b82f6', fontSize: '0.9rem', fontWeight: 600 }}>{m.kode}</td>
                                         <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontSize: '0.9rem' }}>{m.nama}</td>

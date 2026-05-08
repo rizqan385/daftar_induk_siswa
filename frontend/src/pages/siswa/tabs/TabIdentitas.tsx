@@ -257,14 +257,14 @@ const TabIdentitas = ({ siswa, isNew, onSave, section }: TabIdentitasProps) => {
             {/* Section: Photo Upload */}
             {(!section) && !isNew && (
                 <div>
-                    <h3 style={{ marginBottom: '24px', color: 'var(--text-primary)', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>📷 Foto Siswa</h3>
+                    <h3 style={{ marginBottom: '24px', color: 'var(--text-primary)', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>📷 Foto Siswa</h3>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '24px', flexWrap: 'wrap' }}>
                         {/* Photo display */}
                         <div style={{
                             width: '120px',
                             height: '150px',
                             borderRadius: '12px',
-                            border: '2px dashed var(--border-color)',
+                            border: '2px dashed var(--border)',
                             overflow: 'hidden',
                             display: 'flex',
                             alignItems: 'center',
@@ -332,7 +332,7 @@ const TabIdentitas = ({ siswa, isNew, onSave, section }: TabIdentitasProps) => {
 
             {/* Section: Data Pribadi */}
             {(!section) && (<div>
-                <h3 style={{ marginBottom: '24px', color: 'var(--text-primary)', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>I. Keterangan Tentang Diri Siswa</h3>
+                <h3 style={{ marginBottom: '24px', color: 'var(--text-primary)', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>I. Keterangan Tentang Diri Siswa</h3>
                 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
@@ -347,7 +347,7 @@ const TabIdentitas = ({ siswa, isNew, onSave, section }: TabIdentitasProps) => {
                                 name="jenis_kelamin"
                                 value={formData.jenis_kelamin}
                                 onChange={handleChange}
-                                style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border-color)', background: '#ffffff', color: 'var(--text-primary)' }}
+                                style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border)', background: '#ffffff', color: 'var(--text-primary)' }}
                             >
                                 <option value="L">Laki-laki</option>
                                 <option value="P">Perempuan</option>
@@ -376,7 +376,7 @@ const TabIdentitas = ({ siswa, isNew, onSave, section }: TabIdentitasProps) => {
                                 name="kelas_id"
                                 value={formData.kelas_id}
                                 onChange={handleChange}
-                                style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border-color)', background: '#ffffff', color: 'var(--text-primary)' }}
+                                style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border)', background: '#ffffff', color: 'var(--text-primary)' }}
                             >
                                 <option value="">Pilih Kelas</option>
                                 {kelasList.map((k: any) => <option key={k.id} value={k.id}>{k.nama}</option>)}
@@ -389,7 +389,7 @@ const TabIdentitas = ({ siswa, isNew, onSave, section }: TabIdentitasProps) => {
 
             {/* Section: Alamat */}
             {(!section || section === 'alamat') && (<div>
-                <h3 style={{ marginBottom: '24px', color: 'var(--text-primary)', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>II. Keterangan Tempat Tinggal</h3>
+                <h3 style={{ marginBottom: '24px', color: 'var(--text-primary)', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>II. Keterangan Tempat Tinggal</h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                     <Input label="Jalan / Detail Alamat" name="alamat_jalan" value={formData.alamat_jalan} onChange={handleChange} />
                     
@@ -415,7 +415,7 @@ const TabIdentitas = ({ siswa, isNew, onSave, section }: TabIdentitasProps) => {
 
             {/* Section: Ayah */}
             {(!section || section === 'ayah') && (<div>
-                <h3 style={{ marginBottom: '24px', color: 'var(--text-primary)', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>III. Keterangan Ayah</h3>
+                <h3 style={{ marginBottom: '24px', color: 'var(--text-primary)', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>III. Keterangan Ayah</h3>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px' }}>
                     <Input label="Nama Lengkap Ayah" name="ortu_nama" value={formData.ortu_nama} onChange={handleChange} />
                     <Input label="Tempat Lahir" name="ortu_tempat_lahir" value={formData.ortu_tempat_lahir} onChange={handleChange} />
@@ -435,7 +435,7 @@ const TabIdentitas = ({ siswa, isNew, onSave, section }: TabIdentitasProps) => {
 
             {/* Section: Ibu */}
             {(!section || section === 'ibu') && (<div>
-                <h3 style={{ marginBottom: '24px', color: 'var(--text-primary)', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>IV. Keterangan Ibu</h3>
+                <h3 style={{ marginBottom: '24px', color: 'var(--text-primary)', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>IV. Keterangan Ibu</h3>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px' }}>
                     <Input label="Nama Lengkap Ibu" name="ibu_nama" value={formData.ibu_nama} onChange={handleChange} />
                     <Input label="Tempat Lahir" name="ibu_tempat_lahir" value={formData.ibu_tempat_lahir} onChange={handleChange} />
@@ -455,7 +455,7 @@ const TabIdentitas = ({ siswa, isNew, onSave, section }: TabIdentitasProps) => {
 
             {/* Section: Wali */}
             {(!section || section === 'wali') && (<div>
-                <h3 style={{ marginBottom: '24px', color: 'var(--text-primary)', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>IV. Keterangan Wali</h3>
+                <h3 style={{ marginBottom: '24px', color: 'var(--text-primary)', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>IV. Keterangan Wali</h3>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px' }}>
                     <Input label="Nama Wali" name="wali_nama" value={formData.wali_nama} onChange={handleChange} />
                     <Input label="Hubungan Keluarga" name="wali_hubungan" value={formData.wali_hubungan} onChange={handleChange} />
@@ -469,7 +469,7 @@ const TabIdentitas = ({ siswa, isNew, onSave, section }: TabIdentitasProps) => {
             )}
 
             {/* Action Buttons */}
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px', paddingTop: '24px', borderTop: '1px solid var(--border-color)' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px', paddingTop: '24px', borderTop: '1px solid var(--border)' }}>
                 <Button type="submit" size="lg">
                     💾 Simpan Perubahan Identitas
                 </Button>

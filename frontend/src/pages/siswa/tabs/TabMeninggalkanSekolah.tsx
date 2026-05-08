@@ -74,7 +74,7 @@ const TabMeninggalkanSekolah = ({ siswa, isNew, onSave }: TabMeninggalkanSekolah
     return (
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
             <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>
                     <h3 style={{ color: 'var(--text-primary)', margin: 0 }}>Data Meninggalkan Sekolah</h3>
                     <Button type="button" variant="danger" size="sm" onClick={clearData}>Hapus Data Ini</Button>
                 </div>
@@ -85,7 +85,7 @@ const TabMeninggalkanSekolah = ({ siswa, isNew, onSave }: TabMeninggalkanSekolah
                         <select
                             value={data.tipe || ''}
                             onChange={(e) => handleChange('tipe', e.target.value)}
-                            style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border-color)', background: '#ffffff', color: 'var(--text-primary)', fontSize: '1rem' }}
+                            style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border)', background: '#ffffff', color: 'var(--text-primary)', fontSize: '1rem' }}
                         >
                             <option value="">- Pilih Tipe -</option>
                             <option value="tamat">Tamat / Lulus</option>
@@ -104,7 +104,7 @@ const TabMeninggalkanSekolah = ({ siswa, isNew, onSave }: TabMeninggalkanSekolah
 
                 {data.tipe === 'pindah' && (
                     <div style={{ marginTop: '24px', background: 'rgba(59, 130, 246, 0.05)', padding: '20px', borderRadius: '12px', border: '1px dashed rgba(59, 130, 246, 0.3)' }}>
-                        <h4 style={{ color: 'var(--accent-color)', marginBottom: '16px', fontSize: '0.95rem' }}>Detail Pindah Sekolah</h4>
+                        <h4 style={{ color: 'var(--accent)', marginBottom: '16px', fontSize: '0.95rem' }}>Detail Pindah Sekolah</h4>
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                             <Input label="Nama Sekolah Tujuan" value={data.sekolah_tujuan || ''} onChange={(e) => handleChange('sekolah_tujuan', e.target.value)} placeholder="SMAN 2 Surabaya" />
                             <Input label="Alamat Sekolah Tujuan" value={data.alamat_sekolah_tujuan || ''} onChange={(e) => handleChange('alamat_sekolah_tujuan', e.target.value)} placeholder="Jl. Raya No. 5, Surabaya" />
@@ -113,7 +113,7 @@ const TabMeninggalkanSekolah = ({ siswa, isNew, onSave }: TabMeninggalkanSekolah
                 )}
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'flex-end', paddingTop: '24px', borderTop: '1px solid var(--border-color)' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', paddingTop: '24px', borderTop: '1px solid var(--border)' }}>
                 <Button type="submit" size="lg">💾 Simpan Data Keluar</Button>
             </div>
         </form>

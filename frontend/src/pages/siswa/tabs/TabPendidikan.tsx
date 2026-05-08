@@ -99,7 +99,7 @@ const TabPendidikan = ({ siswa, isNew: _isNew, onSave }: TabPendidikanProps) => 
                     <Input label="Tanggal Diterima" name="tanggal_diterima" type="date" value={formData.tanggal_diterima} onChange={handleChange} />
                     <div>
                         <label style={{ display: 'block', marginBottom: '6px', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Kelas Diterima / Kelas Saat Ini</label>
-                        <select name="kelas_id" value={formData.kelas_id} onChange={handleChange} style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-color)', color: 'var(--text-primary)', fontSize: '0.9rem' }}>
+                        <select name="kelas_id" value={formData.kelas_id} onChange={handleChange} style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid var(--border)', background: 'var(--bg-app)', color: 'var(--text-primary)', fontSize: '0.9rem' }}>
                             <option value="">-- Pilih Kelas --</option>
                             {kelasList.map(k => (
                                 <option key={k.id} value={k.id}>{k.nama}</option>
@@ -108,7 +108,7 @@ const TabPendidikan = ({ siswa, isNew: _isNew, onSave }: TabPendidikanProps) => 
                     </div>
                 </div>
 
-                <h4 style={{ marginTop: '24px', marginBottom: '16px', color: 'var(--text-primary)', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>
+                <h4 style={{ marginTop: '24px', marginBottom: '16px', color: 'var(--text-primary)', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>
                     Asal Sekolah / Ijazah
                 </h4>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px' }}>
@@ -134,20 +134,20 @@ const TabPendidikan = ({ siswa, isNew: _isNew, onSave }: TabPendidikanProps) => 
             {/* Nilai Ijazah Section */}
             {nilaiIjazah && (
                 <div>
-                    <h4 style={{ marginBottom: '16px', color: 'var(--text-primary)', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>
+                    <h4 style={{ marginBottom: '16px', color: 'var(--text-primary)', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>
                         📊 Nilai Ijazah
                     </h4>
-                    <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border-color)', overflow: 'hidden' }}>
+                    <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border)', overflow: 'hidden' }}>
                         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                             <thead>
                                 <tr style={{ background: 'rgba(59,130,246,0.1)' }}>
                                     {['No. Ijazah', 'Nilai Rata-rata', 'Tahun Lulus'].map(h => (
-                                        <th key={h} style={{ padding: '12px 16px', textAlign: 'left', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border-color)' }}>{h}</th>
+                                        <th key={h} style={{ padding: '12px 16px', textAlign: 'left', color: 'var(--text-secondary)', fontSize: '0.85rem', fontWeight: 600, borderBottom: '1px solid var(--border)' }}>{h}</th>
                                     ))}
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
+                                <tr style={{ borderBottom: '1px solid var(--border)' }}>
                                     <td style={{ padding: '12px 16px', color: 'var(--text-primary)' }}>{nilaiIjazah.nomor_ijazah || nilaiIjazah.no_ijazah || '-'}</td>
                                     <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontWeight: 600 }}>{nilaiIjazah.nilai_rata_rata || '-'}</td>
                                     <td style={{ padding: '12px 16px', color: 'var(--text-primary)' }}>{nilaiIjazah.tahun_lulus || nilaiIjazah.tanggal_lulus || '-'}</td>
@@ -159,7 +159,7 @@ const TabPendidikan = ({ siswa, isNew: _isNew, onSave }: TabPendidikanProps) => 
             )}
 
             {/* Save Button */}
-            <div style={{ display: 'flex', justifyContent: 'flex-end', paddingTop: '16px', borderTop: '1px solid var(--border-color)' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', paddingTop: '16px', borderTop: '1px solid var(--border)' }}>
                 <Button type="submit" size="lg">💾 Simpan Pendidikan</Button>
             </div>
         </form>

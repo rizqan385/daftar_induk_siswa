@@ -60,8 +60,8 @@ const TabPerkembangan = ({ siswa, isNew: _isNew, onSave: _onSave }: TabPerkemban
     };
 
     const inputStyle: React.CSSProperties = {
-        padding: '8px 12px', borderRadius: '6px', border: '1px solid var(--border-color)',
-        background: 'var(--bg-color)', color: 'var(--text-primary)', fontSize: '0.85rem', width: '100%'
+        padding: '8px 12px', borderRadius: '6px', border: '1px solid var(--border)',
+        background: 'var(--bg-app)', color: 'var(--text-primary)', fontSize: '0.85rem', width: '100%'
     };
 
     return (
@@ -85,12 +85,12 @@ const TabPerkembangan = ({ siswa, isNew: _isNew, onSave: _onSave }: TabPerkemban
 
             <div>
                 <h4 style={{ color: 'var(--text-primary)', marginBottom: '12px' }}>Riwayat Perkembangan</h4>
-                <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border-color)', overflow: 'hidden' }}>
+                <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border)', overflow: 'hidden' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                         <thead>
                             <tr style={{ background: 'rgba(59,130,246,0.1)' }}>
                                 {['Tahun Ajaran', 'Semester', 'Tinggi', 'Berat', 'Pendengaran', 'Penglihatan', 'Gigi', ''].map(h => (
-                                    <th key={h} style={{ padding: '12px 14px', textAlign: 'left', color: 'var(--text-secondary)', fontSize: '0.8rem', fontWeight: 600, borderBottom: '1px solid var(--border-color)' }}>{h}</th>
+                                    <th key={h} style={{ padding: '12px 14px', textAlign: 'left', color: 'var(--text-secondary)', fontSize: '0.8rem', fontWeight: 600, borderBottom: '1px solid var(--border)' }}>{h}</th>
                                 ))}
                             </tr>
                         </thead>
@@ -102,7 +102,7 @@ const TabPerkembangan = ({ siswa, isNew: _isNew, onSave: _onSave }: TabPerkemban
                                     </td>
                                 </tr>
                             ) : rows.map((r, i) => (
-                                <tr key={i} style={{ borderBottom: '1px solid var(--border-color)' }}>
+                                <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
                                     <td style={{ padding: '10px 14px', color: 'var(--text-primary)' }}>{r.tahun_ajaran}</td>
                                     <td style={{ padding: '10px 14px', color: 'var(--text-primary)' }}>{r.semester}</td>
                                     <td style={{ padding: '10px 14px', color: 'var(--text-primary)' }}>{r.tinggi} cm</td>
@@ -121,7 +121,7 @@ const TabPerkembangan = ({ siswa, isNew: _isNew, onSave: _onSave }: TabPerkemban
             </div>
 
             {/* Add new row form */}
-            <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border-color)', padding: '20px' }}>
+            <div style={{ background: 'var(--bg-surface)', borderRadius: '12px', border: '1px solid var(--border)', padding: '20px' }}>
                 <h4 style={{ color: 'var(--text-primary)', marginBottom: '16px' }}>+ Update Data Semester Ini</h4>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '12px' }}>
                     <div>

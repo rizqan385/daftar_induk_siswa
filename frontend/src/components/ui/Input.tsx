@@ -22,7 +22,7 @@ const Input: React.FC<InputProps> = ({ label, error, className = '', id, ...prop
                 style={{
                     padding: '12px 16px',
                     borderRadius: '8px',
-                    border: error ? '1px solid var(--danger-color, #ef4444)' : '1px solid var(--border-color)',
+                    border: error ? '1px solid var(--danger-color, #ef4444)' : '1px solid var(--border)',
                     background: '#ffffff',
                     color: 'var(--text-primary)',
                     fontSize: '1rem',
