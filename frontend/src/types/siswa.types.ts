@@ -68,6 +68,7 @@ export interface SiswaBase {
     bahasa_rumah?: string;
     kelas_id?: number;
     kelas_ref?: { id: number; nama: string; tingkat?: string; };
+    status?: string;
     foto_path?: string;
 }
 

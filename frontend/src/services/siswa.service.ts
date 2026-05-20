@@ -25,10 +25,11 @@ export interface SiswaListItem {
     id: number;
     no_induk: string;
     nisn: string;
-    nama_lengkap: string;
+    nama: string;
     jenis_kelamin: string;
-    kelas: string;
+    kelas_id?: number;
     foto_path: string;
+    status: string;
     created_at: string;
 }
 
@@ -36,7 +37,7 @@ export interface SiswaDetail {
     id: number;
     no_induk: string;
     nisn: string;
-    nama_lengkap: string;
+    nama: string;
     nama_panggilan: string;
     jenis_kelamin: string;
     tempat_lahir: string;
@@ -48,6 +49,7 @@ export interface SiswaDetail {
     bahasa_rumah: string;
     kelas_id?: number;
     foto_path: string;
+    status: string;
     created_at: string;
     updated_at: string;
     alamat?: any;

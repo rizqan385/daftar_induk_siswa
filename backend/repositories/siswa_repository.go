@@ -50,7 +50,7 @@ func (r *SiswaRepository) FindByIDWithRelations(id uint) (*models.Siswa, error) 
 		Preload("CatatanAkhirSemester.PKL").
 		Preload("CatatanAkhirSemester.Ekstrakurikuler").
 		Preload("CatatanAkhirSemester.PrestasiSemester").
-		Preload("CatatanAkhirSemester.Ketidakhadiran").
+		Preload("CatatanAkhirSemester.KetidakhadiranCatatan").
 		Preload("NilaiIjazah").
 		Preload("NilaiIjazah.MataPelajaran").
 		Preload("MeninggalkanSekolah").
@@ -88,7 +88,7 @@ func (r *SiswaRepository) FindAll(page, pageSize int, search, sortBy, sortDir st
 	// Search filter
 	if search != "" {
 		searchPattern := "%" + search + "%"
-		query = query.Where("nama_lengkap LIKE ? OR nisn LIKE ? OR no_induk LIKE ?",
+		query = query.Where("nama LIKE ? OR nisn LIKE ? OR no_induk LIKE ?",
 			searchPattern, searchPattern, searchPattern)
 	}
 

@@ -1,8 +1,8 @@
 /* CetakLaporan.css */
 
 .cetak-container {
-    padding: 20px;
-    background-color: var(--bg-body);
+    padding: 30px;
+    background-color: var(--bg-app);
     min-height: 100vh;
     font-family: 'Inter', sans-serif;
 }
@@ -13,7 +13,16 @@
     border-radius: 12px;
     padding: 24px;
     margin-bottom: 30px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+.cetak-settings h2 {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent) 0%, #a855f7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .form-group {
@@ -30,11 +39,38 @@
 
 .form-group input, 
 .form-group select {
-    background-color: #ffffff;
+    background-color: var(--bg-app);
     border: 1px solid var(--border);
     color: var(--text-primary);
     border-radius: 6px;
+    padding: 10px 12px;
     font-family: inherit;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus, 
+.form-group select:focus {
+    border-color: var(--accent);
+}
+
+.cetak-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.cetak-error {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+    color: #ef4444;
+    font-weight: 600;
 }
 
 /* ========================================================
@@ -42,36 +78,139 @@
    ======================================================== */
 .kertas-a4 {
     background: white;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
     margin: 0 auto;
     width: 210mm;
     min-height: 297mm;
-    padding: 20mm;
+    padding: 15mm 20mm;
     box-sizing: border-box;
     color: black;
-    font-family: 'Times New Roman', Times, serif; /* Standard formal document font */
+    font-family: 'Times New Roman', Times, serif; /* Formal Indonesian school font */
 }
+
+/* Table general styles inside printed sheet */
+.kertas-a4 table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.kertas-a4 table th {
+    font-weight: bold;
+    border: 1.5px solid black;
+}
+
+.kertas-a4 table td {
+    border: 1.5px solid black;
+}
+
+/* Biodata Table specific styles (borderless inside sheet) */
+.kertas-a4 .biodata-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.kertas-a4 .biodata-table td {
+    border: none !important;
+    padding: 4px 0;
+    vertical-align: top;
+}
+
+.kertas-a4 .biodata-table .num-col {
+    width: 5%;
+}
+
+.kertas-a4 .biodata-table .label-col {
+    width: 40%;
+}
+
+.kertas-a4 .biodata-table .colon-col {
+    width: 3%;
+}
+
+.kertas-a4 .biodata-table .value-col {
+    width: 52%;
+}
+
+/* Pas Foto box */
+.pas-foto-container {
+    width: 113px; /* standard 3x4 ratio in pixels roughly */
+    height: 151px;
+    border: 2px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8fafc;
+    color: #475569;
+    font-size: 11px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    overflow: hidden;
+}
+
+.pas-foto-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ========================================================
+   BUKU INDUK FORMATS
+   ======================================================== */
+.buku-induk-page {
+    position: relative;
+    box-sizing: border-box;
+}
+
+.buku-induk-header {
+    text-align: center;
+    margin-bottom: 20px;
+    border-bottom: 3px double black;
+    padding-bottom: 12px;
+}
+
+.buku-induk-table {
+    width: 100%;
+    font-size: 11.5px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.buku-induk-table td {
+    border: none !important;
+    padding: 3px 0;
+    vertical-align: top;
+}
+
+.buku-induk-table td:nth-child(1) { width: 5%; }
+.buku-induk-table td:nth-child(2) { width: 35%; }
+.buku-induk-table td:nth-child(3) { width: 3%; }
+.buku-induk-table td:nth-child(4) { width: 57%; }
+
 
 /* PRINT MEDIA QUERIES */
 @media print {
-    /* Hide everything EXCEPT the print area */
-    body * {
-        visibility: hidden;
-    }
-    
-    .print-area, .print-area * {
-        visibility: visible;
-    }
-
-    /* Remove margins, padding, and background color from body for clean print */
-    @page {
-        size: A4;
-        margin: 0;
+    .no-print {
+        display: none !important;
     }
 
     body {
         margin: 0;
+        padding: 0;
         background-color: white !important;
+        background-image: none !important;
+    }
+
+    .cetak-container {
+        padding: 0;
+        margin: 0;
+        background: transparent;
+    }
+
+    @page {
+        size: A4;
+        margin: 0;
     }
 
     .kertas-a4 {
@@ -81,12 +220,25 @@
         margin: 0;
         box-shadow: none;
         width: 210mm;
-        /* Let it flow naturally to multiple pages if needed */
-        min-height: auto;
-        padding: 15mm; 
+        min-height: 297mm;
+        padding: 15mm 20mm;
+        box-sizing: border-box;
+        background-color: white;
     }
-    
-    /* Ensure no unwanted page breaks inside tables */
-    table { page-break-inside: auto; }
-    tr    { page-break-inside: avoid; page-break-after: auto; }
+
+    /* Print page breaks */
+    .page-break {
+        page-break-before: always;
+        padding-top: 15mm;
+    }
+
+    table {
+        page-break-inside: auto;
+    }
+
+    tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+    }
 }
+

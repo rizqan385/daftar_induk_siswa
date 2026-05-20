@@ -37,14 +37,14 @@ export const BeasiswaPage = () => {
             const list = res.data.data || [];
             setSiswaList(list);
             const all: any[] = [];
-            for (const s of list) {
+            await Promise.all(list.map(async (s: any) => {
                 try {
                     const d = await api.get(`/siswa/${s.id}`);
                     (d.data.data?.beasiswa || []).forEach((b: any) =>
-                        all.push({ ...b, siswa_id: s.id, siswa_nama: s.nama_lengkap, siswa_nisn: s.nisn })
+                        all.push({ ...b, siswa_id: s.id, siswa_nama: s.nama || s.nama_lengkap, siswa_nisn: s.nisn })
                     );
                 } catch (e) { /* skip */ }
-            }
+            }));
             setData(all);
         } catch (e) { console.error(e); }
         finally { setLoading(false); }
@@ -120,7 +120,7 @@ export const BeasiswaPage = () => {
                             <label style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', display: 'block', marginBottom: '4px' }}>Siswa</label>
                             <select value={newData.siswa_id} onChange={e => setNewData({ ...newData, siswa_id: e.target.value })} style={inputStyle} disabled={isEditing}>
                                 <option value="">Pilih Siswa</option>
-                                {siswaList.map((s: any) => <option key={s.id} value={s.id}>{s.nama_lengkap}</option>)}
+                                {siswaList.map((s: any) => <option key={s.id} value={s.id}>{s.nama || s.nama_lengkap}</option>)}
                             </select>
                         </div>
                         <div>
@@ -283,7 +283,7 @@ export const EkstrakurikulerPage = () => {
                             <label style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', display: 'block', marginBottom: '4px' }}>Siswa</label>
                             <select value={newData.siswa_id} onChange={e => setNewData({ ...newData, siswa_id: e.target.value })} style={inputStyle} disabled={isEditing}>
                                 <option value="">Pilih Siswa</option>
-                                {siswaList.map((s: any) => <option key={s.id} value={s.id}>{s.nama_lengkap}</option>)}
+                                {siswaList.map((s: any) => <option key={s.id} value={s.id}>{s.nama || s.nama_lengkap}</option>)}
                             </select>
                         </div>
                         <div>
@@ -365,7 +365,7 @@ export const PKLPage = () => {
                     const catSem = d.data.data?.catatan_semester || [];
                     for (const c of catSem) {
                         (c.pkl || []).forEach((p: any) =>
-                            all.push({ ...p, siswa_id: s.id, siswa_nama: s.nama_lengkap, kelas: c.kelas, semester: c.semester })
+                            all.push({ ...p, siswa_id: s.id, siswa_nama: s.nama || s.nama_lengkap, kelas: c.kelas, semester: c.semester })
                         );
                     }
                 } catch (e) { /* skip */ }
@@ -463,7 +463,7 @@ export const PKLPage = () => {
                             <label style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', display: 'block', marginBottom: '4px' }}>Siswa</label>
                             <select value={newData.siswa_id} onChange={e => setNewData({ ...newData, siswa_id: e.target.value })} style={inputStyle} disabled={isEditing}>
                                 <option value="">Pilih Siswa</option>
-                                {siswaList.map((s: any) => <option key={s.id} value={s.id}>{s.nama_lengkap}</option>)}
+                                {siswaList.map((s: any) => <option key={s.id} value={s.id}>{s.nama || s.nama_lengkap}</option>)}
                             </select>
                         </div>
                         <div>
@@ -681,7 +681,7 @@ export const InputNilaiPage = () => {
                 <div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                         <div>
-                            <h3 style={{ color: 'var(--text-primary)' }}>Nilai untuk: {selectedSiswa.nama_lengkap}</h3>
+                            <h3 style={{ color: 'var(--text-primary)' }}>Nilai untuk: {selectedSiswa.nama || selectedSiswa.nama_lengkap}</h3>
                             <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Semester {semester}</p>
                         </div>
                         <div style={{ display: 'flex', gap: '8px' }}>
@@ -827,7 +827,7 @@ export const InputNilaiPage = () => {
                                 ) : filtered.map((s: any, i: number) => (
                                     <tr key={s.id} style={{ borderBottom: '1px solid var(--border)' }}>
                                         <td style={{ padding: '12px 16px', color: 'var(--text-primary)' }}>{i + 1}</td>
-                                        <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontWeight: 600 }}>{s.nama_lengkap}</td>
+                                        <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontWeight: 600 }}>{s.nama || s.nama_lengkap}</td>
                                         <td style={{ padding: '12px 16px', color: 'var(--text-primary)' }}>{s.no_induk}</td>
                                         <td style={{ padding: '12px 16px', color: 'var(--text-secondary)' }}>{s.nisn}</td>
                                         <td style={{ padding: '12px 16px' }}>
@@ -859,29 +859,27 @@ export const InputNilaiEkskulPage = () => {
     const fetchData = async () => {
         setLoading(true);
         try {
-            const [siswaRes, keanggotaanRes] = await Promise.all([
-                api.get('/siswa?page=1&page_size=200'),
-                api.get('/keanggotaan-ekskul')
-            ]);
-            const sList = siswaRes.data.data || [];
+            const keanggotaanRes = await api.get('/keanggotaan-ekskul');
             const keanggotaan = keanggotaanRes.data.data || [];
 
             const uniqueNames = Array.from(new Set(keanggotaan.map((e: any) => e.nama_kegiatan).filter(Boolean))) as string[];
             setUniqueEkskulNames(uniqueNames.sort());
 
+            const activeSiswaIds = Array.from(new Set(keanggotaan.map((k: any) => k.siswa_id).filter(Boolean))) as number[];
+
             const gradeMap: Record<string, { id_nilai: number, predikat: string }> = {};
-            for (const s of sList) {
+            await Promise.all(activeSiswaIds.map(async (siswaId) => {
                 try {
-                    const d = await api.get(`/siswa/${s.id}`);
+                    const d = await api.get(`/siswa/${siswaId}`);
                     const catSem = d.data.data?.catatan_semester || [];
                     const c = catSem.find((cs: any) => Number(cs.semester) === semester);
                     if (c && c.ekstrakurikuler) {
                         c.ekstrakurikuler.forEach((gr: any) => {
-                           gradeMap[`${s.id}_${gr.nama_kegiatan}`] = { id_nilai: gr.id, predikat: gr.nilai };
+                           gradeMap[`${siswaId}_${gr.nama_kegiatan}`] = { id_nilai: gr.id, predikat: gr.nilai };
                         });
                     }
                 } catch(e) {}
-            }
+            }));
 
             const initialNilaiData: any = {};
             keanggotaan.forEach((k: any) => {
@@ -1185,7 +1183,7 @@ export const InputKetidakhadiranPage = () => {
                         ) : filtered.map((s: any, i: number) => (
                             <tr key={s.id} style={{ borderBottom: '1px solid var(--border)' }}>
                                 <td style={{ padding: '10px 16px', color: 'var(--text-primary)' }}>{i + 1}</td>
-                                <td style={{ padding: '10px 16px', color: 'var(--text-primary)', fontWeight: 600 }}>{s.nama_lengkap}</td>
+                                <td style={{ padding: '10px 16px', color: 'var(--text-primary)', fontWeight: 600 }}>{s.nama || s.nama_lengkap}</td>
                                 <td style={{ padding: '10px 16px', color: 'var(--text-secondary)' }}>{s.no_induk}</td>
                                 <td style={{ padding: '10px 16px' }}>
                                     <input type="number" min="0" value={kehadiranData[s.id]?.sakit || ''} onChange={e => setKehadiranData({ ...kehadiranData, [s.id]: { ...kehadiranData[s.id], sakit: e.target.value } })} style={{ ...inputStyle, width: '70px' }} />
@@ -1326,7 +1324,7 @@ export const KenaikanKelasPage = () => {
                             return (
                                 <tr key={s.id} style={{ borderBottom: '1px solid var(--border)' }}>
                                     <td style={{ padding: '12px 16px', color: 'var(--text-primary)' }}>{i + 1}</td>
-                                    <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontWeight: 600 }}>{s.nama_lengkap}</td>
+                                    <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontWeight: 600 }}>{s.nama || s.nama_lengkap}</td>
                                     <td style={{ padding: '12px 16px', color: 'var(--text-secondary)' }}>{s.no_induk}</td>
                                     <td style={{ padding: '12px 16px', color: 'var(--text-primary)' }}>{getKelasName(s.kelas_id)}</td>
                                     <td style={{ padding: '12px 16px' }}>

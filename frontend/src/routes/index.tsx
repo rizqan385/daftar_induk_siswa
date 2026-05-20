@@ -44,6 +44,9 @@ const AppRoutes = () => {
                 <Route path="/siswa/:id/cetak" element={
                     <ProtectedRoute><CetakLaporanPage /></ProtectedRoute>
                 } />
+                <Route path="/cetak" element={
+                    <ProtectedRoute><CetakLaporanPage /></ProtectedRoute>
+                } />
                 <Route path="/data-kelas" element={
                     <ProtectedRoute><DataKelasPage /></ProtectedRoute>
                 } />

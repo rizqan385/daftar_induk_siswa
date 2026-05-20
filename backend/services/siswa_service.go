@@ -121,7 +121,7 @@ func (s *SiswaService) FindAll(req requests.PaginationRequest) ([]responses.Sisw
 	if req.Page < 1 {
 		req.Page = 1
 	}
-	if req.PageSize < 1 || req.PageSize > 100 {
+	if req.PageSize < 1 || req.PageSize > 1000 {
 		req.PageSize = 20
 	}
 
@@ -575,9 +575,19 @@ func (s *SiswaService) AddMeninggalkanSekolah(siswaID uint, req requests.CreateM
 		return nil, err
 	}
 
-	// Automatic status update to "keluar" 
-	// So frontend UI can display "Tidak Aktif Lagi"
-	_ = s.siswaRepo.UpdateStatus(siswaID, "keluar")
+	var newStatus string
+	switch req.Tipe {
+	case "tamat":
+		newStatus = "lulus"
+	case "pindah", "putus":
+		newStatus = "keluar"
+	default:
+		newStatus = "keluar"
+	}
+
+	// Automatic status update to new status 
+	// So frontend UI can display correctly
+	_ = s.siswaRepo.UpdateStatus(siswaID, newStatus)
 
 	return &responses.MeninggalkanSekolahResponse{
 		ID:                  data.ID,

@@ -25,13 +25,13 @@ const PrestasiPage = () => {
             const list = res.data.data || [];
             setSiswaList(list);
             const allPrestasi: any[] = [];
-            for (const s of list) {
+            await Promise.all(list.map(async (s: any) => {
                 try {
                     const detail = await api.get(`/siswa/${s.id}`);
                     const prestasi = detail.data.data?.prestasi || [];
-                    prestasi.forEach((p: any) => allPrestasi.push({ ...p, siswa_id: s.id, siswa_nama: s.nama_lengkap, siswa_nisn: s.nisn }));
+                    prestasi.forEach((p: any) => allPrestasi.push({ ...p, siswa_id: s.id, siswa_nama: s.nama || s.nama_lengkap, siswa_nisn: s.nisn }));
                 } catch (e) { /* skip */ }
-            }
+            }));
             setData(allPrestasi);
         } catch (e) { console.error(e); }
         finally { setLoading(false); }
@@ -118,7 +118,7 @@ const PrestasiPage = () => {
                                     <label style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', display: 'block', marginBottom: '4px' }}>Siswa</label>
                                     <select value={newData.siswa_id} onChange={e => setNewData({...newData, siswa_id: e.target.value})} style={inputStyle} disabled={isEditing}>
                                         <option value="">Pilih Siswa</option>
-                                        {siswaList.map((s: any) => <option key={s.id} value={s.id}>{s.nama_lengkap}</option>)}
+                                        {siswaList.map((s: any) => <option key={s.id} value={s.id}>{s.nama || s.nama_lengkap}</option>)}
                                     </select>
                                 </div>
 

@@ -37,6 +37,7 @@ func Seed(db *gorm.DB) {
 		&models.PemeriksaanBuku{},
 		&models.ActivityLog{},
 		&models.KeanggotaanEkskul{},
+		&models.KetidakhadiranCatatan{},
 	); err != nil {
 		log.Printf("Warning: Failed to auto-migrate models: %v", err)
 	}

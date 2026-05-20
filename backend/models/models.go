@@ -39,7 +39,7 @@ type Siswa struct {
 	BahasaRumah     string         `gorm:"size:50;default:'Indonesia'" json:"bahasa_rumah"`
 	FotoPath        string         `gorm:"size:255" json:"foto_path"`
 	KelasID         *uint          `json:"kelas_id"`
-	Status          string         `gorm:"type:enum('aktif','lulus','pindah','tinggal_kelas');default:'aktif'" json:"status"`
+	Status          string         `gorm:"type:enum('aktif','lulus','pindah','tinggal_kelas','putus','keluar');default:'aktif'" json:"status"`
 	CreatedAt       time.Time      `json:"created_at"`
 	UpdatedAt       time.Time      `json:"updated_at"`
 	DeletedAt       gorm.DeletedAt `gorm:"index" json:"-"`

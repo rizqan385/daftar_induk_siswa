@@ -15,16 +15,7 @@ const Navbar = ({ title = "Dashboard" }: NavbarProps) => {
             </div>
 
             <div className="topbar-right">
-                <div className="topbar-search">
-                    <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" style={{ color: 'var(--text-muted)', flexShrink: 0 }}>
-                        <circle cx="8" cy="8" r="6" /><path d="m13 13 4 4" />
-                    </svg>
-                    <input type="text" placeholder="Cari..." />
-                </div>
 
-                <button className="topbar-icon-btn" title="Notifikasi">
-                    🔔
-                </button>
 
                 <div className="topbar-user">
                     <div className="topbar-avatar">

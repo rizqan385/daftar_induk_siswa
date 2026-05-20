@@ -20,8 +20,8 @@ import (
 
 // SetupRoutes configures all API routes
 func SetupRoutes(r *gin.Engine, db *gorm.DB) {
-	// Initialize rate limiter (100 requests per minute per IP)
-	rateLimiter := middlewares.NewRateLimiter(100, time.Minute)
+	// Initialize rate limiter (10000 requests per minute per IP to support batch queries in dashboard)
+	rateLimiter := middlewares.NewRateLimiter(10000, time.Minute)
 
 	// Global middlewares
 	r.Use(middlewares.LoggerMiddleware())
@@ -67,6 +67,7 @@ func SetupRoutes(r *gin.Engine, db *gorm.DB) {
 	activityLogService := services.NewActivityLogService(activityLogRepo)
 	kelasService := services.NewKelasService(kelasRepo)
 	keanggotaanEkskulService := services.NewKeanggotaanEkskulService(keanggotaanEkskulRepo)
+	importRaportService := services.NewImportRaportService(db, siswaRepo, kelasRepo, mapelRepo, nilaiRepo, catatanRepo, kehadiranRepo)
 
 	// Initialize handlers
 	authHandler := handlers.NewAuthHandler(authService)
@@ -83,6 +84,7 @@ func SetupRoutes(r *gin.Engine, db *gorm.DB) {
 	activityLogHandler := handlers.NewActivityLogHandler(activityLogService)
 	kelasHandler := handlers.NewKelasHandler(kelasService)
 	keanggotaanEkskulHandler := handlers.NewKeanggotaanEkskulHandler(keanggotaanEkskulService, activityLogService)
+	importRaportHandler := handlers.NewImportRaportHandler(importRaportService, activityLogService)
 	dashboardHandler := handlers.NewDashboardHandler(db)
 
 	// API v1 routes
@@ -118,6 +120,8 @@ func SetupRoutes(r *gin.Engine, db *gorm.DB) {
 			{
 				siswa.POST("", siswaHandler.Create)
 				siswa.POST("/import", siswaHandler.ImportExcel)
+				siswa.POST("/preview-raport", importRaportHandler.PreviewRaport)
+				siswa.POST("/import-raport", importRaportHandler.ImportRaport)
 				siswa.GET("", siswaHandler.FindAll)
 				siswa.GET("/:id", siswaHandler.FindByID)
 				siswa.PUT("/:id", siswaHandler.Update)

@@ -95,7 +95,7 @@ const SiswaDetail = () => {
         id: siswaData.id,
         no_induk: siswaData.no_induk || '',
         nisn: siswaData.nisn || '',
-        nama: siswaData.nama_lengkap || '',
+        nama: siswaData.nama || '',
         nama_panggilan: siswaData.nama_panggilan || '',
         jenis_kelamin: (siswaData.jenis_kelamin as 'L' | 'P') || 'L',
         tempat_lahir: siswaData.tempat_lahir || '',
@@ -106,6 +106,7 @@ const SiswaDetail = () => {
         kewarganegaraan: siswaData.kewarganegaraan || 'Indonesia',
         bahasa_rumah: siswaData.bahasa_rumah || 'Indonesia',
         kelas_id: (siswaData as any).kelas_id,
+        status: siswaData.status || 'aktif',
         foto_path: siswaData.foto_path || '',
         alamat_siswa: siswaData.alamat ? {
             id: siswaData.alamat.id || 0,
@@ -221,7 +222,7 @@ const SiswaDetail = () => {
         meninggalkan_sekolah: siswaData.meninggalkan_sekolah ? {
             id: siswaData.meninggalkan_sekolah.id,
             tipe: siswaData.meninggalkan_sekolah.tipe,
-            tanggal_keluar: siswaData.meninggalkan_sekolah.tanggal?.substring(0, 10) || '',
+            tanggal_keluar: (siswaData.meninggalkan_sekolah.tanggal_keluar || siswaData.meninggalkan_sekolah.tanggal || '').substring(0, 10),
             sekolah_tujuan: siswaData.meninggalkan_sekolah.sekolah_tujuan,
             alamat_sekolah_tujuan: siswaData.meninggalkan_sekolah.alamat_sekolah_tujuan,
             no_ijazah: siswaData.meninggalkan_sekolah.no_ijazah,
@@ -254,7 +255,7 @@ const SiswaDetail = () => {
                 const apiPayload: any = {
                     no_induk: partialData.no_induk,
                     nisn: partialData.nisn,
-                    nama_lengkap: partialData.nama,
+                    nama: partialData.nama,
                     nama_panggilan: partialData.nama_panggilan,
                     jenis_kelamin: partialData.jenis_kelamin,
                     tempat_lahir: partialData.tempat_lahir,
@@ -270,7 +271,7 @@ const SiswaDetail = () => {
                 currentSiswaId = response.id;
             } else if (hasBaseFields && siswa) {
                 const apiPayload: any = {
-                    nama_lengkap: partialData.nama,
+                    nama: partialData.nama,
                     nama_panggilan: partialData.nama_panggilan,
                     jenis_kelamin: partialData.jenis_kelamin,
                     tempat_lahir: partialData.tempat_lahir,
@@ -283,6 +284,7 @@ const SiswaDetail = () => {
                     ...(partialData.kelas_id ? { kelas_id: partialData.kelas_id } : {})
                 };
                 await updateSiswaService(currentSiswaId!, apiPayload);
+
             }
 
             if (!currentSiswaId) throw new Error("ID Siswa tidak ditemukan");
@@ -331,9 +333,12 @@ const SiswaDetail = () => {
             if (partialData.wali && partialData.wali.nama_wali) {
                 const w = partialData.wali;
                 await createOrUpdateWaliService(siswaId, {
-                    nama: w.nama_wali, jenis_kelamin: w.jenis_kelamin || 'L',
-                    hubungan_dengan_siswa: w.hubungan || '', pekerjaan: w.pekerjaan_wali || '',
-                    penghasilan_bulanan: Number(w.penghasilan_bulanan) || 0, no_telepon: w.no_telp_wali || '',
+                    nama_wali: w.nama_wali,
+                    jenis_kelamin: w.jenis_kelamin || 'L',
+                    hubungan: w.hubungan || '',
+                    pekerjaan_wali: w.pekerjaan_wali || '',
+                    penghasilan_bulanan: Number(w.penghasilan_bulanan) || 0,
+                    no_telp_wali: w.no_telp_wali || '',
                 });
             }
 
@@ -341,9 +346,12 @@ const SiswaDetail = () => {
             if (partialData.kesehatan_siswa) {
                 const ks = partialData.kesehatan_siswa;
                 const resKesehatan = await createOrUpdateKesehatanService(siswaId, {
-                    berat_badan_masuk: Number(ks.berat_badan) || 0, tinggi_badan_masuk: Number(ks.tinggi_badan) || 0,
-                    berat_badan_keluar: Number(ks.berat_badan_keluar) || 0, tinggi_badan_keluar: Number(ks.tinggi_badan_keluar) || 0,
-                    golongan_darah: ks.golongan_darah || '', kesanggupan_jasmani: ks.kesanggupan_jasmani || ''
+                    berat_badan: Number(ks.berat_badan) || 0,
+                    tinggi_badan: Number(ks.tinggi_badan) || 0,
+                    berat_badan_keluar: Number(ks.berat_badan_keluar) || 0,
+                    tinggi_badan_keluar: Number(ks.tinggi_badan_keluar) || 0,
+                    golongan_darah: ks.golongan_darah || '',
+                    kesanggupan_jasmani: ks.kesanggupan_jasmani || ''
                 });
                 
                 if (partialData.riwayat_penyakit) {
@@ -351,7 +359,12 @@ const SiswaDetail = () => {
                     const oldRp = siswa?.riwayat_penyakit || [];
                     const newRp = partialData.riwayat_penyakit;
                     for (const rp of newRp.filter((x: any) => isNewId(x.id))) {
-                        await addRiwayatPenyakitService(kesehatanId, { jenis_penyakit: rp.nama_penyakit, tahun: Number(rp.tahun_sakit) || 0, keterangan: rp.keterangan || '', lama_sakit: '' });
+                        await addRiwayatPenyakitService(kesehatanId, {
+                            nama_penyakit: rp.nama_penyakit,
+                            tahun_sakit: Number(rp.tahun_sakit) || 0,
+                            keterangan: rp.keterangan || '',
+                            lama_sakit: rp.lama_sakit || ''
+                        });
                     }
                     for (const rp of oldRp.filter((x: any) => !newRp.find((y: any) => y.id === x.id))) {
                         await deleteRiwayatPenyakitService(rp.id);
@@ -367,7 +380,7 @@ const SiswaDetail = () => {
                     await addPendidikanService(siswaId, {
                         tipe: item.tipe || 'siswa_baru',
                         tanggal_diterima: toDateStr(item.tanggal_diterima),
-                        asal_sekolah: item.nama_sekolah || '',
+                        nama_sekolah: item.nama_sekolah || '',
                         alamat_sekolah: item.alamat_sekolah || '',
                         kelas_diterima: item.kelas_diterima || 'X',
                         no_ijazah: item.no_ijazah || '',
@@ -380,7 +393,7 @@ const SiswaDetail = () => {
                 for (const item of curr.filter((x: any) => !isNewId(x.id))) {
                     await updatePendidikanService(item.id, {
                         tipe: item.tipe || 'siswa_baru',
-                        asal_sekolah: item.nama_sekolah || '',
+                        nama_sekolah: item.nama_sekolah || '',
                         alamat_sekolah: item.alamat_sekolah || '',
                         tanggal_diterima: toDateStr(item.tanggal_diterima),
                         kelas_diterima: item.kelas_diterima || 'X',
@@ -629,8 +642,8 @@ const SiswaDetail = () => {
                 } else if (data) {
                     await addMeninggalkanSekolahService(siswaId, {
                         tipe: data.tipe || 'tamat',
-                        tanggal: toDateStr(data.tanggal_keluar),
-                        sekolah_tujuan: data.tujuan || data.sekolah_tujuan || '',
+                        tanggal_keluar: toDateStr(data.tanggal_keluar),
+                        sekolah_tujuan: data.sekolah_tujuan || data.tujuan || '',
                         alamat_sekolah_tujuan: data.alamat_sekolah_tujuan || '',
                         alasan: data.alasan || '',
                         no_ijazah: data.no_ijazah || ''
@@ -714,7 +727,7 @@ const SiswaDetail = () => {
                             backdropFilter: 'blur(16px)'
                         }}
                     >
-                        {/* Top row: back button + print */}
+                        {/* Top row: back button */}
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 24px 0' }}>
                             <Button 
                                 variant="ghost" 
@@ -723,15 +736,6 @@ const SiswaDetail = () => {
                             >
                                 ← Kembali ke Daftar
                             </Button>
-                            {!isNew && (
-                                <Button 
-                                    variant="secondary"
-                                    size="sm"
-                                    onClick={() => navigate(`/siswa/${id}/cetak`)}
-                                >
-                                    🖨️ Cetak Laporan
-                                </Button>
-                            )}
                         </div>
 
                         {/* Tab scroll row */}

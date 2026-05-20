@@ -51,13 +51,15 @@ const Login = () => {
                 <div style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
                     <div style={{
                         width: '80px', height: '80px',
-                        background: 'rgba(255,255,255,0.15)',
+                        background: 'rgba(255,255,255,1)',
                         borderRadius: '20px',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        fontSize: '2.5rem',
                         margin: '0 auto 28px',
-                        backdropFilter: 'blur(10px)'
-                    }}>📘</div>
+                        boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
+                        padding: '8px'
+                    }}>
+                        <img src="/logo.png" alt="Logo SMK YAJ" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                    </div>
                     <h1 style={{ color: 'white', fontSize: '1.8rem', fontWeight: 800, marginBottom: '10px', lineHeight: 1.2 }}>
                         BUKU INDUK SISWA
                     </h1>
