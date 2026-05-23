@@ -3,8 +3,8 @@ package database
 import (
 	"fmt"
 	"log"
+	"net/url"
 	"os"
-	"strings"
 	"time"
 
 	"daftar_induk_siswa/configs"
@@ -19,12 +19,22 @@ var DB *gorm.DB
 func buildDSN(cfg *configs.Config) string {
 	// Cek MYSQL_URL atau DATABASE_URL dari Railway
 	for _, key := range []string{"MYSQL_URL", "DATABASE_URL", "MYSQL_PRIVATE_URL"} {
-		if url := os.Getenv(key); url != "" {
-			// Railway format: mysql://user:pass@host:port/dbname
-			// Convert ke DSN format GORM
-			dsn := strings.TrimPrefix(url, "mysql://")
+		if rawURL := os.Getenv(key); rawURL != "" {
 			log.Printf("Using connection URL from %s", key)
-			return dsn + "?charset=utf8mb4&parseTime=True&loc=Local"
+			// Parse mysql://user:pass@host:port/dbname → GORM DSN
+			u, err := url.Parse(rawURL)
+			if err != nil {
+				log.Printf("Warning: failed to parse %s: %v, falling back", key, err)
+				continue
+			}
+			password, _ := u.User.Password()
+			dsn := fmt.Sprintf("%s:%s@tcp(%s)%s?charset=utf8mb4&parseTime=True&loc=Local",
+				u.User.Username(),
+				password,
+				u.Host,
+				u.Path,
+			)
+			return dsn
 		}
 	}
 	// Fallback ke individual env vars
