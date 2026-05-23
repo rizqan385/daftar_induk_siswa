@@ -47,9 +47,14 @@ var AppConfig *Config
 
 // LoadConfig loads configuration from environment variables
 func LoadConfig() *Config {
-	// Load .env file if exists
-	if err := godotenv.Load(); err != nil {
-		log.Println("No .env file found, using environment variables")
+	// Load .env file only in non-production (local dev)
+	// Di Railway/production, env vars sudah di-inject langsung — jangan di-override .env lokal
+	if os.Getenv("SERVER_MODE") != "production" && os.Getenv("RAILWAY_ENVIRONMENT") == "" {
+		if err := godotenv.Load(); err != nil {
+			log.Println("No .env file found, using environment variables")
+		}
+	} else {
+		log.Println("Production mode: skipping .env file, using injected environment variables")
 	}
 
 	expiryHours, _ := strconv.Atoi(getEnv("JWT_EXPIRY_HOURS", "24"))
