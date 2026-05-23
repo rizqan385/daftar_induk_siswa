@@ -3,6 +3,8 @@ package database
 import (
 	"fmt"
 	"log"
+	"os"
+	"strings"
 	"time"
 
 	"daftar_induk_siswa/configs"
@@ -13,15 +15,32 @@ import (
 
 var DB *gorm.DB
 
-// Connect initializes database connection
-func Connect(cfg *configs.Config) (*gorm.DB, error) {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+// buildDSN constructs MySQL DSN, supporting Railway's MYSQL_URL / DATABASE_URL
+func buildDSN(cfg *configs.Config) string {
+	// Cek MYSQL_URL atau DATABASE_URL dari Railway
+	for _, key := range []string{"MYSQL_URL", "DATABASE_URL", "MYSQL_PRIVATE_URL"} {
+		if url := os.Getenv(key); url != "" {
+			// Railway format: mysql://user:pass@host:port/dbname
+			// Convert ke DSN format GORM
+			dsn := strings.TrimPrefix(url, "mysql://")
+			log.Printf("Using connection URL from %s", key)
+			return dsn + "?charset=utf8mb4&parseTime=True&loc=Local"
+		}
+	}
+	// Fallback ke individual env vars
+	log.Printf("Using DB_HOST=%s DB_PORT=%s DB_NAME=%s", cfg.Database.Host, cfg.Database.Port, cfg.Database.Name)
+	return fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		cfg.Database.User,
 		cfg.Database.Password,
 		cfg.Database.Host,
 		cfg.Database.Port,
 		cfg.Database.Name,
 	)
+}
+
+// Connect initializes database connection
+func Connect(cfg *configs.Config) (*gorm.DB, error) {
+	dsn := buildDSN(cfg)
 
 	// Configure logger based on mode
 	var logLevel logger.LogLevel
