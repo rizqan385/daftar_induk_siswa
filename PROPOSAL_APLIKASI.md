@@ -360,7 +360,7 @@ Antarmuka aplikasi dibangun menggunakan **React + TypeScript** dengan desain mod
 - Browser modern (Chrome, Firefox, Edge versi terbaru)
 - Koneksi internet / jaringan lokal ke server
 
----
+---     
 
 ## 📦 Instalasi Singkat
 

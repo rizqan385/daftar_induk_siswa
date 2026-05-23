@@ -5,12 +5,11 @@ import (
 
 	"daftar_induk_siswa/models"
 	"daftar_induk_siswa/utils"
+
 	"gorm.io/gorm"
 )
 
-// Seed populates the database with initial data
 func Seed(db *gorm.DB) {
-	// Auto-migrate all tables
 	if err := db.AutoMigrate(
 		&models.User{},
 		&models.Kelas{},
