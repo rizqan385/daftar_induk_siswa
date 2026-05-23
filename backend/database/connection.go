@@ -17,6 +17,16 @@ var DB *gorm.DB
 
 // buildDSN constructs MySQL DSN, supporting Railway's MYSQL_URL / DATABASE_URL
 func buildDSN(cfg *configs.Config) string {
+	// === DIAGNOSTIC LOG — hapus setelah fix ===
+	for _, k := range []string{"MYSQL_URL", "DATABASE_URL", "MYSQL_PRIVATE_URL", "MYSQLHOST", "MYSQLPORT", "MYSQLUSER", "MYSQLDATABASE", "RAILWAY_ENVIRONMENT"} {
+		if v := os.Getenv(k); v != "" {
+			log.Printf("[ENV] %s = %s", k, v)
+		} else {
+			log.Printf("[ENV] %s = (not set)", k)
+		}
+	}
+	// ==========================================
+
 	// Cek MYSQL_URL atau DATABASE_URL dari Railway
 	for _, key := range []string{"MYSQL_URL", "DATABASE_URL", "MYSQL_PRIVATE_URL"} {
 		if rawURL := os.Getenv(key); rawURL != "" {
