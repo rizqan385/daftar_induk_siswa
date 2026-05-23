@@ -57,7 +57,7 @@ func LoadConfig() *Config {
 
 	AppConfig = &Config{
 		Server: ServerConfig{
-			Port: getEnv("SERVER_PORT", "8080"),
+			Port: getEnvWithFallbacks([]string{"PORT", "SERVER_PORT"}, "8080"),
 			Mode: getEnv("SERVER_MODE", "development"),
 		},
 		Database: DatabaseConfig{
@@ -84,6 +84,16 @@ func LoadConfig() *Config {
 func getEnv(key, fallback string) string {
 	if value, exists := os.LookupEnv(key); exists {
 		return value
+	}
+	return fallback
+}
+
+// getEnvWithFallbacks tries multiple keys and returns the first found value
+func getEnvWithFallbacks(keys []string, fallback string) string {
+	for _, key := range keys {
+		if value, exists := os.LookupEnv(key); exists && value != "" {
+			return value
+		}
 	}
 	return fallback
 }
