@@ -20,6 +20,10 @@ backend/*.out
 # Go build artifacts
 /backend/bin/
 /backend/vendor/
+backend/*.txt
+backend/error.log
+backend/out
+backend/test_*.go
 
 # ===========================
 # FRONTEND (Node / Vite)
