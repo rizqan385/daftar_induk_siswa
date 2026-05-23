@@ -61,11 +61,11 @@ func LoadConfig() *Config {
 			Mode: getEnv("SERVER_MODE", "development"),
 		},
 		Database: DatabaseConfig{
-			Host:     getEnv("DB_HOST", "localhost"),
-			Port:     getEnv("DB_PORT", "3306"),
-			User:     getEnv("DB_USER", "root"),
-			Password: getEnv("DB_PASSWORD", ""),
-			Name:     getEnv("DB_NAME", "db_siswa_induk_api"),
+			Host:     getEnvWithFallbacks([]string{"DB_HOST", "MYSQLHOST", "MYSQL_HOST"}, "localhost"),
+			Port:     getEnvWithFallbacks([]string{"DB_PORT", "MYSQLPORT", "MYSQL_PORT"}, "3306"),
+			User:     getEnvWithFallbacks([]string{"DB_USER", "MYSQLUSER", "MYSQL_USER"}, "root"),
+			Password: getEnvWithFallbacks([]string{"DB_PASSWORD", "MYSQLPASSWORD", "MYSQL_PASSWORD"}, ""),
+			Name:     getEnvWithFallbacks([]string{"DB_NAME", "MYSQLDATABASE", "MYSQL_DATABASE"}, "db_siswa_induk_api"),
 		},
 		JWT: JWTConfig{
 			Secret:      getEnv("JWT_SECRET", "default-secret-change-this"),
